@@ -1,0 +1,132 @@
+$base-color: #172b4d;
+$alt-color: #0079BF;
+
+.main{
+  display: flex;
+  justify-content: space-between;
+  max-width: 1240px;
+  margin: 0 auto;
+  min-height: calc(100vh - 40px);
+}
+
+.sidebarMain{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.listItem{
+  margin-bottom: 4px;
+}
+
+.itemLink {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 4px;
+  box-shadow: none;
+  color:  inherit;
+  font-weight: bold;
+  margin: 0;
+  min-height: 20px;
+  overflow: hidden;
+  padding: 6px 8px 6px 0;
+  text-decoration: none;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+  column-gap: 12px;
+  &:not(.current):hover{
+    background-color: rgba(9, 30, 66, 0.08);
+    color: currentColor;
+  }
+}
+
+.current{
+  background-color: #E4F0F6;
+  color: $alt-color;
+}
+
+.workspaceDiv{
+  padding: 8px 0;
+}
+
+.workspaceText{
+  user-select: none;
+  color: var(--ds-text-subtle, #5e6c84);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.workspaceAddBtn{
+  color: currentColor;
+  &:hover{
+    background-color: rgba(9, 30, 66, 0.08);
+    color: currentColor;
+  }
+}
+
+.icon{
+  font-size: 20px;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
+  display: inline-block;
+  font-style: normal;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: bottom;
+  background-color: transparent;
+  border: none;
+}
+
+.sectionTitle{
+  display: flex;
+  column-gap: 4px;
+}
+
+.right-linksButton{
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  font-weight: 400;
+  box-shadow: none;
+  margin: 0;
+  border-radius: 4px;
+  border: 0;
+  box-sizing: border-box;
+  color: #5e6c84;
+  cursor: pointer;
+  height: 48px;
+  padding: 8px 40px 8px 8px;
+  position: relative;
+  text-decoration: none;
+  width: 100%;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+  &:hover {
+    background-color: rgba(9, 30, 66, 0.08);
+    color: currentColor;
+  }
+}
+
+.buttonPlus{
+  background-color: rgba(9, 30, 66, 0.08);
+  box-shadow: none;
+  border: none;
+  text-decoration: none;
+  display: flex;
+  height: 28px;
+  width: 32px;
+  align-items: center;
+  border-radius: 4px;
+  flex: 0 0 auto;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.buttonText{
+  color: #172b4d;
+}
