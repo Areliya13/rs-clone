@@ -1,12 +1,17 @@
 $base-color: #172b4d;
+$header-color: #026aa7;
 $alt-color: #0079bf;
+
+.header {
+  background-color: $header-color;
+}
 
 .content {
   display: flex;
   justify-content: space-between;
   max-width: 1240px;
   margin: 0 auto;
-  min-height: calc(100vh - 40px);
+  min-height: calc(100vh - 120px);
 }
 
 .sidebarMain {

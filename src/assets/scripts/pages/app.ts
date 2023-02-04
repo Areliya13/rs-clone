@@ -1,21 +1,17 @@
 import Page from '../core/page';
-import {
-  getHash,
-  getMainAddress,
-  getMainOptions,
-  getOptions,
-  mainOptions,
-  setMainOptions,
-} from '../helpers/functions';
+import { getHash, getMainAddress, getMainOptions, getOptions, mainOptions, setMainOptions } from '../helpers/functions';
 import { createHtmlElement } from '../helpers/other';
 import { PageIds } from '../types/enum';
 import { Options } from '../types/types';
+import { Footer } from './footer/footer';
+import { Header } from './header/header';
 import Main from './main/main';
 import ErrorPage from './page404/page404';
 
 class App {
-  // private static container: HTMLElement = document.body;
   private static defaultPageID = 'content';
+  private static headerContent = new Header();
+  private static footerContent = new Footer();
   private static header: HTMLElement = createHtmlElement('header', {
     className: 'header',
   });
@@ -56,9 +52,7 @@ class App {
     function getPageHash(): void {
       const hash = window.location.hash;
       const address = getHash(hash);
-      const options = getOptions(
-        decodeURIComponent(hash.slice(hash.indexOf('?') + 1))
-      );
+      const options = getOptions(decodeURIComponent(hash.slice(hash.indexOf('?') + 1)));
       if (!hash) {
         App.renderPageContent(PageIds.MainPage);
       } else if (hash.indexOf('/') >= 0) {
@@ -72,6 +66,8 @@ class App {
   }
 
   run(): void {
+    App.header.append(App.headerContent.render());
+    App.footer.append(App.footerContent.render());
     document.body.append(App.header, App.main, App.footer);
     window.addEventListener('beforeunload', setMainOptions);
     window.addEventListener('load', getMainOptions);
