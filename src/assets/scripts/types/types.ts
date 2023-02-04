@@ -13,3 +13,7 @@ export type OptionsType = {
   min?: string,
   max?: string,
 };
+
+export type Options = Map<string, string>;
+
+export type stringObject = { [key: string]: string };
