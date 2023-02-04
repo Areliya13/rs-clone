@@ -90,3 +90,73 @@
     background-color: rgba(255, 255, 255, 0.2);
   }
 }
+
+.search-container {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  width: 200px;
+  display: flex;
+}
+
+.search-icon {
+  padding: 8px;
+  background-image: url('../images/search.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 16px 16px;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+.search-input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: auto 0;
+  height: 30px;
+  &::placeholder {
+    color: white;
+    margin-left: 4px;
+  }
+}
+
+.header-icon {
+  height: 32px;
+  width: 32px;
+  background-color: #026aa7;
+  border: none;
+  margin: 0 4px;
+  border-radius: 50%;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.bellIcon,
+.infoIcon {
+  background-size: 24px 24px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bellIcon {
+  background-image: url('../images/notification.svg');
+}
+
+.infoIcon {
+  background-image: url('../images/Question_mark_with_ring.svg');
+}
+
+.userIcon {
+  font-size: 14px;
+  color: white;
+}

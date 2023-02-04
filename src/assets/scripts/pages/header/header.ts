@@ -42,13 +42,20 @@ export class Header {
       className: 'right-container',
     });
 
-    const form = createHtmlElement('form');
-    const input = createHtmlElement('input');
-    const bellIcon = createHtmlElement('div', { className: 'header-icon bellIcon' });
-    const infoIcon = createHtmlElement('div', { className: 'header-icon infoIcon' });
-    const userIcon = createHtmlElement('div', { className: 'header-icon userIcon', textContent: 'AA' }); //to-do add user initials
-    form.append(input);
-    container.append(form);
+    const search = createHtmlElement('div', { className: 'search-container' });
+    const searchIcon = createHtmlElement('span', { className: 'search-icon' });
+    const input = createHtmlElement('input', { className: 'search-input', placeholder: 'Поиск', type: 'text' });
+    const bellIcon = createHtmlElement('button', { className: 'header-icon' });
+    const bellIconImg = createHtmlElement('span', { className: 'bellIcon' });
+    const infoIcon = createHtmlElement('button', { className: 'header-icon' });
+    const infoIconImg = createHtmlElement('span', { className: 'infoIcon' });
+    const userIcon = createHtmlElement('button', { className: 'header-icon' });
+    const userIconText = createHtmlElement('span', { className: 'userIcon', textContent: 'AA' }); //to-do add user initials
+    bellIcon.append(bellIconImg);
+    infoIcon.append(infoIconImg);
+    userIcon.append(userIconText);
+    search.append(searchIcon, input);
+    container.append(search, bellIcon, infoIcon, userIcon);
     return container;
   }
 }
