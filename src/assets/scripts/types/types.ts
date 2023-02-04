@@ -12,4 +12,9 @@ export type OptionsType = {
   alt?: string,
   min?: string,
   max?: string,
+  maxLength?: string,
+  for?: string,
+  required?: boolean,
+  disabled?: boolean
+  rows?: string,
 };

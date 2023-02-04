@@ -130,3 +130,211 @@ $alt-color: #0079BF;
 .buttonText{
   color: #172b4d;
 }
+
+.workspaceModalContainer{
+  overflow: auto;
+  z-index: 98;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13,13,13,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workspaceModal{
+  background-color: #ffffff;
+  position: relative;
+  align-items: stretch;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  min-height: 500px;
+  margin-top: 16px;
+  outline: 0;
+  overflow: hidden;
+  width: calc(100vw - 48px);
+  z-index: 1;
+}
+
+.modal-leftSide{
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 24px;
+  overflow: auto;
+  text-align: left;
+  z-index: 3;
+  margin: 64px auto 16px;
+  .modal-form{
+    display: flex;
+    flex-direction: column;
+    width: 388px;
+    .form-head{
+      color: #091E42;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 28px;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .form-text{
+      font-size: 18px;
+      color: #6B778C;
+      margin: 12px auto 24px;
+    }
+  }
+}
+
+.modalHead{
+  margin-top: 24px;
+  color: #091E42;
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  margin-bottom: 4px;
+  cursor: default;
+}
+
+#workspaceInput{
+  height: 48px;
+  margin-bottom: 6px;
+  -webkit-appearance: none;
+  background-color: #fafbfc;
+  border: none;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #dfe1e6;
+  box-sizing: border-box;
+  display: block;
+  line-height: 20px;
+  outline: none;
+  padding: 8px 12px;
+  transition-duration: 85ms;
+  transition-property: background-color,border-color,box-shadow;
+  transition-timing-function: ease;
+}
+
+.workspaceHelp{
+  color: #6B778C;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.activitySelect{
+  margin-bottom: 12px;
+  min-height: 36px;
+  background-color: #fafbfc;
+  box-shadow: inset 0 0 0 2px #dfe1e6;
+  border-radius: 3px;
+  width: 100%;
+  -moz-box-align: center;
+  align-items: center;
+  cursor: default;
+  display: flex;
+  flex-wrap: wrap;
+  -moz-box-pack: justify;
+  justify-content: space-between;
+  outline: 0;
+  position: relative;
+  transition: all 100ms ease 0s;
+  box-sizing: border-box;
+  border: medium none;
+  height: 36px;
+  padding: 8px 12px;
+}
+
+.descriptionHead-additional{
+  color: #6B778C;
+  font-size: 12px;
+  font-weight: 100;
+  cursor: default;
+}
+
+.descriptionTextarea{
+  color: #5e6c84;
+  margin-bottom: 6px;
+  resize: none;
+  -webkit-appearance: none;
+  background-color: #fafbfc;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: block;
+  line-height: 20px;
+  outline: none;
+  padding: 8px 12px;
+  transition-duration: 85ms;
+  transition-property: background-color,border-color,box-shadow;
+  transition-timing-function: ease;
+  &:hover{
+    background-color: #ebecf0;
+    box-shadow: inset 0 0 0 2px #dfe1e6;
+  }
+}
+
+.descriptionHelp{
+  color: var(--ds-text-subtle, #6B778C);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.form-continue{
+  height: 48px;
+  width: 100%;
+  background-color: rgba(9, 30, 66, 0.04);
+  box-shadow: none;
+  border: none;
+  color:  #a5adba;
+  cursor: not-allowed;
+  text-decoration: none;
+  -webkit-appearance: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  white-space: normal;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+}
+
+.modal-rightSide{
+  align-items: flex-start;
+  padding-top: 112px;
+  background: url("../images/modal-bg.svg") no-repeat;
+  background-size: cover;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.modal-close{
+  margin-top: 16px;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 2;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: #42526e;
+  padding: 0;
+  text-decoration: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-bottom: 8px;
+  -webkit-appearance: none;
+  cursor: pointer;
+  text-transform: none;
+  overflow: visible;
+  border: 0;
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
