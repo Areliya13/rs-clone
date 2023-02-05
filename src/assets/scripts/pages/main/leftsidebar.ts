@@ -2,6 +2,8 @@ import { createHtmlElement, getSvgIcon } from '../../helpers/other';
 import boardsIcon from '../../../images/trello-icon.svg';
 import templatesIcon from '../../../images/trello2-icon.svg';
 import mainIcon from '../../../images/trello3-icon.svg';
+import modalImage from '../../../images/modal-image.inl.svg';
+import closeButton from '../../../images/modal-close.inl.svg';
 import { ALT_COLOR, BASE_COLOR } from '../../types/constValues';
 
 class LeftSideBar {
@@ -136,7 +138,7 @@ class LeftSideBar {
     workspaceModalContainer.append(workspaceModal);
 
     workspaceButtonAdd.addEventListener('click', () => {
-      this.content.append(workspaceModalContainer);
+      document.body.append(workspaceModalContainer);
     });
 
     workspaceModalContainer.addEventListener('click', (event) => {
