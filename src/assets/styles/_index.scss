@@ -1,19 +1,24 @@
 $base-color: #172b4d;
-$alt-color: #0079BF;
+$header-color: #026aa7;
+$alt-color: #0079bf;
 
-.main{
+.header {
+  background-color: $header-color;
+}
+
+.content {
   display: flex;
   justify-content: space-between;
   max-width: 1240px;
-  margin: 0 auto;
-  min-height: calc(100vh - 40px);
+  margin: 40px auto 0;
+  min-height: calc(100vh - 164px);
 }
 
-.sidebarMain{
+.sidebarMain {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.listItem{
+.listItem {
   margin-bottom: 4px;
 }
 
@@ -23,7 +28,7 @@ $alt-color: #0079BF;
   background-color: transparent;
   border-radius: 4px;
   box-shadow: none;
-  color:  inherit;
+  color: inherit;
   font-weight: bold;
   margin: 0;
   min-height: 20px;
@@ -34,22 +39,22 @@ $alt-color: #0079BF;
   transition-duration: 85ms;
   transition-timing-function: ease;
   column-gap: 12px;
-  &:not(.current):hover{
+  &:not(.current):hover {
     background-color: rgba(9, 30, 66, 0.08);
     color: currentColor;
   }
 }
 
-.current{
-  background-color: #E4F0F6;
+.current {
+  background-color: #e4f0f6;
   color: $alt-color;
 }
 
-.workspaceDiv{
+.workspaceDiv {
   padding: 8px 0;
 }
 
-.workspaceText{
+.workspaceText {
   user-select: none;
   color: var(--ds-text-subtle, #5e6c84);
   font-size: 12px;
@@ -57,15 +62,15 @@ $alt-color: #0079BF;
   line-height: 16px;
 }
 
-.workspaceAddBtn{
+.workspaceAddBtn {
   color: currentColor;
-  &:hover{
+  &:hover {
     background-color: rgba(9, 30, 66, 0.08);
     color: currentColor;
   }
 }
 
-.icon{
+.icon {
   font-size: 20px;
   height: 20px;
   line-height: 20px;
@@ -79,12 +84,12 @@ $alt-color: #0079BF;
   border: none;
 }
 
-.sectionTitle{
+.sectionTitle {
   display: flex;
   column-gap: 4px;
 }
 
-.right-linksButton{
+.right-linksButton {
   background-color: transparent;
   border: none;
   display: flex;
@@ -112,7 +117,7 @@ $alt-color: #0079BF;
   }
 }
 
-.buttonPlus{
+.buttonPlus {
   background-color: rgba(9, 30, 66, 0.08);
   box-shadow: none;
   border: none;
@@ -127,7 +132,7 @@ $alt-color: #0079BF;
   font-size: 20px;
 }
 
-.buttonText{
+.buttonText {
   color: #172b4d;
 }
 
