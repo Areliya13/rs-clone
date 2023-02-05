@@ -1,5 +1,10 @@
 import express from 'express';
-import mongoose, {connect, Schema, model, isValidObjectId, modelNames } from 'mongoose';
+import {connect, model } from 'mongoose';
+import { defaultImg } from './src/constants/constants';
+import { userSchema } from './src/schema/user';
+import { ICheckItem, ICheckList, IUser } from './src/schema/user.types';
+import { createNewUser } from './src/utils/createNewUser';
+import { IEmptyParams, IEmptyReqQuery } from './types';
 
 const app = express()
 const port = 3000
@@ -12,55 +17,47 @@ const port = 3000
 //ReqQuery - request query params
 
 
-interface IUser {
-  name: string;
-  email: string;
-  avatar?: string;
-  arr: string[];
-}
+// interface IUser {
+//   name: string;
+//   email: string;
+//   avatar?: string;
+//   arr: string[];
+// }
 
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true  },
-  email: { type: String, required: true },
-  avatar: String,
-  arr: Array<String>
-});
+// const userSchema = new Schema<IUser>({
+//   name: { type: String, required: true  },
+//   email: { type: String, required: true },
+//   avatar: String,
+//   arr: Array<String>
+// });
 
-const User = model<IUser>('User', userSchema);  //это функция конструктор (класс)
+// const User = model<ICheckList>('User', checkListSchema);  //это функция конструктор (класс)
+const UserList = model<IUser>('userList', userSchema);  //это функция конструктор (класс)
 
-main().catch(err => console.log(err));
+
 async function main() {
   await connect('mongodb+srv://admin:v1VBsDSCDlkzGIKR@trello.id2jf8j.mongodb.net/trello?retryWrites=true&w=majority');
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-  const user = new User({
-    name: 'Bill22',
-    email: 'bill@initech.com',
-    avatar: 'https://i.imgur.com/dM7Thhn.png',
-    arr: ['s', 'd']
-  });
-  const x = await User.findById('63dc0e424d7c4ebacb50393c');
-
-  console.log(user.email, x);
-  
+  const user = await new UserList();
+  // const x = await User.findById('63de444b5a083013f4f85b92'); // read model by id
+  // const x = await User.findByIdAndDelete('63de56a045cdfac5c2c2129a'); // read model by id and delete
+  // user.save();
+  // user.deleteOne({arrayFilters: {name: 'Tamara'}})
+  const list = await UserList.findByIdAndUpdate<IUser>('63de5657068eec2fde4246ed', {name: 'dada1', id: undefined, boards: [{title: 'new tamaras board'}]});
+  const x = await UserList.find(); // read model all
+  console.log(user);  
+  return x
 }
 
-async function zz() {
-  const d = await isValidObjectId('63dsfe716068f134993f3117s')
-  const z = await modelNames()
-  console.log('d', d, z);
-}
-  zz()
 
 
 app.get<
-{},
-{ data: string[], message: string },
-{},
-{ page: number, limit: number, breed: 'labrador' | 'german shepherd' | 'golden retriever' }>
-('/', (req, res) => {
-  res.send({data: ['доска не доска. лист не лист'], message: 'Start?'})
-})
+IEmptyParams,
+IUser[],
+IEmptyReqQuery,
+IEmptyReqQuery>
+('/rest', async (req, res) => {res.send(await main())})
 
-app.listen(port, () => {
+app.listen(port, () => { 
   console.log(`Example app listening on port ${port}`)
 })
