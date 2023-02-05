@@ -102,10 +102,6 @@ class Main {
     return leftSidebarContainer;
   }
 
-  createWorkspaceModal() {
-
-  }
-
   render() {
     this.content.append(this.createLeftSidebar());
     document.body.append(this.content);
