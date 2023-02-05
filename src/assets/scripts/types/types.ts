@@ -13,6 +13,11 @@ export type OptionsType = {
   min?: string;
   max?: string;
   target?: string;
+  maxLength?: string;
+  for?: string;
+  required?: boolean;
+  disabled?: boolean;
+  rows?: string;
 };
 
 export type Options = Map<string, string>;
