@@ -30,11 +30,25 @@ li {
 
 button {
   cursor: pointer;
-  padding: 0;
+  margin-bottom: 8px;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: inline-block;
+  line-height: 20px;
+  padding: 6px 12px;
+  position: relative;
+  text-decoration: none;
+  overflow: visible;
 }
 
 select {
   cursor: pointer;
+}
+
+button, select {
+  text-transform: none;
 }
 
 a {

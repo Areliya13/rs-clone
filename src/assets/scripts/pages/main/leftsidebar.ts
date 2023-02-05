@@ -4,25 +4,24 @@ import templatesIcon from '../../../images/trello2-icon.svg';
 import mainIcon from '../../../images/trello3-icon.svg';
 import modalImage from '../../../images/modal-image.inl.svg';
 import closeButton from '../../../images/modal-close.inl.svg';
-import { ALT_COLOR, BASE_COLOR } from '../../types/constValues';
+import { ALT_COLOR, BASE_COLOR, leftSidebarButtons } from '../../types/constValues';
 
 class LeftSideBar {
-  render(): HTMLElement {
+  renderLeftSide(): HTMLElement {
     const leftSidebarContainer = createHtmlElement('aside', {
-      className: 'boards',
+      className: 'left-containerMain',
     });
     const unList = createHtmlElement('ul', { className: 'sidebarMain' });
-    const buttonsName = ['Доски', 'Шаблоны', 'Главная страница'];
     const icons = [boardsIcon, templatesIcon, mainIcon];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < leftSidebarButtons.length; i++) {
       const itemList = createHtmlElement('li', { className: 'listItem' });
       const itemLink = createHtmlElement('a', {
         className: 'itemLink',
-        href: '#',
+        href: leftSidebarButtons[i][1],
       });
       let itemIcon: SVGSVGElement;
-      const itemName = buttonsName[i];
-      if (buttonsName[i] === 'Главная страница') {
+      const itemName = leftSidebarButtons[i][0];
+      if (leftSidebarButtons[i][0] === 'Главная страница') {
         itemLink.classList.add('current');
         itemIcon = getSvgIcon(icons[i], ALT_COLOR, 'icon icon-current');
       } else {

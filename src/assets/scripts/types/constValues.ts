@@ -6,3 +6,8 @@ export const menuItems = [
   ['В избранном', '#'],
   ['Шаблоны', '#'],
 ];
+export const leftSidebarButtons = [
+  ['Доски', '#boards'],
+  ['Шаблоны', '#templates'],
+  ['Главная страница', '#main-page'],
+]

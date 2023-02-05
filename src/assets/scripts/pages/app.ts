@@ -5,8 +5,10 @@ import { PageIds } from '../types/enum';
 import { Options } from '../types/types';
 import { Footer } from './footer/footer';
 import { Header } from './header/header';
-import Main from './main/main';
 import ErrorPage from './page404/page404';
+import { Boards } from './main/boards';
+import LeftSideBar from './main/leftsidebar';
+import { MainPage } from './main/mainPage';
 
 class App {
   private static defaultPageID = 'content';
@@ -38,12 +40,18 @@ class App {
           mainOptions.set(key, value);
         });
       }
-      page = new Main(idPage);
+      page = new MainPage(idPage);
+    } else if (idPage === PageIds.BoardsPage) {
+      page = new Boards(idPage)
     }
 
     if (page) {
       const pageHTML: HTMLElement = page.render();
       pageHTML.className = this.defaultPageID;
+      if(idPage === PageIds.MainPage || idPage === PageIds.BoardsPage || idPage === PageIds.TemplatePage) {
+        const leftSidebar = new LeftSideBar().renderLeftSide();
+        pageHTML.prepend(leftSidebar);
+      }
       this.main.append(pageHTML);
     }
   }
@@ -53,6 +61,7 @@ class App {
       const hash = window.location.hash;
       const address = getHash(hash);
       const options = getOptions(decodeURIComponent(hash.slice(hash.indexOf('?') + 1)));
+      console.log(hash, address, options)
       if (!hash) {
         App.renderPageContent(PageIds.MainPage);
       } else if (hash.indexOf('/') >= 0) {
