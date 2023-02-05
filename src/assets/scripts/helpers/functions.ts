@@ -1,10 +1,10 @@
-import { PageIds } from "../types/enum";
-import { Options } from "../types/types";
+import { PageIds } from '../types/enum';
+import { Options } from '../types/types';
 
 export let mainOptions: Options = new Map();
-export const locStMainOptions = 'mainOptions';
+export const locStMainOptions = 'trelloOptions';
 
-export function getLocalStorage (element: Storage, selector: string): string {
+export function getLocalStorage(element: Storage, selector: string): string {
   const result = element.getItem(selector);
   if (!result) {
     return '{}';
@@ -13,7 +13,9 @@ export function getLocalStorage (element: Storage, selector: string): string {
 }
 
 export function getMainOptions(): void {
-  mainOptions = new Map(Object.entries(JSON.parse(getLocalStorage(localStorage, locStMainOptions)) as { [s: string]: string; }));
+  mainOptions = new Map(
+    Object.entries(JSON.parse(getLocalStorage(localStorage, locStMainOptions)) as { [s: string]: string })
+  );
 }
 
 export function setMainOptions(): void {
@@ -29,7 +31,7 @@ export function getMainAddress(): string {
   const arr: string[] = [];
   mainOptions.forEach((val, key) => {
     arr.push(`${key}=${val}`);
-  })
+  });
   return `#${PageIds.MainPage}?${arr.join('&')}`;
 }
 
