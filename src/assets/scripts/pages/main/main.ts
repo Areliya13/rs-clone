@@ -53,17 +53,16 @@ class Main {
     const inputWorkspace = createHtmlElement('input', {id: 'workspaceInput', type: 'text', maxLength: '100', placeholder: 'Компания «Тако»', required: true});
     const spanWorkspaceHelp = createHtmlElement('span', {className: 'workspaceHelp', textContent: 'Укажите название вашей команды, компании или организации.'});
     const headChooseActivity = createHtmlElement('span', {className: 'modalHead activityHead', textContent: 'Тип рабочего пространства'});
-    const selectChooseActivity = createHtmlElement('select', {className: 'activitySelect', required: true, innerHTML: `
-    <option selected disabled>Выбрать...</option>
-    <option>Продажи CRM</option>
-    <option>Образование</option>
-    <option>Инженерия/ИТ</option>
-    <option>Операции</option>
-    <option>Управление персоналом</option>
-    <option>Малый бизнес</option>
-    <option>Маркетинг</option>
-    <option>Другое</option>
-    `});
+    const selectChooseActivity = createHtmlElement('select', {className: 'activitySelect', required: true});
+    const selectArray = ['Выбрать...', 'Продажи CRM', 'Образование', 'Инженерия/ИТ', 'Операции', 'Управление персоналом', 'Малый бизнес', 'Маркетинг', 'Другое'];
+    for(let i = 0; i < selectArray.length; i++) {
+      const selectOption = createHtmlElement('option', {textContent: selectArray[i]});
+      if(i === 0) {
+        selectOption.selected = true;
+        selectOption.disabled = true;
+      }
+      selectChooseActivity.append(selectOption);
+    }
     const headDescription = createHtmlElement('span', {className: 'modalHead descriptionHead', innerHTML: `
     Описание рабочего пространства
     <span class="descriptionHead-additional">Необязательно</span>
