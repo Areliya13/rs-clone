@@ -24,7 +24,7 @@ export class Footer {
 
   renderGitHubItem(link: string, name: string) {
     const githubLink = createHtmlElement('a', { className: 'gh-link', href: link, target: '_blank' });
-    const github = createHtmlElement('div', { className: 'icon github' });
+    const github = createHtmlElement('div', { className: 'icon-footer github' });
     const githubName = createHtmlElement('span', { textContent: name });
     githubLink.append(github, githubName);
     return githubLink;
@@ -44,7 +44,7 @@ export class Footer {
       className: 'rsschool-link',
     });
     const rsschoolLink = createHtmlElement('a', { href: links.rsschool, target: '_blank' });
-    const RSSchool = createHtmlElement('div', { className: 'icon rsschool' });
+    const RSSchool = createHtmlElement('div', { className: 'icon-footer rsschool' });
     rsschoolLink.append(RSSchool);
     container.append(rsschoolLink);
     return container;
