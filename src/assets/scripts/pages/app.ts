@@ -61,7 +61,6 @@ class App {
       const hash = window.location.hash;
       const address = getHash(hash);
       const options = getOptions(decodeURIComponent(hash.slice(hash.indexOf('?') + 1)));
-      console.log(hash, address, options)
       if (!hash) {
         App.renderPageContent(PageIds.MainPage);
       } else if (hash.indexOf('/') >= 0) {
