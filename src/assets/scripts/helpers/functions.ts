@@ -13,14 +13,13 @@ export function getLocalStorage(element: Storage, selector: string): string {
 }
 
 export function getMainOptions(): void {
-  mainOptions = new Map(
-    Object.entries(JSON.parse(getLocalStorage(localStorage, locStMainOptions)) as { [s: string]: string })
-  );
+  const objFromLocalStorage = JSON.parse(getLocalStorage(localStorage, locStMainOptions));
+  mainOptions = new Map<string, string>(Object.entries(objFromLocalStorage));
 }
 
 export function setMainOptions(): void {
-  const opt = JSON.stringify(Object.fromEntries(mainOptions));
-  localStorage.setItem(locStMainOptions, opt);
+  const options = JSON.stringify(Object.fromEntries(mainOptions));
+  localStorage.setItem(locStMainOptions, options);
 }
 
 export function getMainAddress(): string {
@@ -29,8 +28,8 @@ export function getMainAddress(): string {
     return `#${PageIds.MainPage}`;
   }
   const arr: string[] = [];
-  mainOptions.forEach((val, key) => {
-    arr.push(`${key}=${val}`);
+  mainOptions.forEach((option, index) => {
+    arr.push(`${index}=${option}`);
   });
   return `#${PageIds.MainPage}?${arr.join('&')}`;
 }

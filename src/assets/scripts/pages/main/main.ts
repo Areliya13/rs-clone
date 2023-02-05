@@ -1,7 +1,6 @@
 import Page from '../../core/page';
 import LeftSideBar from './leftsidebar';
 import { MainBoards } from './mainBoards';
-import { RightSideBar } from './rightSideBar';
 
 class Main extends Page {
   leftSideBar: LeftSideBar;
