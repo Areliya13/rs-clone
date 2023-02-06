@@ -1,6 +1,7 @@
 import express from 'express';
 import { port as expressPort } from './src/config';
-import { createBoardController } from './src/controllers/board';
+import { createBoardController, deleteBoardController, getAllBoardsController } from './src/controllers/board/index';
+import { Path } from './src/types/path';
 
 const app = express()
 const port = expressPort || 3000
@@ -28,7 +29,9 @@ app.use(express.urlencoded({extended: false}))
     
 // }
 // Board section
-app.post('/board', createBoardController)
+app.post(Path.board, createBoardController)
+app.get(Path.boardWithId, getAllBoardsController)
+app.delete(Path.boardWithId, deleteBoardController)
 
 app.listen(port, () => { 
   console.log(`Trello app listening on port ${port}`)

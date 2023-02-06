@@ -9,7 +9,7 @@ interface ICreateNewUserProps {
 export const createNewUser = ({name, image }: ICreateNewUserProps): IUser => {
     return {
         name,
-        id: createId(),
+        _id: createId(),
         image: image ? image : undefined,
         boards: []
       }

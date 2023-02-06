@@ -1,15 +1,14 @@
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { IUser } from './user.types';
 
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true  },
-  id: {type: String, required: true},
   image: String,
   boards: [{
     title: String,
     image: String,
     color: String,
-    id: String,
+    _id: Types.ObjectId,
     list: [{
             title: String,
             id: String,

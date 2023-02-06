@@ -1,8 +1,11 @@
+import { Types } from "mongoose";
+
 interface IBoard {
     title: string;
     lists: IList[];
     image?: string;
     color?: string;
+    _id: Types.ObjectId;
 }
 
 interface IList {
@@ -27,7 +30,7 @@ interface IItem {
 
 interface IUser {
     name: string;
-    id: string;
+    _id: Types.ObjectId;
     image?: string;
     boards: IBoard[];
 }
