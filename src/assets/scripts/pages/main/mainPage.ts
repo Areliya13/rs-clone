@@ -2,8 +2,13 @@ import { createHtmlElement, getSvgIcon } from '../../helpers/other';
 import clockIcon from '../../../images/clock-icon.svg';
 import heartIcon from '../../../images/heart-icon.svg';
 import { BASE_COLOR } from '../../types/constValues';
+import Page from '../../core/page';
 
-export class MainBoards {
+export class MainPage extends Page {
+  constructor(id: string) {
+    super(id);
+  }
+
   renderContent() {
     const midContentContainer = createHtmlElement('article', {
       className: 'midContent',
@@ -64,5 +69,10 @@ export class MainBoards {
     rightSidebarContainer.append(recentlyViewed, linksSection);
 
     return rightSidebarContainer;
+  }
+
+  render(): HTMLDivElement {
+    this.container.append(this.renderContent(), this.renderRightSideBar());
+    return this.container;
   }
 }

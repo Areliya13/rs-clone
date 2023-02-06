@@ -14,6 +14,12 @@ $alt-color: #0079bf;
   min-height: calc(100vh - 164px);
 }
 
+.left-containerMain {
+  max-height: 90vh;
+  padding: 0 16px;
+  width: 240px;
+}
+
 .sidebarMain {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -50,8 +56,12 @@ $alt-color: #0079bf;
   color: $alt-color;
 }
 
-.workspaceDiv {
+.workspacesDiv {
   padding: 8px 0;
+  .workspaceHead {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .workspaceText {
