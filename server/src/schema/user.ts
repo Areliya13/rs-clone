@@ -1,4 +1,4 @@
-import { Schema, Types, } from 'mongoose';
+import { Schema } from 'mongoose';
 import { IUser } from './user.types';
 
 const userSchema = new Schema<IUser>({
@@ -8,6 +8,7 @@ const userSchema = new Schema<IUser>({
   boards: [{
     title: String,
     image: String,
+    color: String,
     id: String,
     list: [{
             title: String,

@@ -1,7 +1,8 @@
 interface IBoard {
     title: string;
     lists: IList[];
-    image: string;
+    image?: string;
+    color?: string;
 }
 
 interface IList {
