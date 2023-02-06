@@ -2,7 +2,7 @@ export const enum PageIds {
   MainPage = 'main-page',
   ErrorPage = 'error-page',
   BoardsPage = 'boards',
-  TemplatePage = 'template',
+  TemplatesPage = 'templates',
 }
 
 export const enum links {

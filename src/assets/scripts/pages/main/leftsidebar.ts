@@ -7,6 +7,11 @@ import closeButton from '../../../images/modal-close.inl.svg';
 import { ALT_COLOR, BASE_COLOR, leftSidebarButtons } from '../../types/constValues';
 
 class LeftSideBar {
+
+  constructor(public id: string) {
+    this.id = id;
+  }
+
   renderLeftSide(): HTMLElement {
     const leftSidebarContainer = createHtmlElement('aside', {
       className: 'left-containerMain',
@@ -21,7 +26,7 @@ class LeftSideBar {
       });
       let itemIcon: SVGSVGElement;
       const itemName = leftSidebarButtons[i][0];
-      if (leftSidebarButtons[i][0] === 'Главная страница') {
+      if (leftSidebarButtons[i][1].slice(1) === this.id) {
         itemLink.classList.add('current');
         itemIcon = getSvgIcon(icons[i], ALT_COLOR, 'icon icon-current');
       } else {

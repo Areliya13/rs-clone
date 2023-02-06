@@ -9,6 +9,7 @@ import ErrorPage from './page404/page404';
 import { Boards } from './main/boards';
 import LeftSideBar from './main/leftsidebar';
 import { MainPage } from './main/mainPage';
+import { Templates } from './main/templates';
 
 class App {
   private static defaultPageID = 'content';
@@ -41,15 +42,17 @@ class App {
         });
       }
       page = new MainPage(idPage);
+    } else if (idPage === PageIds.TemplatesPage) {
+      page = new Templates(idPage);
     } else if (idPage === PageIds.BoardsPage) {
-      page = new Boards(idPage)
+      page = new Boards(idPage);
     }
 
     if (page) {
       const pageHTML: HTMLElement = page.render();
       pageHTML.className = this.defaultPageID;
-      if(idPage === PageIds.MainPage || idPage === PageIds.BoardsPage || idPage === PageIds.TemplatePage) {
-        const leftSidebar = new LeftSideBar().renderLeftSide();
+      if(idPage === PageIds.MainPage || idPage === PageIds.BoardsPage || idPage === PageIds.TemplatesPage) {
+        const leftSidebar = new LeftSideBar(idPage).renderLeftSide();
         pageHTML.prepend(leftSidebar);
       }
       this.main.append(pageHTML);
