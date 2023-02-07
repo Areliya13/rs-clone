@@ -4,6 +4,7 @@ import { IUser } from './user.types';
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true  },
   image: String,
+  _id: Types.ObjectId,
   boards: [{
     title: String,
     image: String,

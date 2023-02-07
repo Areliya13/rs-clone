@@ -3,8 +3,8 @@ import { getAllBoardsService } from "../../services/board/getAllBoards"
 
 export const getAllBoardsController = async (req: Request, res: Response) => {
     try{
-      const id = req.params.id
-      const response = await getAllBoardsService(id)
+      const userId = req.body.userId
+      const response = await getAllBoardsService(userId)
       res.status(200).send(response)
     }
     catch(e) {

@@ -3,8 +3,8 @@ import { createBoardService } from "../../services/board/createBoard"
 
 export const createBoardController = async (req: Request, res: Response) => {
     try{
-      const id = req.body.id
-      const response = await createBoardService(id, req.body)
+      const userId = req.body.id
+      const response = await createBoardService(userId, req.body)
       res.status(200).send(response)
     }
     catch(e) {
