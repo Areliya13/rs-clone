@@ -5,6 +5,13 @@ import mainIcon from '../../../images/trello3-icon.svg';
 import modalImage from '../../../images/modal-image.inl.svg';
 import closeButton from '../../../images/modal-close.inl.svg';
 import { ALT_COLOR, BASE_COLOR, leftSidebarButtons } from '../../types/constValues';
+import upSvg from '../../../images/up.inl.svg';
+import downSvg from '../../../images/down.inl.svg';
+import workspaceBoardIcon from '../../../images/boards.inl.svg';
+import importantIcon from '../../../images/heart-icon.inl.svg';
+import presentationIcon from '../../../images/presentation.inl.svg';
+import membersIcon from '../../../images/members.inl.svg';
+import settingsIcon from '../../../images/settings.inl.svg';
 
 class LeftSideBar {
 
@@ -155,7 +162,51 @@ class LeftSideBar {
       workspaceModalContainer.remove();
     });
 
-    leftSidebarContainer.append(unList, workspacesDiv);
+    const workspace = createHtmlElement('div', {className: 'workspace'});
+    const workspaceHeader = createHtmlElement('a', {className: 'workspaceHeader', href: '#'});
+    const workspaceName = createHtmlElement('span', {className: 'workspaceName', textContent: 'Тестовое рабочее пространство'})
+    const workspaceIcon = createHtmlElement('div', {className: 'workspaceIcon', textContent: `${workspaceName.textContent[0].toUpperCase()}`});
+    const workspaceArrow = createHtmlElement('div', {className: 'workspaceArrow', innerHTML: upSvg});
+    workspaceHeader.append(workspaceIcon, workspaceName, workspaceArrow);
+    workspace.append(workspaceHeader);
+    workspacesDiv.append(workspace);
+
+    const workspaceOptionsList = createHtmlElement('ul', {className: 'workspaceOptionsList'});
+    const workspaceOptionsArray = [
+      [workspaceBoardIcon, 'Доски'],
+      [importantIcon, 'Важные события'],
+      [presentationIcon, 'Представления'],
+      [membersIcon, 'Участники'],
+      [settingsIcon, 'Настройки'],
+    ];
+    workspaceOptionsArray.map(e => {
+      const listItem = createHtmlElement('li', {className: 'workspaceListItem'});
+      const itemLink = createHtmlElement('a', {className: 'workspaceItemLink', href: '#'});
+      const linkIcon = createHtmlElement('div', {className: 'workspaceLinkIcon', innerHTML: e[0]});
+      const linkText = createHtmlElement('span', {className: 'workspaceLinkText', textContent: e[1]});
+      const membersPlusSpan = createHtmlElement('span', {className: 'icon membersPlusSymbol', textContent: '+'});
+      const symbolItem = createHtmlElement('span', {className: 'icon symbolItem', textContent: '>'})
+      if(e[1] === 'Участники') {
+        itemLink.append(linkIcon, linkText, membersPlusSpan);
+      } else {
+        itemLink.append(linkIcon, linkText);
+      }
+      if(e[1] === workspaceOptionsArray[2][1] || e[1] === workspaceOptionsArray[3][1] || e[1] === workspaceOptionsArray[4][1]) {
+        itemLink.append(symbolItem);
+      }
+      listItem.append(itemLink);
+      workspaceOptionsList.append(listItem);
+    })
+    workspace.append(workspaceOptionsList);
+
+    workspaceHeader.addEventListener('click', (event) => {
+      event.preventDefault();
+      if(workspaceArrow.innerHTML === upSvg) {
+        workspaceArrow.innerHTML = downSvg;
+      } else {
+        workspaceArrow.innerHTML = upSvg;
+      }
+    })
 
     leftSidebarContainer.append(unList, workspacesDiv);
     return leftSidebarContainer;

@@ -57,16 +57,68 @@ $alt-color: #0079bf;
 }
 
 .workspacesDiv {
-  padding: 8px 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding-top: 12px;
+  padding-bottom: 40px;
+  list-style: none;
   .workspaceHead {
     display: flex;
     justify-content: space-between;
+    padding: 8px 0;
+  }
+  .workspace {
+    margin-bottom: 4px;
+    .workspaceHeader {
+      align-items: center;
+      background-color: transparent;
+      border-radius: 4px;
+      box-shadow: none;
+      color: inherit;
+      display: flex;
+      font-weight: bold;
+      margin: 0;
+      min-height: 20px;
+      overflow: hidden;
+      padding: 6px 8px 6px 0;
+      text-decoration: none;
+      transition-property: background-color, border-color, box-shadow;
+      transition-duration: 85ms;
+      transition-timing-function: ease;
+      .workspaceIcon {
+        font-size: 14px;
+        border-radius: 2px;
+        height: 21px;
+        width: 21px;
+        margin: 6px;
+        flex: 0 0 auto;
+        background: linear-gradient(#0747a6, #008da6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-weight: bold;
+      }
+      .workspaceName {
+        flex: 1 1 auto;
+        width: min-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: inherit;
+        font-weight: bold;
+      }
+      .workspaceArrow {
+        margin-left: 4px;
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 }
 
 .workspaceText {
   user-select: none;
-  color: var(--ds-text-subtle, #5e6c84);
+  color: #5e6c84;
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
@@ -74,6 +126,7 @@ $alt-color: #0079bf;
 
 .workspaceAddBtn {
   color: currentColor;
+  margin-bottom: 0;
   &:hover {
     background-color: rgba(9, 30, 66, 0.08);
     color: currentColor;
@@ -353,4 +406,64 @@ $alt-color: #0079bf;
   height: 24px;
   width: 24px;
   line-height: 24px;
+}
+
+.workspaceListItem {
+  margin-bottom: 4px;
+  .workspaceItemLink {
+    font-size: 12px;
+    color: rgba(9, 30, 66, 0.66);
+    font-weight: 400;
+    align-items: center;
+    background-color: transparent;
+    border-radius: 4px;
+    box-shadow: none;
+    display: flex;
+    column-gap: 4px;
+    margin: 0;
+    min-height: 20px;
+    overflow: hidden;
+    padding: 6px 8px 6px 28px;
+    text-decoration: none;
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: 85ms;
+    transition-timing-function: ease;
+    &:hover {
+      color: rgba(9, 30, 66, 0.77);
+      background-color: rgba(9, 30, 66, 0.08);
+      outline: 0;
+      .symbolItem {
+        width: 10px;
+        transform: translateX(0px);
+      }
+    }
+  }
+  .workspaceLinkIcon {
+    display: block;
+    flex: 0 0 auto;
+    text-align: center;
+    width: 16px;
+    height: 16px;
+    color: #42526e;
+    font-size: 12px;
+  }
+  .workspaceLinkText {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    width: min-content;
+    font-size: 12px;
+    color: rgba(9, 30, 66, 0.66);
+  }
+}
+
+.membersPlusSymbol {
+  font-weight: bold;
+}
+
+.symbolItem {
+  width: 0;
+  transform: translateX(20px);
+  transition: all 0.2s ease;
 }
