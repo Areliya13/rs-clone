@@ -7,6 +7,7 @@ import { getAllUsersController } from './src/controllers/user/index';
 import { createBoardController, deleteBoardController, getAllBoardsController, updateBoardController } from './src/controllers/board/index';
 import { createListController, deleteListsController, getAllListsController, updateListsController } from './src/controllers/list/index';
 import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
+import { createCommentController, deleteCommentController, getAllCommentsController, updateCommentController } from './src/controllers/comment/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -40,6 +41,12 @@ app.post(Path.item, createItemController)
 app.get(Path.itemWithId, getAllItemsController)
 app.delete(Path.itemWithId, deleteItemController)
 app.put(Path.itemWithId, updateItemController)
+
+//Comment section
+app.post(Path.comment, createCommentController)
+app.get(Path.commentWithId, getAllCommentsController)
+app.delete(Path.commentWithId, deleteCommentController)
+app.put(Path.commentWithId, updateCommentController)
 
 // async function main() {
 //   await connectToDB()
