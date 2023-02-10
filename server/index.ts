@@ -4,7 +4,7 @@ import { port as expressPort } from './src/config';
 import { Path } from './src/types/path';
 import { createWorkSpaceController, deleteWorkSpaceController, getAllWorkSpacesController, updateWorkSpaceController } from './src/controllers/workSpace/index';
 import { getAllUsersController } from './src/controllers/user/index';
-import { createBoardController, deleteBoardController, getAllBoardsController } from './src/controllers/board/index';
+import { createBoardController, deleteBoardController, getAllBoardsController, updateBoardController } from './src/controllers/board/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -25,7 +25,7 @@ app.put(Path.workSpaceWithId, updateWorkSpaceController)
 app.post(Path.board, createBoardController)
 app.get(Path.boardWithId, getAllBoardsController)
 app.delete(Path.boardWithId, deleteBoardController)
-// app.put(Path.boardWithId, updateBoardController)
+app.put(Path.boardWithId, updateBoardController)
 
 // // List section
 // app.post(Path.list, createListController)

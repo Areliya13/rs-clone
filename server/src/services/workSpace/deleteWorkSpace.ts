@@ -8,7 +8,8 @@ export const deleteWorkSpaceService = async (userId: string, workSpaceId: string
     await connectToDB()
     const workSpace = await WorkSpace.findByIdAndDelete(workSpaceId)
     if (!workSpace) throw new Error('workSpaceId does not exist').message
-    await User.findOneAndUpdate<IUser>({_id: userId}, {$pull: {workSpace: workSpaceId}})
+    const user = await User.findOneAndUpdate<IUser>({_id: userId}, {$pull: {workSpace: workSpaceId}})
+    if (!user) throw new Error('userId does not exist').message
     const response = await getPopulatedUser(userId)
     return response
 }
