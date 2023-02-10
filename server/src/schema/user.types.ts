@@ -1,8 +1,33 @@
 import { Types } from "mongoose";
 
+enum IRef {
+    user = 'User',
+    workSpace = 'WorkSpace',
+    board = 'Board',
+    list = 'List',
+    item = 'Item',
+    comment = 'Comment',
+    mark = 'Mark',
+    checkList = 'CheckList',
+    checkItem = 'CheckItem',
+}
+
+interface IUser {
+    name: string;
+    _id: Types.ObjectId;
+    image?: string;
+    workSpace: Types.ObjectId[];
+}
+
+interface IWork {
+    title: string;
+    _id: Types.ObjectId;
+    boards: Types.ObjectId[];
+}
+
 interface IBoard {
     title: string;
-    lists: IList[];
+    lists: Types.ObjectId[];
     image?: string;
     color?: string;
     _id: Types.ObjectId;
@@ -10,62 +35,45 @@ interface IBoard {
 
 interface IList {
     title: string;
-    items: IItem[];
-    id: string;
+    items: Types.ObjectId[];
+    _id: Types.ObjectId;
 }
 
 interface IItem {
     title: string;
-    userId: string[];
+    userId: Types.ObjectId[];
     deadline: Date;
     description: string;
-    comments: IComment[];
-    actions: IAction[];
-    marks: IMark[];
-    checkLists: ICheckItem[];
+    comments: Types.ObjectId[];
+    marks: Types.ObjectId[];
+    checkLists: Types.ObjectId[];
     image: string;
-    id: string;
-    authorId: string;
-}
-
-interface IUser {
-    name: string;
     _id: Types.ObjectId;
-    image?: string;
-    boards: IBoard[];
 }
 
 interface IComment {
-    userId:	string;
+    userId:	Types.ObjectId;
     description: string;
     date: Date;
-    authorName: string;
-    authorImg: string;
-    id: string;
+    _id: Types.ObjectId;
 }
 
-interface IAction {
-    userId: string;
-    // do: unknown; //sadsada
-    date: Date;
-    id: string;
-}
 
 interface IMark {
     title: string;
     color: string;
-    id: string;
+    _id: Types.ObjectId;
 }
 
 interface ICheckList {
-    id: string;
-    items: ICheckItem[]
+    _id: Types.ObjectId;
+    items: Types.ObjectId[];
 }
 
 interface ICheckItem {
     title: string;
     done: boolean;
-    id: string;
+    _id: Types.ObjectId;
 }
 
-export {IUser, IBoard, IList, IItem, ICheckItem, ICheckList, IAction, IComment, IMark}
+export {IUser, IWork, IBoard, IList, IItem, ICheckItem, ICheckList, IComment, IMark, IRef}

@@ -1,11 +1,10 @@
-import { UserList } from '../../schema/model';
+import { WorkSpace } from '../../schema/model';
+import { IRef } from '../../schema/user.types';
 import { connectToDB } from '../../utils/connectToDB';
 
-export const getAllBoardsService = async (userId: string) => {
-    if (!userId) throw new Error('Id not transferred').message
+export const getAllBoardsService = async (workSpaceId: string) => {
+    if (!workSpaceId) throw new Error('Id not transferred').message
     await connectToDB()
-    const user = await UserList.findById(userId)
-    if (!user) throw new Error('User not found').message
-    const allBoards = user?.boards
-    return allBoards
+    const workSpace = await WorkSpace.findById(workSpaceId).populate({path: 'boards', model: IRef.board})
+    return workSpace
 }

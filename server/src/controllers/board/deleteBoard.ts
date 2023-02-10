@@ -3,9 +3,9 @@ import { deleteBoardService } from "../../services/board/deleteBoard"
 
 export const deleteBoardController = async (req: Request, res: Response) => {
     try{
-      const userId = req.body.userId
+      const workSpaceId = req.body.workSpaceId
       const boardId = req.params.id
-      const response = await deleteBoardService(userId, boardId)
+      const response = await deleteBoardService(workSpaceId, boardId)
       res.status(200).send(response)
     }
     catch(e) {
