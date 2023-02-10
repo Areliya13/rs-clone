@@ -42,12 +42,12 @@ interface IList {
 interface IItem {
     title: string;
     userId: Types.ObjectId[];
-    deadline: Date;
-    description: string;
+    deadline?: Date;
+    description?: string;
     comments: Types.ObjectId[];
     marks: Types.ObjectId[];
     checkLists: Types.ObjectId[];
-    image: string;
+    image?: string;
     _id: Types.ObjectId;
 }
 

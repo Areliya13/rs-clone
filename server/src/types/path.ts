@@ -8,5 +8,8 @@ export enum Path {
     boardWithId = '/board/:id',
     
     list = '/list',
-    listWithId = '/list/:id'
+    listWithId = '/list/:id',
+
+    item = '/item',
+    itemWithId = '/item/:id'
 }

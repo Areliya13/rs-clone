@@ -6,6 +6,7 @@ import { createWorkSpaceController, deleteWorkSpaceController, getAllWorkSpacesC
 import { getAllUsersController } from './src/controllers/user/index';
 import { createBoardController, deleteBoardController, getAllBoardsController, updateBoardController } from './src/controllers/board/index';
 import { createListController, deleteListsController, getAllListsController, updateListsController } from './src/controllers/list/index';
+import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -28,11 +29,18 @@ app.get(Path.boardWithId, getAllBoardsController)
 app.delete(Path.boardWithId, deleteBoardController)
 app.put(Path.boardWithId, updateBoardController)
 
-// // List section
+//List section
 app.post(Path.list, createListController)
 app.get(Path.listWithId, getAllListsController)
 app.delete(Path.listWithId, deleteListsController)
 app.put(Path.listWithId, updateListsController)
+
+//Item section
+app.post(Path.item, createItemController)
+app.get(Path.itemWithId, getAllItemsController)
+app.delete(Path.itemWithId, deleteItemController)
+app.put(Path.itemWithId, updateItemController)
+
 // async function main() {
 //   await connectToDB()
 //   const user = await User.create<IUser>({
