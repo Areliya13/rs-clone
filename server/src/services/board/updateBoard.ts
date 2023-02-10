@@ -1,4 +1,4 @@
-import { Board, User } from '../../schema/model';
+import { Board } from '../../schema/model';
 import { IBoard } from '../../schema/user.types';
 import { connectToDB } from '../../utils/connectToDB';
 

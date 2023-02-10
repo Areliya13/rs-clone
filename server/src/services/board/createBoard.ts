@@ -17,8 +17,9 @@ export const createBoardService = async ({workSpaceId, image, color, title}: cre
 
     const newBoard = createBoard({title, color, image})
     const workSpace = await WorkSpace.findById(workSpaceId)
-    workSpace?.boards.push(newBoard._id)
-    await workSpace?.save()
+    if (!workSpace) throw new Error('workSpaceId is not found')
+    workSpace.boards.push(newBoard._id)
+    await workSpace.save()
     const board = await Board.create(newBoard)
     return board
 }
