@@ -68,6 +68,7 @@ interface IMark {
 
 interface ICheckList {
     _id: Types.ObjectId;
+    title: string;
     items: Types.ObjectId[];
 }
 

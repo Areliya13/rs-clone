@@ -8,6 +8,7 @@ import { createBoardController, deleteBoardController, getAllBoardsController, u
 import { createListController, deleteListsController, getAllListsController, updateListsController } from './src/controllers/list/index';
 import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
 import { createCommentController, deleteCommentController, getAllCommentsController, updateCommentController } from './src/controllers/comment/index';
+import { createChecklistController, deleteChecklistController, getAllChecklistController, updateChecklistController } from './src/controllers/checklist/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -47,6 +48,13 @@ app.post(Path.comment, createCommentController)
 app.get(Path.commentWithId, getAllCommentsController)
 app.delete(Path.commentWithId, deleteCommentController)
 app.put(Path.commentWithId, updateCommentController)
+
+//Checklist section
+app.post(Path.checklist, createChecklistController)
+app.get(Path.checklistWithId, getAllChecklistController)
+app.delete(Path.checklistWithId, deleteChecklistController)
+app.put(Path.checklistWithId, updateChecklistController)
+
 
 // async function main() {
 //   await connectToDB()

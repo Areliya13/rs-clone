@@ -14,5 +14,8 @@ export enum Path {
     itemWithId = '/item/:id',
 
     comment = '/comment',
-    commentWithId = '/comment/:id'
+    commentWithId = '/comment/:id',
+
+    checklist = '/checklist',
+    checklistWithId = '/checklist/:id',
 }

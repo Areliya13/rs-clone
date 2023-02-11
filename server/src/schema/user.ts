@@ -78,6 +78,7 @@ const checkListSchema = new Schema<ICheckList>({
         type: Types.ObjectId,
         ref: IRef.checkItem,
     }],
+    title: String
 })
 
 const checkItemSchema = new Schema<ICheckItem>({
