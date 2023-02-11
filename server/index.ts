@@ -9,6 +9,7 @@ import { createListController, deleteListsController, getAllListsController, upd
 import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
 import { createCommentController, deleteCommentController, getAllCommentsController, updateCommentController } from './src/controllers/comment/index';
 import { createChecklistController, deleteChecklistController, getAllChecklistController, updateChecklistController } from './src/controllers/checklist/index';
+import { createCheckItemController, deleteCheckItemController, getAllCheckItemsController, updateCheckItemController } from './src/controllers/checkitem/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -54,6 +55,12 @@ app.post(Path.checklist, createChecklistController)
 app.get(Path.checklistWithId, getAllChecklistController)
 app.delete(Path.checklistWithId, deleteChecklistController)
 app.put(Path.checklistWithId, updateChecklistController)
+
+//CheckItem section
+app.post(Path.checkItem, createCheckItemController)
+app.get(Path.checkItemWithId, getAllCheckItemsController)
+app.delete(Path.checkItemWithId, deleteCheckItemController)
+app.put(Path.checkItemWithId, updateCheckItemController)
 
 
 // async function main() {

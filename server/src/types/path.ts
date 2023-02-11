@@ -18,4 +18,7 @@ export enum Path {
 
     checklist = '/checklist',
     checklistWithId = '/checklist/:id',
+
+    checkItem = '/checkitem',
+    checkItemWithId = '/checkitem/:id',
 }
