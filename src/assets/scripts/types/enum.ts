@@ -3,6 +3,7 @@ export const enum PageIds {
   ErrorPage = 'error-page',
   BoardsPage = 'boards',
   TemplatesPage = 'templates',
+  WorkspaceBoardsPage = 'home',
 }
 
 export const enum links {

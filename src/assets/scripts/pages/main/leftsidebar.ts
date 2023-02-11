@@ -173,15 +173,18 @@ class LeftSideBar {
 
     const workspaceOptionsList = createHtmlElement('ul', {className: 'workspaceOptionsList'});
     const workspaceOptionsArray = [
-      [workspaceBoardIcon, 'Доски'],
-      [importantIcon, 'Важные события'],
-      [presentationIcon, 'Представления'],
-      [membersIcon, 'Участники'],
-      [settingsIcon, 'Настройки'],
+      [workspaceBoardIcon, 'Доски', '#home'],
+      [importantIcon, 'Важные события', '#'],
+      [presentationIcon, 'Представления', '#'],
+      [membersIcon, 'Участники', '#'],
+      [settingsIcon, 'Настройки', '#'],
     ];
     workspaceOptionsArray.map(e => {
       const listItem = createHtmlElement('li', {className: 'workspaceListItem'});
-      const itemLink = createHtmlElement('a', {className: 'workspaceItemLink', href: '#'});
+      const itemLink = createHtmlElement('a', {className: 'workspaceItemLink', href: e[2]});
+      if(this.id === e[2].slice(1)) {
+        itemLink.classList.add('current');
+      }
       const linkIcon = createHtmlElement('div', {className: 'workspaceLinkIcon', innerHTML: e[0]});
       const linkText = createHtmlElement('span', {className: 'workspaceLinkText', textContent: e[1]});
       const membersPlusSpan = createHtmlElement('span', {className: 'icon membersPlusSymbol', textContent: '+'});
@@ -202,8 +205,10 @@ class LeftSideBar {
     workspaceHeader.addEventListener('click', (event) => {
       event.preventDefault();
       if(workspaceArrow.innerHTML === upSvg) {
+        workspaceOptionsList.remove()
         workspaceArrow.innerHTML = downSvg;
       } else {
+        workspace.append(workspaceOptionsList);
         workspaceArrow.innerHTML = upSvg;
       }
     })

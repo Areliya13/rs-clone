@@ -412,10 +412,8 @@ $alt-color: #0079bf;
   margin-bottom: 4px;
   .workspaceItemLink {
     font-size: 12px;
-    color: rgba(9, 30, 66, 0.66);
     font-weight: 400;
     align-items: center;
-    background-color: transparent;
     border-radius: 4px;
     box-shadow: none;
     display: flex;
@@ -428,7 +426,11 @@ $alt-color: #0079bf;
     transition-property: background-color, border-color, box-shadow;
     transition-duration: 85ms;
     transition-timing-function: ease;
-    &:hover {
+    &:not(.current) {
+      color: rgba(9, 30, 66, 0.66);
+      background-color: transparent;
+    }
+    &:not(.current):hover {
       color: rgba(9, 30, 66, 0.77);
       background-color: rgba(9, 30, 66, 0.08);
       outline: 0;
@@ -454,7 +456,7 @@ $alt-color: #0079bf;
     flex: 1 1 auto;
     width: min-content;
     font-size: 12px;
-    color: rgba(9, 30, 66, 0.66);
+    color: inherit;
   }
 }
 
