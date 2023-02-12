@@ -10,6 +10,7 @@ import { Boards } from './main/boards';
 import LeftSideBar from './main/leftsidebar';
 import { MainPage } from './main/mainPage';
 import { Templates } from './main/templates';
+import { WorkspaceBoards } from './main/workspaceBoards';
 
 class App {
   private static defaultPageID = 'content';
@@ -46,12 +47,15 @@ class App {
       page = new Templates(idPage);
     } else if (idPage === PageIds.BoardsPage) {
       page = new Boards(idPage);
+    } else if (idPage === PageIds.WorkspaceBoardsPage) {
+      page = new WorkspaceBoards(idPage);
     }
 
     if (page) {
       const pageHTML: HTMLElement = page.render();
       pageHTML.className = this.defaultPageID;
-      if(idPage === PageIds.MainPage || idPage === PageIds.BoardsPage || idPage === PageIds.TemplatesPage) {
+      const leftSideNeedPages: string[] = [PageIds.MainPage, PageIds.BoardsPage, PageIds.TemplatesPage, PageIds.WorkspaceBoardsPage]
+      if(leftSideNeedPages.includes(idPage)) {
         const leftSidebar = new LeftSideBar(idPage).renderLeftSide();
         pageHTML.prepend(leftSidebar);
       }
