@@ -6,7 +6,7 @@
   backdrop-filter: blur(10px);
 }
 
-.space-info {
+.space-top-section {
   width: 236px;
   height: 40px;
   padding: 14px 12px;
@@ -18,6 +18,147 @@
   max-height: calc(100% - 68px);
 }
 
+.space-link {
+  background-image: linear-gradient(#0747a6, #008da6);
+  color: white;
+  border-radius: 3px;
+  width: 36px;
+  height: 36px;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.space-info {
+  width: 156px;
+  height: 40px;
+  margin-left: 8px;
+  margin-right: 4px;
+}
+
+.space-name {
+  font-weight: 700;
+}
+
+.button-hide-menu {
+  background: none;
+  border: none;
+}
+
+.left-arrow {
+  border: none;
+  background-image: url(../images/left-arrow.svg);
+  background-position: center;
+  width: 24px;
+  height: 24px;
+}
+
+.space-option-link {
+  display: flex;
+  width: 100%;
+  height: 32px;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba($color: #ffffff, $alpha: 0.3);
+  }
+}
+
+.space-option-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 172px;
+  margin-left: 12px;
+}
+
+.left-space-menu {
+  padding-top: 12px;
+}
+
+.icon-img {
+  padding-left: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 16px;
+  display: inline-block;
+  width: 16px;
+  height: 20px;
+}
+
+.boards-img {
+  background-image: url('../images/trello-icon-white.svg');
+}
+
+.users-img {
+  background-image: url('../images/users-icon.svg');
+}
+
+.gear-img {
+  background-image: url('../images/gear.svg');
+}
+
+.plus-img {
+  cursor: pointer;
+  margin: 4px;
+  background-image: url('../images/plus.svg');
+}
+
+.arrow-down {
+  margin: 4px;
+  background-image: url('../images/down.svg');
+}
+
+.boards-container {
+  margin-top: 6px;
+}
+
+.boards-header-container {
+  width: 240px;
+  height: 24px;
+  padding: 4px 0 4px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.space-boards-header {
+  width: 182px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board-item {
+  padding: 0 12px;
+  width: 236px;
+  display: flex;
+  align-items: center;
+}
+
 .board-img {
-  width: 32px;
+  width: 24px;
+  height: 20px;
+  padding-right: 8px;
+}
+
+.board-option-text {
+  width: 196px;
+}
+
+.board-action {
+  display: flex;
+  width: 56px;
+}
+
+.board-option-settings {
+  background-image: url('../images/three-dots.svg');
+}
+
+.board-option-favorite {
+  background-image: url('../images/favorite.svg');
+}
+
+.hidden {
+  display: none;
 }
