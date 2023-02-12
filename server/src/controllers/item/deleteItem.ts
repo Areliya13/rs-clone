@@ -9,6 +9,6 @@ export const deleteItemController = async (req: Request, res: Response) => {
       res.status(200).send(response)
     }
     catch(e) {
-      res.status(404).send(e)
+      res.status(400).send(e)
     }
 }

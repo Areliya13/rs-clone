@@ -6,9 +6,9 @@ export const createCheckItemController = async (req: Request, res: Response) => 
       const checkListId = req.body.checkListId
       const title = req.body.title
       const response = await createCheckItemService({checkListId, title})
-      res.status(200).send(response)
+      res.status(201).send(response)
     }
     catch(e) {
-      res.status(404).send(e)
+      res.status(400).send(e)
     }
 }

@@ -6,9 +6,9 @@ export const createWorkSpaceController = async (req: Request, res: Response) => 
       const userId: string = req.body.userId
       const title: string = req.body.title
       const response = await createWorkSpaceService(userId, title)
-      res.status(200).send(response)
+      res.status(201).send(response)
     }
     catch(e) {
-      res.status(404).send(e)
+      res.status(400).send(e)
     }
 }

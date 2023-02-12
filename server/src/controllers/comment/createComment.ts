@@ -7,9 +7,9 @@ export const createCommentController = async (req: Request, res: Response) => {
         const userId = req.body.userId
         const description = req.body.description
         const response = await createCommentService({itemId, userId, description})
-        res.status(200).send(response)
+        res.status(201).send(response)
     }
     catch(e) {
-        res.status(404).send(e)
+        res.status(400).send(e)
     }
 }

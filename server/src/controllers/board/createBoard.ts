@@ -8,9 +8,9 @@ export const createBoardController = async (req: Request, res: Response) => {
       const color = req.body.color
       const title = req.body.title
       const response = await createBoardService({workSpaceId, image, color, title})
-      res.status(200).send(response)
+      res.status(201).send(response)
     }
     catch(e) {
-      res.status(404).send(e)
+      res.status(400).send(e)
     }
 }

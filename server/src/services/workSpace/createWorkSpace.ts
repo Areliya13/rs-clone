@@ -9,6 +9,7 @@ export const createWorkSpaceService = async (userId: string, title: string) => {
     await connectToDB()
 
     const user = await User.findById(userId)
+    if (!user) throw new Error('User not exist').message
     user?.workSpace.push(workSpaceObject._id)
     await user?.save()
 
