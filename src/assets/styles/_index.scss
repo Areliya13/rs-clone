@@ -96,7 +96,7 @@ $alt-color: #0079bf;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #FFFFFF;
+        color: #ffffff;
         font-weight: bold;
       }
       .workspaceName {
@@ -200,7 +200,7 @@ $alt-color: #0079bf;
   color: #172b4d;
 }
 
-.workspaceModalContainer{
+.workspaceModalContainer {
   overflow: auto;
   z-index: 98;
   position: fixed;
@@ -208,13 +208,13 @@ $alt-color: #0079bf;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(13,13,13,.7);
+  background: rgba(13, 13, 13, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.workspaceModal{
+.workspaceModal {
   background-color: #ffffff;
   position: relative;
   align-items: stretch;
@@ -230,7 +230,7 @@ $alt-color: #0079bf;
   z-index: 1;
 }
 
-.modal-leftSide{
+.modal-leftSide {
   align-items: center;
   display: flex;
   flex: 1;
@@ -240,12 +240,12 @@ $alt-color: #0079bf;
   text-align: left;
   z-index: 3;
   margin: 64px auto 16px;
-  .modal-form{
+  .modal-form {
     display: flex;
     flex-direction: column;
     width: 388px;
-    .form-head{
-      color: #091E42;
+    .form-head {
+      color: #091e42;
       font-size: 24px;
       font-weight: 600;
       letter-spacing: -0.01em;
@@ -253,17 +253,17 @@ $alt-color: #0079bf;
       display: block;
       margin-bottom: 12px;
     }
-    .form-text{
+    .form-text {
       font-size: 18px;
-      color: #6B778C;
+      color: #6b778c;
       margin: 12px auto 24px;
     }
   }
 }
 
-.modalHead{
+.modalHead {
   margin-top: 24px;
-  color: #091E42;
+  color: #091e42;
   display: block;
   font-size: 12px;
   font-weight: 700;
@@ -272,7 +272,7 @@ $alt-color: #0079bf;
   cursor: default;
 }
 
-#workspaceInput{
+#workspaceInput {
   height: 48px;
   margin-bottom: 6px;
   -webkit-appearance: none;
@@ -286,17 +286,17 @@ $alt-color: #0079bf;
   outline: none;
   padding: 8px 12px;
   transition-duration: 85ms;
-  transition-property: background-color,border-color,box-shadow;
+  transition-property: background-color, border-color, box-shadow;
   transition-timing-function: ease;
 }
 
-.workspaceHelp{
-  color: #6B778C;
+.workspaceHelp {
+  color: #6b778c;
   font-size: 12px;
   margin-bottom: 12px;
 }
 
-.activitySelect{
+.activitySelect {
   margin-bottom: 12px;
   min-height: 36px;
   background-color: #fafbfc;
@@ -319,14 +319,14 @@ $alt-color: #0079bf;
   padding: 8px 12px;
 }
 
-.descriptionHead-additional{
-  color: #6B778C;
+.descriptionHead-additional {
+  color: #6b778c;
   font-size: 12px;
   font-weight: 100;
   cursor: default;
 }
 
-.descriptionTextarea{
+.descriptionTextarea {
   color: #5e6c84;
   margin-bottom: 6px;
   resize: none;
@@ -340,27 +340,27 @@ $alt-color: #0079bf;
   outline: none;
   padding: 8px 12px;
   transition-duration: 85ms;
-  transition-property: background-color,border-color,box-shadow;
+  transition-property: background-color, border-color, box-shadow;
   transition-timing-function: ease;
-  &:hover{
+  &:hover {
     background-color: #ebecf0;
     box-shadow: inset 0 0 0 2px #dfe1e6;
   }
 }
 
-.descriptionHelp{
-  color: var(--ds-text-subtle, #6B778C);
+.descriptionHelp {
+  color: var(--ds-text-subtle, #6b778c);
   font-size: 12px;
   margin-bottom: 12px;
 }
 
-.form-continue{
+.form-continue {
   height: 48px;
   width: 100%;
   background-color: rgba(9, 30, 66, 0.04);
   box-shadow: none;
   border: none;
-  color:  #a5adba;
+  color: #a5adba;
   cursor: not-allowed;
   text-decoration: none;
   -webkit-appearance: none;
@@ -372,17 +372,17 @@ $alt-color: #0079bf;
   transition-timing-function: ease;
 }
 
-.modal-rightSide{
+.modal-rightSide {
   align-items: flex-start;
   padding-top: 112px;
-  background: url("../images/modal-bg.svg") no-repeat;
+  background: url('../images/modal-bg.svg') no-repeat;
   background-size: cover;
   display: flex;
   flex: 1;
   justify-content: center;
 }
 
-.modal-close{
+.modal-close {
   margin-top: 16px;
   position: absolute;
   right: 16px;

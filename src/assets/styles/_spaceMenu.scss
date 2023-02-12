@@ -1,0 +1,23 @@
+.space-menu {
+  width: 260px;
+  height: 100%;
+  color: white;
+  border-right: 0.8px solid rgba($color: #ffffff, $alpha: 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.space-info {
+  width: 236px;
+  height: 40px;
+  padding: 14px 12px;
+  display: flex;
+  border-bottom: 0.8px solid rgba($color: #ffffff, $alpha: 0.16);
+}
+
+.left-space-wrapper {
+  max-height: calc(100% - 68px);
+}
+
+.board-img {
+  width: 32px;
+}

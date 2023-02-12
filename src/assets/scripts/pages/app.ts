@@ -1,7 +1,7 @@
 import Page from '../core/page';
-import { getHash, getMainAddress, getMainOptions, getOptions, mainOptions, setMainOptions } from '../helpers/functions';
+import { getHash, getMainOptions, setMainOptions } from '../helpers/functions';
 import { createHtmlElement } from '../helpers/other';
-import { PageIds } from '../types/enum';
+import { localStorageItems, PageIds } from '../types/enum';
 import { Options } from '../types/types';
 import { Footer } from './footer/footer';
 import { Header } from './header/header';
@@ -10,7 +10,7 @@ import { Boards } from './main/boards';
 import LeftSideBar from './main/leftsidebar';
 import { MainPage } from './main/mainPage';
 import { Templates } from './main/templates';
-import { WorkspaceBoards } from './main/workspaceBoards';
+import { SpacePageRender } from './space/spacePageRender';
 
 class App {
   private static defaultPageID = 'content';
@@ -26,38 +26,31 @@ class App {
     className: 'footer',
   });
 
-  static renderPageContent(idPage: string, options?: Options): void {
-    const currentPage = document.querySelector('.content');
+  static renderPageContent(idPage: string): void {
+    const currentPage = document.querySelector(this.defaultPageID);
     if (currentPage) {
       currentPage.remove();
     }
 
     let page: Page = new ErrorPage(idPage);
     if (idPage === PageIds.MainPage) {
-      if ((!options || options.size === 0) && mainOptions.size !== 0) {
-        window.location.hash = getMainAddress();
-      } else if (options) {
-        mainOptions.clear();
-        options.forEach((value, key) => {
-          mainOptions.set(key, value);
-        });
-      }
       page = new MainPage(idPage);
     } else if (idPage === PageIds.TemplatesPage) {
       page = new Templates(idPage);
     } else if (idPage === PageIds.BoardsPage) {
       page = new Boards(idPage);
-    } else if (idPage === PageIds.WorkspaceBoardsPage) {
-      page = new WorkspaceBoards(idPage);
+    } else if (idPage === PageIds.SpacePage) {
+      page = new SpacePageRender(idPage);
     }
 
     if (page) {
       const pageHTML: HTMLElement = page.render();
       pageHTML.className = this.defaultPageID;
-      const leftSideNeedPages: string[] = [PageIds.MainPage, PageIds.BoardsPage, PageIds.TemplatesPage, PageIds.WorkspaceBoardsPage]
-      if(leftSideNeedPages.includes(idPage)) {
+      if (idPage === PageIds.MainPage || idPage === PageIds.BoardsPage || idPage === PageIds.TemplatesPage) {
         const leftSidebar = new LeftSideBar(idPage).renderLeftSide();
         pageHTML.prepend(leftSidebar);
+      } else if (idPage === PageIds.SpacePage) {
+        pageHTML.classList.add('full-page');
       }
       this.main.append(pageHTML);
     }
@@ -67,13 +60,13 @@ class App {
     function getPageHash(): void {
       const hash = window.location.hash;
       const address = getHash(hash);
-      const options = getOptions(decodeURIComponent(hash.slice(hash.indexOf('?') + 1)));
+      localStorage.setItem(localStorageItems.address, address);
       if (!hash) {
         App.renderPageContent(PageIds.MainPage);
       } else if (hash.indexOf('/') >= 0) {
         App.renderPageContent(PageIds.ErrorPage);
       } else {
-        App.renderPageContent(address, options);
+        App.renderPageContent(address);
       }
     }
     window.addEventListener('hashchange', getPageHash);
