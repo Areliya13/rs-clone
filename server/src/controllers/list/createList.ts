@@ -6,9 +6,9 @@ export const createListController = async (req: Request, res: Response) => {
         const boardId = req.body.boardId
         const title = req.body.title
         const response = await createListService({boardId, title})
-        res.status(200).send(response)
+        res.status(201).send(response)
     }
     catch(e) {
-        res.status(404).send(e)
+        res.status(400).send(e)
     }
 }
