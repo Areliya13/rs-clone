@@ -10,11 +10,11 @@ export interface IUpdateCommentProps {
 }
 
 export const updateCommentService = async ({authorName, description, authorImage, commentId}: IUpdateCommentProps) => {
-    if (!commentId) throw new Error('commentId not transferred').message
+    if (!commentId) throw new Error('commentId not transferred')
     await connectToDB()
     
     const comment = await Comment.findById(commentId)
-    if (!comment) throw new Error('commentId not exist').message
+    if (!comment) throw new Error('commentId not exist')
     await Comment.findByIdAndUpdate<IComment>(commentId, {
         authorName: authorName ? authorName : comment.authorName, 
         authorImage: authorImage ? authorImage : comment.authorImage,

@@ -1,8 +1,8 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { updateCommentService } from "../../services/comment/updateComment"
 import { updateListService } from "../../services/list/updateList"
 
-export const updateCommentController = async (req: Request, res: Response) => {
+export const updateCommentController = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const commentId = req.params.id
         const authorName = req.body.authorName
@@ -13,6 +13,6 @@ export const updateCommentController = async (req: Request, res: Response) => {
         res.status(200).send(response)
     }
     catch(e) {
-        res.status(400).send(e)   
+        next(e);   
     }
 }

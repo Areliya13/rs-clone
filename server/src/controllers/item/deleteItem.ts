@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { deleteItemService } from "../../services/item/deleteItem"
 
-export const deleteItemController = async (req: Request, res: Response) => {
+export const deleteItemController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const listId = req.body.listId
       const itemId = req.params.id
@@ -9,6 +9,6 @@ export const deleteItemController = async (req: Request, res: Response) => {
       res.status(200).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }

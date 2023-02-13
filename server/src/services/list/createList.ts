@@ -8,7 +8,7 @@ export interface createListProps {
 }
 
 export const createListService = async ({boardId, title}: createListProps) => {
-    if (!boardId || !title) throw new Error('boardId or title is undefined').message
+    if (!boardId || !title) throw new Error('boardId or title is undefined')
     await connectToDB();
 
     const newList = createList(title)

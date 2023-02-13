@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { updateWorkSpaceService } from "../../services/workSpace/updateWorkSpace"
 
-export const updateWorkSpaceController = async (req: Request, res: Response) => {
+export const updateWorkSpaceController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const workSpaceId = req.params.id
       const title = req.body.title
@@ -9,6 +9,6 @@ export const updateWorkSpaceController = async (req: Request, res: Response) => 
       res.status(200).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }

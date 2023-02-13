@@ -3,8 +3,8 @@ import { connectToDB } from '../../utils/connectToDB';
 import { createItem } from '../../utils/createItem';
 
 export const createItemService = async (listId:string, title:string) => {
-    if (!listId) throw new Error('listId not transferred').message
-    if (!title) throw new Error('Title not transferred').message
+    if (!listId) throw new Error('listId not transferred')
+    if (!title) throw new Error('Title not transferred')
     await connectToDB()
 
     const newItem = createItem(title)

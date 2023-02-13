@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { createChecklistService } from "../../services/checklist/createChecklist";
 
-export const createChecklistController = async (req: Request, res: Response) => {
+export const createChecklistController = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const itemId = req.body.itemId
         const title = req.body.title
@@ -9,6 +9,6 @@ export const createChecklistController = async (req: Request, res: Response) => 
         res.status(201).send(response)
     }
     catch(e) {
-        res.status(400).send(e)
+        next(e);
     }
 }

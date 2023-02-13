@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { updateItemService } from "../../services/item/updateItem"
 
-export const updateItemController = async (req: Request, res: Response) => {
+export const updateItemController = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const itemId = req.params.id
         const title = req.body.title
@@ -13,6 +13,6 @@ export const updateItemController = async (req: Request, res: Response) => {
         res.status(200).send(response)
     }
     catch(e) {
-        res.status(400).send(e)   
+        next(e);   
     }
 }

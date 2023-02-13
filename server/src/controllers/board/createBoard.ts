@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { createBoardService } from "../../services/board/createBoard"
 
-export const createBoardController = async (req: Request, res: Response) => {
+export const createBoardController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const workSpaceId = req.body.workSpaceId
       const image = req.body.image
@@ -11,6 +11,6 @@ export const createBoardController = async (req: Request, res: Response) => {
       res.status(201).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }
