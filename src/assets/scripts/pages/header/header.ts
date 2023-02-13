@@ -16,11 +16,13 @@ export class Header {
     });
     const menuButton = createHtmlElement('button', { className: 'menu-bar' });
     const innerImg = createHtmlElement('span', { className: 'menu-image' });
+    const logoLink = createHtmlElement('a', { href: '#' });
     const logo = createHtmlElement('div', { className: 'logo' });
     const navigation = this.createNav();
     const createButton = createHtmlElement('button', { className: 'create-button', textContent: 'Создать' });
     menuButton.append(innerImg);
-    container.append(menuButton, logo, navigation, createButton);
+    logoLink.append(logo);
+    container.append(menuButton, logoLink, navigation, createButton);
     return container;
   }
 
@@ -28,11 +30,11 @@ export class Header {
     const nav = createHtmlElement('nav', { className: 'nav-list' });
     for (let i = 0; i < menuItems.length; i++) {
       const element = menuItems[i];
-      const item = createHtmlElement('li', { className: 'nav-item' });
-      const link = createHtmlElement('a', { textContent: element[0], href: element[1], className: 'nav-link' });
+      const link = createHtmlElement('a', { href: element[1], className: 'nav-link' });
+      const item = createHtmlElement('li', { textContent: element[0], className: 'nav-item' });
       const span = createHtmlElement('span', { className: 'nav-img' });
-      item.append(link, span);
-      nav.append(item);
+      link.append(item, span);
+      nav.append(link);
     }
     return nav;
   }

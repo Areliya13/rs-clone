@@ -74,7 +74,7 @@ class SpaceMenu {
       const link = createHtmlElement('a', { className: 'board-option-text', textContent: board.name });
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
-      const favorite = createHtmlElement('div', { className: 'icon-img board-option-favorite' });
+      const favorite = createHtmlElement('div', { className: 'icon-img favorite-img' });
 
       li.addEventListener('mouseover', () => {
         link.style.width = '140px';
@@ -83,7 +83,6 @@ class SpaceMenu {
       li.addEventListener('mouseleave', () => {
         link.style.width = '196px';
         actions.classList.add('hidden');
-        // actions.style.width = '0px';
       });
 
       actions.append(settings, favorite);
