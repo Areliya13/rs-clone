@@ -11,6 +11,7 @@ import LeftSideBar from './main/leftsidebar';
 import { MainPage } from './main/mainPage';
 import { Templates } from './main/templates';
 import { WorkspaceBoards } from './main/workspaceBoards';
+import { SpacePageRender } from './space/spacePageRender';
 
 class App {
   private static defaultPageID = 'content';
@@ -49,15 +50,25 @@ class App {
       page = new Boards(idPage);
     } else if (idPage === PageIds.WorkspaceBoardsPage) {
       page = new WorkspaceBoards(idPage);
+    } else if (idPage === PageIds.SpacePage) {
+      page = new SpacePageRender(idPage);
     }
 
     if (page) {
       const pageHTML: HTMLElement = page.render();
       pageHTML.className = this.defaultPageID;
-      const leftSideNeedPages: string[] = [PageIds.MainPage, PageIds.BoardsPage, PageIds.TemplatesPage, PageIds.WorkspaceBoardsPage]
-      if(leftSideNeedPages.includes(idPage)) {
+      const leftSideNeedPages: string[] = [
+        PageIds.MainPage,
+        PageIds.BoardsPage,
+        PageIds.TemplatesPage,
+        PageIds.WorkspaceBoardsPage,
+      ];
+      if (leftSideNeedPages.includes(idPage)) {
         const leftSidebar = new LeftSideBar(idPage).renderLeftSide();
         pageHTML.prepend(leftSidebar);
+      }
+      if (idPage === PageIds.SpacePage) {
+        pageHTML.classList.add('full-page');
       }
       this.main.append(pageHTML);
     }

@@ -24,3 +24,4 @@ export type OptionsType = {
 export type Options = Map<string, string>;
 
 export type stringObject = { [key: string]: string };
+export type board = { name: string; img: string };

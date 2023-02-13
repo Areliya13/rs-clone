@@ -1,8 +1,7 @@
-import { PageIds } from '../types/enum';
+import { localStorageItems, PageIds } from '../types/enum';
 import { Options } from '../types/types';
 
 export let mainOptions: Options = new Map();
-export const locStMainOptions = 'trelloOptions';
 
 export function getLocalStorage(element: Storage, selector: string): string {
   const result = element.getItem(selector);
@@ -13,13 +12,19 @@ export function getLocalStorage(element: Storage, selector: string): string {
 }
 
 export function getMainOptions(): void {
-  const objFromLocalStorage = JSON.parse(getLocalStorage(localStorage, locStMainOptions));
+  const objFromLocalStorage = JSON.parse(getLocalStorage(localStorage, localStorageItems.mainOptions));
   mainOptions = new Map<string, string>(Object.entries(objFromLocalStorage));
+}
+
+export function getSpaceOptions(): Options {
+  const objFromLocalStorage = JSON.parse(getLocalStorage(localStorage, localStorageItems.spaceOptions));
+  const options = new Map<string, string>(Object.entries(objFromLocalStorage));
+  return options;
 }
 
 export function setMainOptions(): void {
   const options = JSON.stringify(Object.fromEntries(mainOptions));
-  localStorage.setItem(locStMainOptions, options);
+  localStorage.setItem(localStorageItems.mainOptions, options);
 }
 
 export function getMainAddress(): string {
@@ -35,7 +40,7 @@ export function getMainAddress(): string {
 }
 
 export function getOptions(opt: string): Options {
-  const result = new Map();
+  const result = new Map<string, string>();
   const arr = opt.split('&');
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i].split('=');
@@ -43,7 +48,7 @@ export function getOptions(opt: string): Options {
       result.set(element[0], element[1]);
     }
   }
-  return result as Map<string, string>;
+  return result; //as Map<string, string>;
 }
 
 export function getHash(hash: string): string {
