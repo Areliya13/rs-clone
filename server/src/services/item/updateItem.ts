@@ -11,10 +11,10 @@ export interface IUpdateItemProps {
 }
 
 export const updateItemService = async ({title, description, deadline, image, itemId}: IUpdateItemProps) => {
-    if (!itemId) throw new Error('itemId not transferred').message
+    if (!itemId) throw new Error('itemId not transferred')
     await connectToDB()
     const item = await Item.findById(itemId)
-    if (!item) throw new Error('boardId not exist').message
+    if (!item) throw new Error('boardId not exist')
     await Item.findByIdAndUpdate<IItem>(itemId, {
         title: title ? title : item.title, 
         image: image ? image : item.image,

@@ -10,10 +10,10 @@ export interface IUpdateBoardProps {
 }
 
 export const updateBoardService = async ({title, color, image, boardId}: IUpdateBoardProps) => {
-    if (!boardId) throw new Error('boardId not transferred').message
+    if (!boardId) throw new Error('boardId not transferred')
     await connectToDB()
     const board = await Board.findById(boardId)
-    if (!board) throw new Error('boardId not exist').message
+    if (!board) throw new Error('boardId not exist')
     await Board.findByIdAndUpdate<IBoard>(boardId, {
         title: title ? title : board.title, 
         color: color ? color : board.color,

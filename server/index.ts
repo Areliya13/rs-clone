@@ -10,9 +10,12 @@ import { createItemController, deleteItemController, getAllItemsController, upda
 import { createCommentController, deleteCommentController, getAllCommentsController, updateCommentController } from './src/controllers/comment/index';
 import { createChecklistController, deleteChecklistController, getAllChecklistController, updateChecklistController } from './src/controllers/checklist/index';
 import { createCheckItemController, deleteCheckItemController, getAllCheckItemsController, updateCheckItemController } from './src/controllers/checkitem/index';
+import { ErrorHandler } from './src/middleware/errorHandler';
 
 const app = express()
 const port = expressPort || 3000
+
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
@@ -65,3 +68,4 @@ app.put(Path.checkItemWithId, updateCheckItemController)
 app.listen(port, () => { 
   console.log(`Trello app listening on port ${port}`)
 })
+app.use(ErrorHandler)

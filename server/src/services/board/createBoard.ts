@@ -10,9 +10,9 @@ export interface createBoardProps {
 }
 
 export const createBoardService = async ({workSpaceId, image, color, title}: createBoardProps) => {
-    if (!workSpaceId) throw new Error('WorkSpaceId not transferred').message
-    if (!title) throw new Error('Title not transferred').message
-    if (!image && !color) throw new Error('Image or color not transferred').message
+    if (!workSpaceId) throw new Error('WorkSpaceId not transferred')
+    if (!title) throw new Error('Title not transferred')
+    if (!image && !color) throw new Error('Image or color not transferred')
     await connectToDB()
 
     const newBoard = createBoard({title, color, image})

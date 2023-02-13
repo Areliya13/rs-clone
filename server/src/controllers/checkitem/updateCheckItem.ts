@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { updateCheckItemService } from "../../services/checkitem/updateCheckItem"
 
-export const updateCheckItemController = async (req: Request, res: Response) => {
+export const updateCheckItemController = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const checkItemId = req.params.id
         const title = req.body.title
@@ -11,6 +11,6 @@ export const updateCheckItemController = async (req: Request, res: Response) => 
         res.status(200).send(response)
     }
     catch(e) {
-        res.status(400).send(e)   
+        next(e);   
     }
 }

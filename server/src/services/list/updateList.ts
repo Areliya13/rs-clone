@@ -8,11 +8,11 @@ export interface IUpdateListProps {
 }
 
 export const updateListService = async ({listId, title}: IUpdateListProps) => {
-    if (!listId) throw new Error('listId not transferred').message
+    if (!listId) throw new Error('listId not transferred')
     await connectToDB()
 
     const list = await List.findById(listId)
-    if (!list) throw new Error('list does not exist').message
+    if (!list) throw new Error('list does not exist')
     await List.findByIdAndUpdate<IBoard>(listId, {
         title: title ? title : list.title
     })

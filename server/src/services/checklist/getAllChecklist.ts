@@ -3,7 +3,7 @@ import { IRef } from '../../schema/user.types';
 import { connectToDB } from '../../utils/connectToDB';
 
 export const getAllChecklistService = async (itemId: string) => {
-    if (!itemId) throw new Error('itemId not transferred').message
+    if (!itemId) throw new Error('itemId not transferred')
     await connectToDB()
     
     const item = await Item.findById(itemId).populate(
@@ -14,6 +14,6 @@ export const getAllChecklistService = async (itemId: string) => {
                 model: IRef.checkItem
             }
         })
-    if (!item) throw new Error('itemId not exist').message
+    if (!item) throw new Error('itemId not exist')
     return item.checkLists
 }

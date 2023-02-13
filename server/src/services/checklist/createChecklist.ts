@@ -8,7 +8,7 @@ export interface ICreateChecklist {
 }
 
 export const createChecklistService = async ({itemId, title}:ICreateChecklist) => {
-    if (!itemId || !title) throw new Error('title or itemId not transferred').message
+    if (!itemId || !title) throw new Error('title or itemId not transferred')
     await connectToDB()
 
     const newChecklist = createChecklist(title)
