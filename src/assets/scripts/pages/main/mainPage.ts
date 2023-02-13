@@ -31,9 +31,16 @@ export class MainPage extends Page {
     });
 
     attentionSpan.addEventListener('click', async() => {
-      const res = await makeRequest({path: Path.workSpace, params: '63e64246b756937011626568'})
-      const json = await res.json()
-      console.log(json)
+      const res = await makeRequest({
+        path: Path.board, 
+        // params: '63e64246b756937011626568',
+        method: Method.POST,
+        body: JSON.stringify({
+          workSpaceId: '63e652cce520cd3f6a3f32cb',
+          title: 'Новый борд сделанный уже с помощью клиента'
+        })
+      })
+      console.log(await res.text())
     } )
 
     midAttentionDiv.append(getSvgIcon(clockIcon, BASE_COLOR), attentionSpan);
