@@ -3,8 +3,6 @@ import clockIcon from '../../../images/clock-icon.svg';
 import heartIcon from '../../../images/heart-icon.svg';
 import { BASE_COLOR } from '../../types/constValues';
 import Page from '../../core/page';
-import { makeRequest } from '../../api/makeRequest';
-import { Method, Path } from '../../api/types';
 
 export class MainPage extends Page {
   constructor(id: string) {
@@ -29,19 +27,6 @@ export class MainPage extends Page {
       className: 'mid-importantEventText',
       textContent: 'Важные события',
     });
-
-    attentionSpan.addEventListener('click', async() => {
-      const res = await makeRequest({
-        path: Path.board, 
-        // params: '63e64246b756937011626568',
-        method: Method.POST,
-        body: JSON.stringify({
-          workSpaceId: '63e652cce520cd3f6a3f32cb',
-          title: 'Новый борд сделанный уже с помощью клиента'
-        })
-      })
-      console.log(await res.text())
-    } )
 
     midAttentionDiv.append(getSvgIcon(clockIcon, BASE_COLOR), attentionSpan);
     midImportantEvents.append(getSvgIcon(heartIcon, BASE_COLOR), importantEventsSpan);
