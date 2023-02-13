@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { createWorkSpaceService } from "../../services/workSpace/createWorkSpace"
 
-export const createWorkSpaceController = async (req: Request, res: Response) => {
+export const createWorkSpaceController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const userId: string = req.body.userId
       const title: string = req.body.title
@@ -9,6 +9,6 @@ export const createWorkSpaceController = async (req: Request, res: Response) => 
       res.status(201).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }

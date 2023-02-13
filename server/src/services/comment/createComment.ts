@@ -9,12 +9,12 @@ export interface ICreateComment {
 }
 
 export const createCommentService = async ({itemId, userId, description}:ICreateComment) => {
-    if (!itemId || !userId) throw new Error('userId or itemId not transferred').message
-    if (!description) throw new Error('description not transferred').message
+    if (!itemId || !userId) throw new Error('userId or itemId not transferred')
+    if (!description) throw new Error('description not transferred')
     await connectToDB()
 
     const author = await User.findById(userId)
-    if (!author) throw new Error('author does not exist').message
+    if (!author) throw new Error('author does not exist')
 
     const newComment = createComment({authorName: author.name, authorImage: author.image, description})
     const item = await Item.findById(itemId)

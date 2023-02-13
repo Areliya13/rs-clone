@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { deleteWorkSpaceService } from "../../services/workSpace/deleteWorkSpace"
 
-export const deleteWorkSpaceController = async (req: Request, res: Response) => {
+export const deleteWorkSpaceController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const userId = req.body.userId
       const workSpaceId = req.params.id
@@ -9,6 +9,6 @@ export const deleteWorkSpaceController = async (req: Request, res: Response) => 
       res.status(200).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }

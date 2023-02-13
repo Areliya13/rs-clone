@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { deleteListService } from "../../services/list/deleteList"
 
-export const deleteListsController = async (req: Request, res: Response) => {
+export const deleteListsController = async (req: Request, res: Response, next: NextFunction) => {
     try{
       const boardId = req.body.boardId
       const listId = req.params.id
@@ -9,6 +9,6 @@ export const deleteListsController = async (req: Request, res: Response) => {
       res.status(200).send(response)
     }
     catch(e) {
-      res.status(400).send(e)
+      next(e);
     }
 }

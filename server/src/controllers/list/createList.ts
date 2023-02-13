@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { createListService } from "../../services/list/createList";
 
-export const createListController = async (req: Request, res: Response) => {
+export const createListController = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const boardId = req.body.boardId
         const title = req.body.title
@@ -9,6 +9,6 @@ export const createListController = async (req: Request, res: Response) => {
         res.status(201).send(response)
     }
     catch(e) {
-        res.status(400).send(e)
+        next(e);
     }
 }
