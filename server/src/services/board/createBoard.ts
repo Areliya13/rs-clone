@@ -10,6 +10,7 @@ export interface createBoardProps {
 }
 
 export const createBoardService = async ({workSpaceId, image, color, title}: createBoardProps) => {
+    console.log(workSpaceId, image, color, title)
     if (!workSpaceId) throw new Error('WorkSpaceId not transferred')
     if (!title) throw new Error('Title not transferred')
     if (!image && !color) throw new Error('Image or color not transferred')

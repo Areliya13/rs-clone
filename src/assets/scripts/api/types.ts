@@ -1,8 +1,8 @@
-interface IMakeRequestProps {
+interface IMakeRequestProps<T> {
     method?: Method; 
     params?: string; 
     path?: Path;
-    body?: string;
+    data?: T;
 }
 
 enum Method {
