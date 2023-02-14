@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from "express";
 
 export const ErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const errStatus = err.statusCode || 400;
-    const errMsg = err || 'Something went wrong';
+    const errMsg = err.message || 'Something went wrong';
     res.status(errStatus).json({
         success: false,
         status: errStatus,
