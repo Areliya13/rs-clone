@@ -3,15 +3,10 @@ import clockIcon from '../../../images/clock-icon.svg';
 import heartIcon from '../../../images/heart-icon.svg';
 import { BASE_COLOR } from '../../types/constValues';
 import Page from '../../core/page';
-import { readAll } from '../../api/rest/readAll';
-import { Path } from '../../api/types';
-import { store } from '../../store/store';
-import { IUser } from '../../store/types';
 
 export class MainPage extends Page {
   constructor(id: string) {
     super(id);
-    this.getUser();
   }
 
   renderContent() {
@@ -81,14 +76,4 @@ export class MainPage extends Page {
     return this.container;
   }
 
-  async getUser(): Promise<void> {
-    try {
-      const users: IUser[] = await readAll(Path.user, '')
-      store.user = users[0]
-      const user = await readAll(Path.workSpace, store.user._id)
-      store.user = user
-    }catch(e) {
-      console.log(e)
-    }
-  }
 }
