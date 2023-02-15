@@ -20,6 +20,7 @@ interface IUser {
     _id: string;
     image?: string;
     workSpace: IWork[];
+    favoriteBoards: IBoard[]
 }
 
 interface IWork {
