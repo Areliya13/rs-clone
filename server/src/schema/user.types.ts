@@ -28,6 +28,7 @@ interface IWork {
 interface IBoard {
     title: string;
     lists: Types.ObjectId[];
+    marks: Types.ObjectId[];
     image?: string;
     color?: string;
     _id: Types.ObjectId;

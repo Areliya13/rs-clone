@@ -27,6 +27,10 @@ const boardSchema = new Schema<IBoard>({
         type: Types.ObjectId,
         ref: IRef.list,
     }],
+    marks: [{
+        type: Types.ObjectId,
+        ref: IRef.mark,
+    }],
     color: String,
     image: String,
 })

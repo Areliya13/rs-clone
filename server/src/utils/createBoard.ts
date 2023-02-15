@@ -1,7 +1,7 @@
 import { IBoard } from "../schema/user.types";
 import { createId } from "./createId";
 
-export type IBoardProps = Omit<IBoard, "lists" | "_id">
+export type IBoardProps = Omit<IBoard, "lists" | "_id" | "marks">
 
 export const createBoard = ({title, image, color}: IBoardProps): IBoard => {
     return {
@@ -9,6 +9,7 @@ export const createBoard = ({title, image, color}: IBoardProps): IBoard => {
         title,
         image,
         color,
-        lists: []
+        lists: [],
+        marks: [],
     }
 }
