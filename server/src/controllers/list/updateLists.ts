@@ -5,8 +5,9 @@ export const updateListsController = async (req: Request, res: Response, next: N
     try{
         const listId = req.params.id
         const title = req.body.title
+        const item: string[] = await JSON.parse(req.body.item)
       
-        const response = await updateListService({listId, title})
+        const response = await updateListService({listId, title, item})
         res.status(200).send(response)
     }
     catch(e) {
