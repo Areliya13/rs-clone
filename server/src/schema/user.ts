@@ -66,8 +66,7 @@ const itemSchema = new Schema<IItem>({
 
 const commentSchema = new Schema<IComment>({
     _id: Types.ObjectId,
-    authorName: String,
-    authorImage: String,
+    userId: Types.ObjectId,
     description: String,
     date: Date
 })

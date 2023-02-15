@@ -13,10 +13,7 @@ export const createCommentService = async ({itemId, userId, description}:ICreate
     if (!description) throw new Error('description not transferred')
     await connectToDB()
 
-    const author = await User.findById(userId)
-    if (!author) throw new Error('author does not exist')
-
-    const newComment = createComment({authorName: author.name, authorImage: author.image, description})
+    const newComment = createComment({userId, description})
     const item = await Item.findById(itemId)
     if (!item) throw new Error('itemId is not found')
     item.comments.push(newComment._id)

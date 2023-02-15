@@ -8,7 +8,10 @@ export const getAllCommentsService = async (itemId: string) => {
     
     const item = await Item.findById(itemId).populate(
         {
-            path: 'comments', model: IRef.comment
+            path: 'comments', model: IRef.comment,
+            populate: {
+                path: 'userId', model: IRef.user
+            }
         })
     if (!item) throw new Error('itemId not exist')
     return item.comments

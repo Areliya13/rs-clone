@@ -52,9 +52,8 @@ interface IItem {
 }
 
 interface IComment {
-    authorName: string;
-    authorImage?: string;
     description: string;
+    userId: Types.ObjectId;
     date: Date;
     _id: Types.ObjectId;
 }
