@@ -12,6 +12,10 @@ import { MainPage } from './main/mainPage';
 import { Templates } from './main/templates';
 import { WorkspaceBoards } from './main/workspaceBoards';
 import { SpacePageRender } from './space/spacePageRender';
+import { readAll } from '../api/rest/readAll';
+import { Path } from '../api/types';
+import { IUser } from '../store/types';
+import { store } from '../store/store';
 
 class App {
   private static defaultPageID = 'content';
@@ -92,12 +96,25 @@ class App {
   }
 
   run(): void {
+    this.getUser()
     App.header.append(App.headerContent.render());
     App.footer.append(App.footerContent.render());
     document.body.append(App.header, App.main, App.footer);
     window.addEventListener('beforeunload', setMainOptions);
     window.addEventListener('load', getMainOptions);
     this.changedHash();
+  }
+
+  async getUser(): Promise<void> {
+    try {
+      const users: IUser[] = await readAll(Path.user, '')
+      store.user = users[0]
+      const user = await readAll(Path.workSpace, store.user._id)
+      store.user = user
+      console.log(store.user.name)
+    }catch(e) {
+      console.log(e)
+    }
   }
 }
 

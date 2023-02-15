@@ -75,4 +75,5 @@ export class MainPage extends Page {
     this.container.append(this.renderContent(), this.renderRightSideBar());
     return this.container;
   }
+
 }
