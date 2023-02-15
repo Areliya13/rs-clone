@@ -11,6 +11,7 @@ import { createCommentController, deleteCommentController, getAllCommentsControl
 import { createChecklistController, deleteChecklistController, getAllChecklistController, updateChecklistController } from './src/controllers/checklist/index';
 import { createCheckItemController, deleteCheckItemController, getAllCheckItemsController, updateCheckItemController } from './src/controllers/checkitem/index';
 import { ErrorHandler } from './src/middleware/errorHandler';
+import { createMarkController, deleteMarkController, getAllMarksController, updateMarkController } from './src/controllers/mark/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -64,6 +65,14 @@ app.post(Path.checkItem, createCheckItemController)
 app.get(Path.checkItemWithId, getAllCheckItemsController)
 app.delete(Path.checkItemWithId, deleteCheckItemController)
 app.put(Path.checkItemWithId, updateCheckItemController)
+
+//Mark section
+app.post(Path.mark, createMarkController)
+app.get(Path.markWithId, getAllMarksController)
+app.delete(Path.markWithId, deleteMarkController)
+app.put(Path.markWithId, updateMarkController)
+
+
 
 app.listen(port, () => { 
   console.log(`Trello app listening on port ${port}`)

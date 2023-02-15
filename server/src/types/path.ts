@@ -21,4 +21,7 @@ export enum Path {
 
     checkItem = '/checkitem',
     checkItemWithId = '/checkitem/:id',
+
+    mark = '/mark',
+    markWithId = '/mark/:id',
 }
