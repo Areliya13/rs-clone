@@ -7,7 +7,6 @@ export const makeRequest = <T>({method, params, path, data}: IMakeRequestProps<T
     const requestUrl = `${baseUrl}/${pathsUrl}/${paramsUrl}`
 
     const body = JSON.stringify(data)
-    console.log('ss', method, params, path, body, requestUrl)
     const options = {
         method: method ? method : Method.GET,
         body,
