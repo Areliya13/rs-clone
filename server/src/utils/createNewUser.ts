@@ -11,6 +11,7 @@ export const createNewUser = ({name, image }: ICreateNewUserProps): IUser => {
         name,
         _id: createId(),
         image: image ? image : undefined,
-        workSpace: []
+        workSpace: [],
+        favoriteBoards: [],
       }
 }

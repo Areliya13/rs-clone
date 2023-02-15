@@ -17,6 +17,7 @@ interface IUser {
     _id: Types.ObjectId;
     image?: string;
     workSpace: Types.ObjectId[];
+    favoriteBoards: Types.ObjectId[];
 }
 
 interface IWork {
@@ -28,6 +29,7 @@ interface IWork {
 interface IBoard {
     title: string;
     lists: Types.ObjectId[];
+    marks: Types.ObjectId[];
     image?: string;
     color?: string;
     _id: Types.ObjectId;
@@ -52,9 +54,8 @@ interface IItem {
 }
 
 interface IComment {
-    authorName: string;
-    authorImage?: string;
     description: string;
+    userId: Types.ObjectId;
     date: Date;
     _id: Types.ObjectId;
 }

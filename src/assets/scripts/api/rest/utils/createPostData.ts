@@ -1,4 +1,4 @@
-import { ICreateBoardPostData } from "./types"
+import { ICreateBoardPostData, ICreateMarkPostData } from "./types"
 
 export const createWorkSpacePostData = (title: string, userId: string) => ({title, userId})
 
@@ -26,3 +26,4 @@ export const createCommentPostData = (itemId: string, userId: string, descriptio
 export const createCheckListPostData = (itemId: string, title: string) => ({ itemId, title })
 
 export const createCheckItemPostData = (checkListId: string, title: string) => ({ checkListId, title })
+export const createMarkPostData = ({boardId, color, itemId, title}: ICreateMarkPostData) => ({boardId, color, itemId, title})

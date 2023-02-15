@@ -3,7 +3,7 @@ import cors from 'cors';
 import { port as expressPort } from './src/config';
 import { Path } from './src/types/path';
 import { createWorkSpaceController, deleteWorkSpaceController, getAllWorkSpacesController, updateWorkSpaceController } from './src/controllers/workSpace/index';
-import { getAllUsersController } from './src/controllers/user/index';
+import { getAllUsersController, updateUserController } from './src/controllers/user/index';
 import { createBoardController, deleteBoardController, getAllBoardsController, updateBoardController } from './src/controllers/board/index';
 import { createListController, deleteListsController, getAllListsController, updateListsController } from './src/controllers/list/index';
 import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
@@ -11,6 +11,7 @@ import { createCommentController, deleteCommentController, getAllCommentsControl
 import { createChecklistController, deleteChecklistController, getAllChecklistController, updateChecklistController } from './src/controllers/checklist/index';
 import { createCheckItemController, deleteCheckItemController, getAllCheckItemsController, updateCheckItemController } from './src/controllers/checkitem/index';
 import { ErrorHandler } from './src/middleware/errorHandler';
+import { createMarkController, deleteMarkController, getAllMarksController, updateMarkController } from './src/controllers/mark/index';
 
 const app = express()
 const port = expressPort || 3000
@@ -22,6 +23,7 @@ app.use(express.urlencoded({extended: false}))
 
 //User section
 app.get(Path.user, getAllUsersController)
+app.put(Path.userWithId, updateUserController)
 
 //WorkSpace section
 app.post(Path.workSpace, createWorkSpaceController)
@@ -64,6 +66,14 @@ app.post(Path.checkItem, createCheckItemController)
 app.get(Path.checkItemWithId, getAllCheckItemsController)
 app.delete(Path.checkItemWithId, deleteCheckItemController)
 app.put(Path.checkItemWithId, updateCheckItemController)
+
+//Mark section
+app.post(Path.mark, createMarkController)
+app.get(Path.markWithId, getAllMarksController)
+app.delete(Path.markWithId, deleteMarkController)
+app.put(Path.markWithId, updateMarkController)
+
+
 
 app.listen(port, () => { 
   console.log(`Trello app listening on port ${port}`)

@@ -1,5 +1,6 @@
 export enum Path {
     user = '/user',
+    userWithId = '/user/:id',
 
     workSpace = '/workSpace',
     workSpaceWithId = '/workSpace/:id',
@@ -21,4 +22,7 @@ export enum Path {
 
     checkItem = '/checkitem',
     checkItemWithId = '/checkitem/:id',
+
+    mark = '/mark',
+    markWithId = '/mark/:id',
 }

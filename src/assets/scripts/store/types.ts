@@ -20,6 +20,7 @@ interface IUser {
     _id: string;
     image?: string;
     workSpace: IWork[];
+    favoriteBoards: IBoard[]
 }
 
 interface IWork {
@@ -34,6 +35,7 @@ interface IBoard {
     image?: string;
     color?: string;
     _id: string;
+    marks: IMark[];
 }
 
 interface IList {
@@ -55,8 +57,7 @@ interface IItem {
 }
 
 interface IComment {
-    authorName: string;
-    authorImage?: string;
+    userId: string;
     description: string;
     date: Date;
     _id: string;

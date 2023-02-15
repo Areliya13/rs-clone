@@ -8,7 +8,11 @@ const userSchema = new Schema<IUser>({
     workSpace: [{
       type: Types.ObjectId,
       ref: IRef.workSpace,
-    }]
+    }],
+    favoriteBoards: [{
+        type: Types.ObjectId,
+        ref: IRef.board,
+      }]
   });
 
 const workSchema = new Schema<IWork>({
@@ -26,6 +30,10 @@ const boardSchema = new Schema<IBoard>({
     lists: [{
         type: Types.ObjectId,
         ref: IRef.list,
+    }],
+    marks: [{
+        type: Types.ObjectId,
+        ref: IRef.mark,
     }],
     color: String,
     image: String,
@@ -66,8 +74,7 @@ const itemSchema = new Schema<IItem>({
 
 const commentSchema = new Schema<IComment>({
     _id: Types.ObjectId,
-    authorName: String,
-    authorImage: String,
+    userId: Types.ObjectId,
     description: String,
     date: Date
 })
