@@ -3,7 +3,7 @@ import cors from 'cors';
 import { port as expressPort } from './src/config';
 import { Path } from './src/types/path';
 import { createWorkSpaceController, deleteWorkSpaceController, getAllWorkSpacesController, updateWorkSpaceController } from './src/controllers/workSpace/index';
-import { getAllUsersController } from './src/controllers/user/index';
+import { getAllUsersController, updateUserController } from './src/controllers/user/index';
 import { createBoardController, deleteBoardController, getAllBoardsController, updateBoardController } from './src/controllers/board/index';
 import { createListController, deleteListsController, getAllListsController, updateListsController } from './src/controllers/list/index';
 import { createItemController, deleteItemController, getAllItemsController, updateItemController } from './src/controllers/item/index';
@@ -23,6 +23,7 @@ app.use(express.urlencoded({extended: false}))
 
 //User section
 app.get(Path.user, getAllUsersController)
+app.put(Path.userWithId, updateUserController)
 
 //WorkSpace section
 app.post(Path.workSpace, createWorkSpaceController)

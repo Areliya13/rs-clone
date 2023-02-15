@@ -17,6 +17,7 @@ interface IUser {
     _id: Types.ObjectId;
     image?: string;
     workSpace: Types.ObjectId[];
+    favoriteBoards: Types.ObjectId[];
 }
 
 interface IWork {

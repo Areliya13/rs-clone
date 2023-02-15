@@ -1,5 +1,6 @@
 export enum Path {
     user = '/user',
+    userWithId = '/user/:id',
 
     workSpace = '/workSpace',
     workSpaceWithId = '/workSpace/:id',

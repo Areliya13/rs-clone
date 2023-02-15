@@ -8,7 +8,11 @@ const userSchema = new Schema<IUser>({
     workSpace: [{
       type: Types.ObjectId,
       ref: IRef.workSpace,
-    }]
+    }],
+    favoriteBoards: [{
+        type: Types.ObjectId,
+        ref: IRef.board,
+      }]
   });
 
 const workSchema = new Schema<IWork>({
