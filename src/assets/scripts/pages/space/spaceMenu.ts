@@ -2,11 +2,14 @@ import { createHtmlElement } from '../../helpers/other';
 import { spaceMenuOptions } from '../../types/enum';
 import { board } from '../../types/types';
 import { imageLinks } from '../../types/background';
+import { store } from '../../store/store';
+import { IBoard } from '../../store/types';
 
 class SpaceMenu {
-  boards: board[];
+  workspace = store.user.workSpace[0]; // to-do get info from path
+  boards: IBoard[];
   renderLeftSide(): HTMLElement {
-    this.boards = [{ name: 'First board', img: imageLinks[0] }];
+    this.boards = this.workspace.boards;
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
     });
@@ -30,9 +33,9 @@ class SpaceMenu {
   renderSpace(container: HTMLDivElement): void {
     const spaceLink = createHtmlElement('a', { href: '#' });
     const spaceColor = createHtmlElement('div', { className: 'space-link' });
-    const spaceText = createHtmlElement('div', { textContent: '1' }); //to-do first letter of space name
+    const spaceText = createHtmlElement('div', { textContent: this.workspace.title.slice(0, 1) });
     const spaceInfo = createHtmlElement('div', { className: 'space-info' });
-    const spaceName = createHtmlElement('p', { className: 'space-name', textContent: '123' });
+    const spaceName = createHtmlElement('p', { className: 'space-name', textContent: this.workspace.title });
     const spaceDesc = createHtmlElement('p', { textContent: 'some info' });
     const buttonHideMenu = createHtmlElement('button', { className: 'button-hide-menu' });
     const imgHideMenu = createHtmlElement('img', { className: 'left-arrow' });
@@ -70,8 +73,16 @@ class SpaceMenu {
     for (let i = 0; i < this.boards.length; i++) {
       const board = this.boards[i];
       const li = createHtmlElement('li', { className: 'space-option-link board-item' });
-      const img = createHtmlElement('img', { src: board.img, className: 'board-img' });
-      const link = createHtmlElement('a', { className: 'board-option-text', textContent: board.name });
+      if (i === 0) {
+        li.classList.add('chosen-board');
+      }
+      const img = board.image
+        ? createHtmlElement('img', { src: board.image, className: 'board-img' })
+        : createHtmlElement('div', { className: 'board-img' });
+      if (!board.image && board.color) {
+        img.style.backgroundColor = board.color;
+      }
+      const link = createHtmlElement('a', { className: 'board-option-text', textContent: board.title });
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
       const favorite = createHtmlElement('div', { className: 'icon-img favorite-img' });

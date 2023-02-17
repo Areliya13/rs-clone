@@ -95,8 +95,8 @@ class App {
     window.addEventListener('load', getPageHash);
   }
 
-  run(): void {
-    this.getUser()
+  async run(): Promise<void> {
+    await this.getUser();
     App.header.append(App.headerContent.render());
     App.footer.append(App.footerContent.render());
     document.body.append(App.header, App.main, App.footer);
@@ -107,13 +107,13 @@ class App {
 
   async getUser(): Promise<void> {
     try {
-      const users: IUser[] = await readAll(Path.user, '')
-      store.user = users[0]
-      const user = await readAll(Path.workSpace, store.user._id)
-      store.user = user
-      console.log(store.user.name)
-    }catch(e) {
-      console.log(e)
+      const users: IUser[] = await readAll(Path.user, '');
+      store.user = users[0];
+      const user = await readAll(Path.workSpace, store.user._id);
+      store.user = user;
+      console.log(store.user.name);
+    } catch (e) {
+      console.log(e);
     }
   }
 }

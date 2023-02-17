@@ -27,16 +27,29 @@ export function setMainOptions(): void {
   localStorage.setItem(localStorageItems.mainOptions, options);
 }
 
-export function getMainAddress(): string {
+export function getAddress(id: PageIds, options: Options): string {
   setMainOptions();
-  if (mainOptions.size === 0) {
-    return `#${PageIds.MainPage}`;
+  if (options.size === 0) {
+    return `#${id}`;
   }
   const arr: string[] = [];
-  mainOptions.forEach((option, index) => {
+  options.forEach((option, index) => {
     arr.push(`${index}=${option}`);
   });
-  return `#${PageIds.MainPage}?${arr.join('&')}`;
+  return `#${id}?${arr.join('&')}`;
+}
+
+export function getMainAddress(): string {
+  return getAddress(PageIds.MainPage, mainOptions);
+  // setMainOptions();
+  // if (mainOptions.size === 0) {
+  //   return `#${PageIds.MainPage}`;
+  // }
+  // const arr: string[] = [];
+  // mainOptions.forEach((option, index) => {
+  //   arr.push(`${index}=${option}`);
+  // });
+  // return `#${PageIds.MainPage}?${arr.join('&')}`;
 }
 
 export function getOptions(opt: string): Options {
@@ -58,4 +71,15 @@ export function getHash(hash: string): string {
     return hash.slice(1);
   }
   return hash.slice(1, posOptions);
+}
+
+export function getInitials(name: string): string {
+  const array = name.split(' ');
+  let res = '';
+  for (let i = 0; i < array.length; i++) {
+    const element = array[i];
+    res += element.slice(0, 1);
+  }
+  res = res.slice(0, 2).toUpperCase();
+  return res;
 }

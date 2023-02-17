@@ -19,6 +19,7 @@ export type OptionsType = {
   disabled?: boolean;
   rows?: string;
   title?: string;
+  'style.backgroundColor'?: string;
 };
 
 export type Options = Map<string, string>;
