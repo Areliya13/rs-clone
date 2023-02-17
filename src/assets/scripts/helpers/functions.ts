@@ -40,16 +40,16 @@ export function getAddress(id: PageIds, options: Options): string {
 }
 
 export function getMainAddress(): string {
-  return getAddress(PageIds.MainPage, mainOptions);
-  // setMainOptions();
-  // if (mainOptions.size === 0) {
-  //   return `#${PageIds.MainPage}`;
-  // }
-  // const arr: string[] = [];
-  // mainOptions.forEach((option, index) => {
-  //   arr.push(`${index}=${option}`);
-  // });
-  // return `#${PageIds.MainPage}?${arr.join('&')}`;
+  // return getAddress(PageIds.MainPage, mainOptions);
+  setMainOptions();
+  if (mainOptions.size === 0) {
+    return `#${PageIds.MainPage}`;
+  }
+  const arr: string[] = [];
+  mainOptions.forEach((option, index) => {
+    arr.push(`${index}=${option}`);
+  });
+  return `#${PageIds.MainPage}?${arr.join('&')}`;
 }
 
 export function getOptions(opt: string): Options {
