@@ -1,13 +1,15 @@
 import { getInitials } from '../../helpers/functions';
 import { createHtmlElement } from '../../helpers/other';
 import { store } from '../../store/store';
-import { IItem } from '../../store/types';
+import { IBoard, IItem } from '../../store/types';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
-  renderContent(): HTMLDivElement {
+  renderContent(curBoard?: IBoard): HTMLDivElement {
+    if (curBoard) {
+      this.chosenBoard = curBoard;
+    }
     const currentBoard = store.user.workSpace[0];
-    console.log(currentBoard);
     const container = createHtmlElement('div', {
       className: 'board-content',
     });

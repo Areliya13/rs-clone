@@ -1,14 +1,15 @@
 import { createHtmlElement } from '../../helpers/other';
-import { spaceMenuOptions } from '../../types/enum';
-import { board } from '../../types/types';
-import { imageLinks } from '../../types/background';
+import { PageIds, spaceMenuOptions, spaceMode } from '../../types/enum';
 import { store } from '../../store/store';
-import { IBoard } from '../../store/types';
+import { IBoard, IWork } from '../../store/types';
+import { getAddress } from '../../helpers/functions';
 
 class SpaceMenu {
   workspace = store.user.workSpace[0]; // to-do get info from path
+  // options = getOptions(window.)
   boards: IBoard[];
-  renderLeftSide(): HTMLElement {
+  renderLeftSide(workSpace: IWork, board: IBoard): HTMLElement {
+    // this.workspace = workSpace;
     this.boards = this.workspace.boards;
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
@@ -24,7 +25,7 @@ class SpaceMenu {
     const boardsPlus = createHtmlElement('span', { className: 'icon-img plus-img' });
     boardsHeader.append(boardsHeaderText, boardsPlus);
     boards.append(boardsHeader);
-    this.renderBoards(boards);
+    this.renderBoards(boards, board);
     wrapper.append(menu, boards);
     spaceMenuContainer.append(space, wrapper);
     return spaceMenuContainer;
@@ -69,36 +70,45 @@ class SpaceMenu {
     container.append(boardsLink, usersLink, settingsLink);
   }
 
-  renderBoards(container: HTMLDivElement): void {
+  renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
     for (let i = 0; i < this.boards.length; i++) {
       const board = this.boards[i];
+      const options = new Map(
+        Object.entries({
+          mode: spaceMode.board,
+          workspaceID: this.workspace._id,
+          boardID: board._id,
+        })
+      );
+      const link = createHtmlElement('a', { href: getAddress(PageIds.SpacePage, options) });
       const li = createHtmlElement('li', { className: 'space-option-link board-item' });
-      if (i === 0) {
-        li.classList.add('chosen-board');
-      }
+      // if (board._id === chosenBoard._id) {
+      //   li.classList.add('chosen-board');
+      // }
       const img = board.image
         ? createHtmlElement('img', { src: board.image, className: 'board-img' })
         : createHtmlElement('div', { className: 'board-img' });
       if (!board.image && board.color) {
         img.style.backgroundColor = board.color;
       }
-      const link = createHtmlElement('a', { className: 'board-option-text', textContent: board.title });
+      const text = createHtmlElement('a', { className: 'board-option-text', textContent: board.title });
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
       const favorite = createHtmlElement('div', { className: 'icon-img favorite-img' });
 
       li.addEventListener('mouseover', () => {
-        link.style.width = '140px';
+        text.style.width = '140px';
         actions.classList.remove('hidden');
       });
       li.addEventListener('mouseleave', () => {
-        link.style.width = '196px';
+        text.style.width = '196px';
         actions.classList.add('hidden');
       });
 
       actions.append(settings, favorite);
-      li.append(img, link, actions);
-      container.append(li);
+      li.append(img, text, actions);
+      link.append(li);
+      container.append(link);
     }
   }
 }
