@@ -1,3 +1,5 @@
+import { PageIds, spaceMode } from './enum';
+
 export type OptionsType = {
   id?: string;
   className?: string;
@@ -19,9 +21,10 @@ export type OptionsType = {
   disabled?: boolean;
   rows?: string;
   title?: string;
+  'style.backgroundColor'?: string;
 };
 
-export type Options = Map<string, string>;
+export type Options = Map<string, string | spaceMode>;
 
 export type stringObject = { [key: string]: string };
 export type board = { name: string; img: string };
