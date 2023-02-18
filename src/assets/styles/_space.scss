@@ -8,7 +8,332 @@
 .background {
   background-image: url('https://live.staticflickr.com/65535/52682453673_e81dae0a3b_b.jpg');
   background-position: center;
+  background-size: cover;
   width: 100%;
   height: 100%;
   display: flex;
+}
+
+.settingsModalContainer {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  z-index: 98;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000000a3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settingsModal {
+  background-color: #f4f5f7;
+  position: relative;
+  border-radius: 2px;
+  margin: 48px 0 80px;
+  width: 768px;
+  z-index: 1;
+}
+
+.modalHeaderIcon {
+  width: 24px;
+  height: 25px;
+  fill: #42526e;
+}
+
+.modalDescriptionIcon {
+  width: 24px;
+  height: 25px;
+  fill: #42526e;
+}
+
+.currUserIcon {
+  background: url('../images/currUserIcon.png') no-repeat;
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+}
+
+.modalIcon {
+  width: 16px;
+  height: 16px;
+  fill: #42526e;
+  color: #42526e;
+}
+
+.settingsModalHeader {
+  min-height: 32px;
+  padding: 12px 40px 0 56px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  .modalHeaderText {
+    color: #5e6c84;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    height: 34px;
+    background: #0000;
+    border-radius: 3px;
+    box-shadow: none;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    margin: -4px -8px;
+    min-height: 24px;
+    padding: 4px 0 4px 0;
+    resize: none;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    transition-duration: 85ms;
+    transition-property: background-color, border-color, box-shadow;
+    transition-timing-function: ease;
+    &:focus {
+      background-color: #fff;
+      box-shadow: inset 0 0 0 2px #0079bf;
+      outline: 0;
+    }
+  }
+}
+
+.modalColumnDiv {
+  padding: 0 40px 8px 56px;
+  cursor: default;
+  display: inline-block;
+  margin: 4px 8px 4px 2px;
+  color: #5e6c84;
+}
+
+.modalMainSidebar {
+  display: flex;
+  justify-content: space-around;
+}
+
+.modalMain {
+  width: 552px;
+  margin: 0;
+  min-height: 24px;
+  padding: 0 8px 8px 16px;
+}
+
+.modalCardDetail {
+  display: flex;
+  margin-top: 8px;
+  margin-left: 40px;
+  .cardDetail-item {
+    margin: 0 8px 8px 0;
+    max-width: 100%;
+    .modalMembersList {
+      display: flex;
+      .modalMemberIcon {
+        color: #172b4d;
+        background-color: #dfe1e6;
+        border-radius: 25em;
+        cursor: pointer;
+        height: 32px;
+        margin: 0 4px 4px 0;
+        overflow: visible;
+        position: relative;
+        text-decoration: none;
+        user-select: none;
+        width: 32px;
+        z-index: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modalMemberAdd {
+        font-size: 24px;
+        height: 32px;
+        line-height: 16px;
+        width: 32px;
+        color: #42526e;
+        border-radius: 100%;
+        background-color: #091e420a;
+        border: none;
+        box-shadow: none;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        transition-duration: 85ms;
+        transition-property: background-color, border-color, box-shadow;
+        transition-timing-function: ease;
+      }
+    }
+  }
+}
+
+.modalNotificationIcon {
+  width: 16px;
+  height: 16px;
+  fill: #42526e;
+}
+
+.modal-button {
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 32px;
+  max-width: 300px;
+  overflow: hidden;
+  padding: 6px 12px;
+  position: relative;
+  text-overflow: ellipsis;
+  transition-duration: 85ms;
+  transition-property: background-color, border-color, box-shadow;
+  transition-timing-function: ease;
+  user-select: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  &:hover {
+    background-color: #091e4214;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.modalCardDateControls {
+  display: flex;
+  .modalCardDateButton {
+    margin: 0;
+  }
+}
+
+.modalDateStatus {
+  color: #ffffff;
+  background-color: #ec9488;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 0 4px;
+  border-radius: 2px;
+  margin: auto 0 auto 8px;
+}
+
+.modalDateArrowIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.modalDescriptionHeadDiv {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  column-gap: 16px;
+  margin: 0 0 4px 40px;
+  padding: 8px 0;
+}
+
+.modalDescriptionInput {
+  background-color: #091e420a;
+  border: none;
+  border-radius: 3px;
+  box-shadow: none;
+  color: inherit;
+  display: block;
+  min-height: 40px;
+  padding: 8px 12px;
+  text-decoration: none;
+  margin: 0 0 8px 40px;
+  resize: none;
+  width: 85%;
+  &:focus {
+    background-color: #fff;
+    box-shadow: inset 0 0 0 2px #0079bf;
+    border: none;
+  }
+  &:active {
+    background-color: #e4f0f6;
+    border: none;
+    box-shadow: none;
+    color: #0079bf;
+    outline: 0;
+  }
+}
+
+.modalCommentDiv {
+  margin: 0 0 8px 40px;
+  display: flex;
+  column-gap: 10px;
+}
+
+.modalCommentForm {
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px -1px #091e4240, 0 0 0 1px #091e4214;
+  margin: 4px 4px 12px 0;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 85ms ease;
+  width: 88%;
+  .modalCommentTextarea {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    height: 20px;
+    margin: -8px 0 -8px 0;
+    padding: 8px 12px;
+    border: 0;
+    box-shadow: none;
+    resize: none;
+    width: 100%;
+    min-height: 20px;
+    box-sizing: initial;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    outline: none;
+    transition-duration: 85ms;
+    transition-property: background-color, border-color, box-shadow;
+    transition-timing-function: ease;
+    background-color: #091e4214;
+  }
+}
+
+.modalHeadText {
+  color: #5e6c84;
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 0 8px 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modalColumnLink {
+  background-color: initial;
+  cursor: pointer;
+  color: #5e6c84;
+  text-decoration: underline;
+  &:hover {
+    color: #172b4d;
+  }
+}
+
+.modalDescriptionHead {
+  display: inline-block;
+  margin: 0;
+  min-height: 18px;
+  min-width: 40px;
+  width: auto;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 10;
 }

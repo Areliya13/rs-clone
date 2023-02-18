@@ -55,7 +55,7 @@ class App {
     } else if (idPage === PageIds.WorkspaceBoardsPage) {
       page = new WorkspaceBoards(idPage);
     } else if (idPage === PageIds.SpacePage) {
-      page = new SpacePageRender(idPage);
+      page = new SpacePageRender(idPage, options);
     }
 
     if (page) {
@@ -96,7 +96,7 @@ class App {
   }
 
   run(): void {
-    this.getUser()
+    this.getUser();
     App.header.append(App.headerContent.render());
     App.footer.append(App.footerContent.render());
     document.body.append(App.header, App.main, App.footer);
