@@ -40,6 +40,10 @@
 
 .space-name {
   font-weight: 700;
+  max-width: 156px;
+  max-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button-hide-menu {
@@ -139,7 +143,7 @@
 .board-img {
   width: 24px;
   height: 20px;
-  padding-right: 8px;
+  margin-right: 8px;
 }
 
 .board-option-text {
@@ -161,4 +165,8 @@
 
 .hidden {
   display: none;
+}
+
+.chosen-board {
+  background-color: rgba($color: #ffffff, $alpha: 0.2);
 }
