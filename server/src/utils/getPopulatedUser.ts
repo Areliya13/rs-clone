@@ -1,13 +1,15 @@
 import { Types } from "mongoose";
 import { User } from "../schema/model";
+import { IUser } from "../schema/user.types";
 import { connectToDB } from "./connectToDB";
 
 
 export const getPopulatedUser = async (userId: string | Types.ObjectId) => {
     await connectToDB();
-    const user = await User.findById(userId).populate({
+    const user = await User.findById<IUser>(userId).populate([{
         path: 'workSpace', 
         model: 'WorkSpace',
+
         populate: {
             path: 'boards',
             model: 'Board',
@@ -38,6 +40,11 @@ export const getPopulatedUser = async (userId: string | Types.ObjectId) => {
                 }
             }
         }
-    })
+    },
+    {
+        path: 'favoriteBoards',
+        model: 'Board'
+    }
+])
     return user
 }

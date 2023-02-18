@@ -19,6 +19,8 @@ export type OptionsType = {
   disabled?: boolean;
   rows?: string;
   title?: string;
+  name?: string;
+  style?: string;
 };
 
 export type Options = Map<string, string>;

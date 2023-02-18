@@ -108,10 +108,9 @@ class App {
   async getUser(): Promise<void> {
     try {
       const users: IUser[] = await readAll(Path.user, '')
-      store.user = users[0]
-      const user = await readAll(Path.workSpace, store.user._id)
+      const user = await readAll(Path.workSpace, users[0]._id)
       store.user = user
-      console.log(store.user.name)
+      store.updateStore(user)
     }catch(e) {
       console.log(e)
     }

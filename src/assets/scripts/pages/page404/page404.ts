@@ -1,5 +1,4 @@
 import Page from "../../core/page";
-import { stringObject } from "../../types/types";
 
 class ErrorPage extends Page {
 
