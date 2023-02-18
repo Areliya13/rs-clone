@@ -6,7 +6,6 @@
 }
 
 .background {
-  background-image: url('https://live.staticflickr.com/65535/52682453673_e81dae0a3b_b.jpg');
   background-position: center;
   background-size: cover;
   width: 100%;
@@ -19,7 +18,7 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  z-index: 98;
+  z-index: 5;
   position: fixed;
   top: 0;
   left: 0;
@@ -406,7 +405,7 @@
   cursor: pointer;
   margin: 0;
   padding: 0;
-  z-index: 2;
+  z-index: 7;
   outline: none;
   -webkit-appearance: none;
   border-radius: 3px;
@@ -481,7 +480,7 @@
   min-width: 48px;
   height: 32px;
   box-sizing: border-box;
-  background-color: #DFE1E6;
+  background-color: #dfe1e6;
   line-height: 32px;
   color: #172b4d;
   font-size: 14px;

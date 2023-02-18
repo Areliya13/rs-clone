@@ -140,3 +140,21 @@
   margin: 0 4px;
   padding: 0 2px;
 }
+
+.add-task-button {
+  width: 238px;
+  padding: 4px;
+  margin-left: 10.6px;
+  background-color: rgba($color: #ffffff, $alpha: 0.8);
+  border-radius: 3px;
+  overflow-y: auto;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background-color: rgba($color: #ffffff, $alpha: 1);
+  }
+}
+
+.mark-container {
+  display: flex;
+}
