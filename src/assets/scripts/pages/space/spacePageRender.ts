@@ -15,6 +15,7 @@ import rightIcon from '../../../images/rightArrow.inl.svg';
 import copyIcon from '../../../images/copyIcon.inl.svg';
 import shareIcon from '../../../images/sharingIcon.inl.svg';
 import closeButtonIcon from '../../../images/modal-close.inl.svg';
+import changeIconSvg from '../../../images/wsChangeIcon.inl.svg';
 import { Options } from '../../types/types';
 import { IBoard, IWork } from '../../store/types';
 import { store } from '../../store/store';
@@ -249,6 +250,53 @@ export class SpacePageRender extends Page {
       settingsModalContainer.remove();
     });
     // Конец кода - Модальное окно с настройками
+
+    // todo: Модальное окно метки
+
+    const tempButtonForModalMark = createHtmlElement('button', {textContent: 'Временная кнопка для модального окна метки'});
+    this.content.append(tempButtonForModalMark);
+    const marksModalContainer = createHtmlElement('div', { className: 'marksModalContainer' });
+    const marksModal = createHtmlElement('div', { className: 'marksModal'});
+    const marksHeader = createHtmlElement('header', {className: 'marksHeader'});
+    const marksHeadText = createHtmlElement('h2', {className: 'marksHeadText', textContent: 'Метки'});
+    const marksCloseButton = createHtmlElement('div', {className: 'marksCloseButton', innerHTML: closeButtonIcon});
+    const marksContentContainer = createHtmlElement('div', {className: 'marksContentContainer'});
+    const marksList = createHtmlElement('ul', {className: 'marksList'});
+    for (let i = 0; i < 6; i++) {
+      const marksItem = createHtmlElement('li', {className: 'marksItem'});
+      const marksCheckbox = createHtmlElement('input', {className: 'marksCheckbox', type: 'checkbox'});
+      const marksContainer = createHtmlElement('div', {className: 'marksContainer'});
+      const mark = createHtmlElement('div', {className: 'markDiv'});
+      const markColorIcon = createHtmlElement('div', {className: 'markColorIcon'});
+      const markName = createHtmlElement('span', {className: 'markName', textContent: `Test ${i + 1}`});
+      const markEditButton = createHtmlElement('button', {className: 'markEditButton', innerHTML: changeIconSvg});
+
+      mark.append(markColorIcon, markName);
+      marksContainer.append(mark, markEditButton);
+      marksItem.append(marksCheckbox, marksContainer);
+      marksList.append(marksItem);
+    }
+    const createMarkButton = createHtmlElement('button', {className: 'marksCreateButton', textContent: 'Создать новую метку'});
+
+    marksHeader.append(marksHeadText, marksCloseButton);
+
+    marksContentContainer.append(marksList, createMarkButton);
+    marksModal.append(marksHeader, marksContentContainer);
+    marksModalContainer.append(marksModal);
+    tempButtonForModalMark.addEventListener('click', () => {
+      document.body.append(marksModalContainer);
+    })
+
+    marksModalContainer.addEventListener('click', (event) => {
+      if (event.target === marksModalContainer) {
+        marksModalContainer.remove();
+      }
+    })
+
+    marksCloseButton.addEventListener('click', () => {
+      marksModalContainer.remove();
+    })
+    // Конец кода - Модальное окно метки
 
     return container;
   }
