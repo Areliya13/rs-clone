@@ -22,6 +22,8 @@ export type OptionsType = {
   rows?: string;
   title?: string;
   'style.backgroundColor'?: string;
+  name?: string;
+  style?: string;
 };
 
 export type Options = Map<string, string | spaceMode>;

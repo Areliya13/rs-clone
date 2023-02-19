@@ -1,6 +1,7 @@
 
 interface IStore {
-    user: Partial<IUser>;
+    user: IPartialUser;
+    updateStore: (store: IPartialUser) => void;
 }
 
 enum IRef {
@@ -14,6 +15,8 @@ enum IRef {
     checkList = 'CheckList',
     checkItem = 'CheckItem',
 }
+
+type IPartialUser = Partial<IUser>
 
 interface IUser {
     name: string;
@@ -82,4 +85,29 @@ interface ICheckItem {
     _id: string;
 }
 
-export {IUser, IWork, IBoard, IList, IItem, ICheckItem, ICheckList, IComment, IMark, IRef, IStore}
+enum EventName {
+    updateState = 'updateState',
+}
+
+interface ISubscriber {
+    eventName: EventName;
+    function: (store: IStore) => void;
+}
+
+interface IEventObject {
+    eventName: EventName;
+    eventPayload: IStore;
+}
+
+interface IReadUser {
+    name: string;
+    _id: string;
+    image?: string;
+    workSpace: string[];
+    favoriteBoards: string[]
+}
+
+
+export { ISubscriber, IEventObject, EventName };
+
+export {IUser, IPartialUser, IWork, IBoard, IList, IItem, ICheckItem, ICheckList, IComment, IMark, IRef, IStore, IReadUser}

@@ -12,6 +12,12 @@ import importantIcon from '../../../images/heart-icon.inl.svg';
 import presentationIcon from '../../../images/presentation.inl.svg';
 import membersIcon from '../../../images/members.inl.svg';
 import settingsIcon from '../../../images/settings.inl.svg';
+import { createOne } from '../../api/rest/createOne';
+import { Path } from '../../api/types';
+import { createWorkSpacePostData } from '../../api/rest/utils/createPostData';
+import { store } from '../../store/store';
+import { readAll } from '../../api/rest/readAll';
+import { updateStore } from '../../store/updateStore';
 
 class LeftSideBar {
 
@@ -65,6 +71,7 @@ class LeftSideBar {
     <span class="form-text">Повысьте производительность: участники команды смогут получать удобный доступ ко всем доскам.</span>
     `,
     });
+    form.addEventListener('submit', (e) => this.handlerFormSubmit(e))
     const labelWorkspace = createHtmlElement('label', {
       className: 'modalHead workspaceLabel',
       for: 'workspaceInput',
@@ -76,7 +83,10 @@ class LeftSideBar {
       maxLength: '100',
       placeholder: 'Компания «Тако»',
       required: true,
+      name: 'workSpaceName',
     });
+    inputWorkspace.addEventListener('input', (e: InputEvent) => this.handlerWorkSpaceInput(e))
+
     const spanWorkspaceHelp = createHtmlElement('span', {
       className: 'workspaceHelp',
       textContent: 'Укажите название вашей команды, компании или организации.',
@@ -127,6 +137,7 @@ class LeftSideBar {
       disabled: true,
       textContent: 'Продолжить',
     });
+
     form.append(
       labelWorkspace,
       inputWorkspace,
@@ -215,6 +226,44 @@ class LeftSideBar {
 
     leftSidebarContainer.append(unList, workspacesDiv);
     return leftSidebarContainer;
+  }
+
+  private handlerWorkSpaceInput(e: Event) {
+    if (!(e.target instanceof HTMLInputElement)) return
+    const target = e.target
+    const value = target.value
+    const submitButton:HTMLButtonElement = document.querySelector('button.form-continue')
+    if (value.trim().length) {
+      if (submitButton) {
+        submitButton.disabled = false
+      }
+    } else {
+      if (submitButton) {
+        submitButton.disabled = true
+      }
+    }
+  }
+
+  private async handlerFormSubmit(e: SubmitEvent) {
+    e.preventDefault()
+    if (!(e.target instanceof HTMLFormElement) ) return
+    const form = new FormData(e.target)
+    const workSpaceName = form.get('workSpaceName')
+
+    if (!workSpaceName.toString().trim()) return
+    
+    await createOne(Path.workSpace, createWorkSpacePostData(workSpaceName.toString(), store.user._id))
+    await updateStore()
+    
+    const inputWorkspace: HTMLInputElement = e.target.querySelector('#workspaceInput')
+    const textAreaWorkspace: HTMLInputElement = e.target.querySelector('.descriptionTextarea')
+    const button: HTMLInputElement = e.target.querySelector('.form-continue')
+    const workspaceModalContainer = document.querySelector('.workspaceModalContainer')
+    inputWorkspace.value = ''
+    textAreaWorkspace.value = ''
+    button.disabled = true
+    workspaceModalContainer.remove()
+
   }
 }
 
