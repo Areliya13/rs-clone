@@ -1,7 +1,14 @@
 import { createHtmlElement } from '../../helpers/other';
 import { menuItems } from '../../types/constValues';
+import { BoardList } from '../../components/BoardList/BoardList';
+import { store } from '../../store/store';
+import observer from '../../store/observer';
+import { EventName, IPartialUser } from '../../store/types';
+import starIcon from '../../../images/star.inl.svg';
 
 export class Header {
+  constructor() {
+  }
   render(): HTMLDivElement {
     const container = createHtmlElement('div', {
       className: 'header-container',
@@ -33,8 +40,39 @@ export class Header {
       const link = createHtmlElement('a', { href: element[1], className: 'nav-link' });
       const item = createHtmlElement('li', { textContent: element[0], className: 'nav-item' });
       const span = createHtmlElement('span', { className: 'nav-img' });
+
       link.append(item, span);
       nav.append(link);
+
+      // todo: Модалка избранные доски в хедере - Доделать.
+      if(element[0] === menuItems[2][0]) {
+        const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown'});
+        const modalList = createHtmlElement('ul', {className: 'modalFavoriteList'})
+        let boards = store.user.favoriteBoards
+        if (!boards) {
+          modalList.append('Нет избранных досок');
+        } else {
+          modalList.replaceChildren();
+          boards.map(e => {
+            const item = createHtmlElement('li');
+            const img = createHtmlElement('img', {className: 'modalFavoriteImg', src: e.image});
+            const contentDiv = createHtmlElement('div', {className: 'modalFavoriteDiv'})
+            const boardName = createHtmlElement('span', {className: 'modalFavoriteName', textContent: e.title})
+            const workspaceName = createHtmlElement('span', {className: 'modalFavoriteWorkspace', textContent: 'Какое-то раб. пространство'})
+            const favoriteIcon = createHtmlElement('div', {className: 'modalFavoriteIcon', innerHTML: starIcon})
+            contentDiv.append(boardName, workspaceName)
+            item.append(img, contentDiv, favoriteIcon);
+          })
+        }
+        modalFavorites.append(modalList);
+        link.append(modalFavorites)
+
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          link.classList.toggle('favorite-active');
+          modalFavorites.classList.toggle('modal-active');
+        })
+      }
     }
     return nav;
   }
