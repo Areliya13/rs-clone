@@ -37,13 +37,12 @@ class SpaceMenu {
     const spaceText = createHtmlElement('div', { textContent: this.workspace.title.slice(0, 1) });
     const spaceInfo = createHtmlElement('div', { className: 'space-info' });
     const spaceName = createHtmlElement('p', { className: 'space-name', textContent: this.workspace.title });
-    const spaceDesc = createHtmlElement('p', { textContent: 'some info' });
     const buttonHideMenu = createHtmlElement('button', { className: 'button-hide-menu' });
     const imgHideMenu = createHtmlElement('img', { className: 'left-arrow' });
 
     spaceLink.append(spaceColor);
     spaceColor.append(spaceText);
-    spaceInfo.append(spaceName, spaceDesc);
+    spaceInfo.append(spaceName);
     buttonHideMenu.append(imgHideMenu);
     container.append(spaceLink, spaceInfo, buttonHideMenu);
   }

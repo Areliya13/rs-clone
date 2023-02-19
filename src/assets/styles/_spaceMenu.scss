@@ -4,11 +4,11 @@
   color: white;
   border-right: 0.8px solid rgba($color: #ffffff, $alpha: 0.16);
   backdrop-filter: blur(10px);
+  background-color: rgba($color: #ffffff, $alpha: 0.2);
 }
 
 .space-top-section {
   width: 236px;
-  height: 40px;
   padding: 14px 12px;
   display: flex;
   border-bottom: 0.8px solid rgba($color: #ffffff, $alpha: 0.16);
@@ -31,17 +31,10 @@
   align-items: center;
 }
 
-.space-info {
-  width: 156px;
-  height: 40px;
-  margin-left: 8px;
-  margin-right: 4px;
-}
-
 .space-name {
   font-weight: 700;
-  max-width: 156px;
-  max-height: 20px;
+  width: 156px;
+  padding: 0 4px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
