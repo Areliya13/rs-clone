@@ -4,7 +4,6 @@ import { BoardList } from '../../components/BoardList/BoardList';
 import { store } from '../../store/store';
 import observer from '../../store/observer';
 import { EventName, IBoard, IPartialUser, IStore } from '../../store/types';
-import starIcon from '../../../images/star.inl.svg';
 
 export class Header {
   header: HTMLDivElement | undefined
