@@ -47,19 +47,17 @@ export class Header {
       link.append(item, span);
       nav.append(link);
 
-      // todo: Модалка избранные доски в хедере - Доделать.
+      // todo: Модалка избранные доски в хедере.
       if(element[0] === menuItems[2][0]) {
         const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown'});
-        const modalList = createHtmlElement('ul', {className: 'modalFavoriteList'})
         let boards: IBoard[] = store.user.favoriteBoards
         if (!boards || boards.length === 0) {
-          modalList.append(createHtmlElement('div', {textContent: 'Нет избранных досок'}));
+          modalFavorites.append(createHtmlElement('div', {textContent: 'Нет избранных досок'}));
         } else {
-          modalList.replaceChildren();
-          const list = new BoardList(boards).getList()
-          item.append(list)
+          modalFavorites.replaceChildren();
+          const list = new BoardList(boards).getList();
+          modalFavorites.append(list);
         }
-        modalFavorites.append(modalList);
         link.append(modalFavorites)
 
         link.addEventListener('click', (event) => {
