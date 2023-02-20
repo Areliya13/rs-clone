@@ -5,6 +5,6 @@ import { IPartialUser } from "./types"
 
 export const updateStore = async () => {
     const newData: IPartialUser = await readAll(Path.workSpace, store.user._id)
-    console.log('обновляю стор')
+    console.log('обновляю стор', newData)
     store.updateStore(newData)
 }
