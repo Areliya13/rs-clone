@@ -3,17 +3,20 @@ import { menuItems } from '../../types/constValues';
 import { BoardList } from '../../components/BoardList/BoardList';
 import { store } from '../../store/store';
 import observer from '../../store/observer';
-import { EventName, IPartialUser } from '../../store/types';
+import { EventName, IBoard, IPartialUser, IStore } from '../../store/types';
 import starIcon from '../../../images/star.inl.svg';
 
 export class Header {
+  header: HTMLDivElement | undefined
   constructor() {
   }
   render(): HTMLDivElement {
     const container = createHtmlElement('div', {
       className: 'header-container',
     });
+    this.header = container;
     container.append(this.leftMenu(), this.rightMenu());
+    this.subscribe();
     return container;
   }
 
@@ -48,21 +51,13 @@ export class Header {
       if(element[0] === menuItems[2][0]) {
         const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown'});
         const modalList = createHtmlElement('ul', {className: 'modalFavoriteList'})
-        let boards = store.user.favoriteBoards
-        if (!boards) {
-          modalList.append('Нет избранных досок');
+        let boards: IBoard[] = store.user.favoriteBoards
+        if (!boards || boards.length === 0) {
+          modalList.append(createHtmlElement('div', {textContent: 'Нет избранных досок'}));
         } else {
           modalList.replaceChildren();
-          boards.map(e => {
-            const item = createHtmlElement('li');
-            const img = createHtmlElement('img', {className: 'modalFavoriteImg', src: e.image});
-            const contentDiv = createHtmlElement('div', {className: 'modalFavoriteDiv'})
-            const boardName = createHtmlElement('span', {className: 'modalFavoriteName', textContent: e.title})
-            const workspaceName = createHtmlElement('span', {className: 'modalFavoriteWorkspace', textContent: 'Какое-то раб. пространство'})
-            const favoriteIcon = createHtmlElement('div', {className: 'modalFavoriteIcon', innerHTML: starIcon})
-            contentDiv.append(boardName, workspaceName)
-            item.append(img, contentDiv, favoriteIcon);
-          })
+          const list = new BoardList(boards).getList()
+          item.append(list)
         }
         modalFavorites.append(modalList);
         link.append(modalFavorites)
@@ -97,5 +92,16 @@ export class Header {
     search.append(searchIcon, input);
     container.append(search, bellIcon, infoIcon, userIcon);
     return container;
+  }
+
+  subscribe(): void {
+    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  }
+
+  update(): void {  
+    if (this.header) {
+      this.header.innerHTML = ''
+      this.header.append(this.leftMenu(), this.rightMenu());
+    }
   }
 }

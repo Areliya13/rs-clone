@@ -95,8 +95,8 @@ class App {
     window.addEventListener('load', getPageHash);
   }
 
-  async run(): Promise<void> {
-    await this.getUser();
+  run(): void {
+    this.getUser();
     App.header.append(App.headerContent.render());
     App.footer.append(App.footerContent.render());
     document.body.append(App.header, App.main, App.footer);
