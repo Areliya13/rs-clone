@@ -51,7 +51,7 @@ export class MainPage extends Page {
       textContent: 'В избранном',
     });
     
-    const rightBoardList = createHtmlElement('div', {
+    const rightBoardFavoriteList = createHtmlElement('div', {
       className: 'right-list-title-wrapper',
     });
 
@@ -74,9 +74,9 @@ export class MainPage extends Page {
     });
 
     createBoardDiv.append(buttonCreateBoard);
-    rightBoardList.append(getSvgIcon(clockIcon, BASE_COLOR), recentlyViewedSpan)
+    rightBoardFavoriteList.append(getSvgIcon(clockIcon, BASE_COLOR), recentlyViewedSpan)
     recentlyViewed
-    recentlyViewed.append(rightBoardList);
+    recentlyViewed.append(rightBoardFavoriteList);
 
     let boards = store.user.favoriteBoards
     if (!boards) boards = []

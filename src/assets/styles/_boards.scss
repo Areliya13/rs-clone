@@ -26,6 +26,29 @@
   }
 }
 
+.boardsFavorite {}
+.boardsFavoriteHead {
+  display: flex;
+  align-items: center;
+  padding: 0 0 11px;
+  column-gap: 16px;
+  .boardsFavoriteIcon {
+    width: 24px;
+    height: 25px;
+  }
+  .boardsFavoriteText {
+    display: inline-block;
+    flex: 1;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    margin: 3px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .closedWorkspacesButton{
   border: 0;
   box-sizing: border-box;

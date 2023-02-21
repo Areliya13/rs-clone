@@ -1,6 +1,7 @@
 import Page from '../../core/page';
 import { createHtmlElement } from '../../helpers/other';
 import clockIcon from '../../../images/clock-icon.inl.svg';
+import star from '../../../images/star.inl.svg';
 
 export class Boards extends Page{
   constructor(id: string) {
@@ -11,6 +12,13 @@ export class Boards extends Page{
     const contentContainer = createHtmlElement('article', {
       className: 'boardsContent',
     });
+
+    const favoriteBoards = createHtmlElement('section', { className: 'boardsFavorite' });
+    const favoriteHead = createHtmlElement('div', { className: 'boardsFavoriteHead' });
+    const favoriteIcon = createHtmlElement('div', {className: 'boardsFavoriteIcon', innerHTML: star})
+    const favoriteText = createHtmlElement('h3', { className: 'boardsFavoriteText' , textContent: 'Отмеченные доски'})
+    favoriteHead.append(favoriteIcon, favoriteText);
+    favoriteBoards.append(favoriteHead);
 
     const recentlyViewed = createHtmlElement('section', { className: 'boardsRecently' });
     const recentlyHead = createHtmlElement('div', { className: 'boardsRecentlyHead' });
@@ -25,7 +33,7 @@ export class Boards extends Page{
 
     const closedWorkspacesButton = createHtmlElement('button', { className: 'closedWorkspacesButton', textContent: 'Посмотреть закрытые доски'})
 
-    contentContainer.append(recentlyViewed, yourWorkspaces, closedWorkspacesButton);
+    contentContainer.append(favoriteBoards, recentlyViewed, yourWorkspaces, closedWorkspacesButton);
     return contentContainer;
   }
 

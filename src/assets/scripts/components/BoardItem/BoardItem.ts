@@ -75,7 +75,6 @@ export class BoardItem {
             const newFavoriteArr = favoriteArr.push(boardId)
             await updateOne(Path.user, store.user._id, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteArr)}))
         }
-        await updateStore()
-        
+        await updateStore()   
     }
 }
