@@ -15,7 +15,7 @@ export const createBoardService = async ({workSpaceId, image, color, title}: cre
     if (!image && !color) throw new Error('Image or color not transferred')
     await connectToDB()
 
-    const newBoard = createBoard({title, color, image})
+    const newBoard = createBoard({title, color, image, workSpaceId})
     const workSpace = await WorkSpace.findById(workSpaceId)
     if (!workSpace) throw new Error('workSpaceId is not found')
     workSpace.boards.push(newBoard._id)

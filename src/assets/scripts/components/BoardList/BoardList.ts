@@ -20,10 +20,9 @@ export class BoardList {
         })
         if (this.boards.length !== 0) {
             ul.append(...items)
-            return ul
         } else {
             ul.append(noUl)
-            return ul
         }
+        return ul
     }
 }

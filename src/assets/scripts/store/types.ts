@@ -39,6 +39,7 @@ interface IBoard {
     color?: string;
     _id: string;
     marks: IMark[];
+    workSpaceId: string;
 }
 
 interface IList {
