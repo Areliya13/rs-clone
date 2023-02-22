@@ -4,6 +4,10 @@
   width: 100%;
 }
 
+.boardsRecently {
+  margin: 0 0 30px 0;
+}
+
 .boardsRecentlyHead{
   display: flex;
   align-items: center;
@@ -26,7 +30,13 @@
   }
 }
 
-.boardsFavorite {}
+.boardsWorkspacesHead {
+  margin: 0 0 15px 0;
+}
+
+.boardsFavorite {
+  margin: 0 0 30px 0;
+}
 .boardsFavoriteHead {
   display: flex;
   align-items: center;
