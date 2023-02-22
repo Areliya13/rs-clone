@@ -75,7 +75,6 @@ export class MainPage extends Page {
 
     createBoardDiv.append(buttonCreateBoard);
     rightBoardList.append(getSvgIcon(clockIcon, BASE_COLOR), recentlyViewedSpan)
-    recentlyViewed
     recentlyViewed.append(rightBoardList);
 
     let boards = store.user.favoriteBoards
