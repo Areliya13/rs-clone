@@ -111,6 +111,7 @@ class App {
       const users: IUser[] = await readAll(Path.user, '')
       const user = await readAll(Path.workSpace, users[0]._id)
       store.user = user
+      console.log('app', user)
       store.updateStore(user)
     }catch(e) {
       console.log(e)
