@@ -92,4 +92,12 @@
     
 }
 
-
+.right-list {
+    &-title-wrapper {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    &-star {
+        margin-right: 10px;
+    }
+}

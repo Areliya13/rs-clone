@@ -1,20 +1,20 @@
 import { createHtmlElement } from "../../helpers/other";
 import { IBoard } from "../../store/types";
-import { BoardItem } from "../BoardItem/BoardItem";
+import { BigBoardItem } from "../BigBoardItem/BigBoardItem";
 
-export class BoardList {
-    constructor(private boards: IBoard[]) {}
+export class BigBoardList {
+    constructor(private boards: IBoard[], private className: string) {}
 
     getList() {
         const ul = createHtmlElement('ul', {
-            className: 'right-list-ul'
+            className: `big-board-list ${this.className}`
         })
         const noUl = createHtmlElement('span', {
-            className: 'right-list-p',
+            className: 'big-board-list-not',
             textContent: 'Нет досок'
         })
         const items = this.boards.map((board) => {
-            return new BoardItem(board).getItem()
+            return new BigBoardItem(board).getItem()
         })
         if (this.boards.length !== 0) {
             ul.append(...items)

@@ -16,6 +16,7 @@ import { readAll } from '../api/rest/readAll';
 import { Path } from '../api/types';
 import { IUser } from '../store/types';
 import { store } from '../store/store';
+import { updateStore } from '../store/updateStore';
 
 class App {
   private static defaultPageID = 'content';

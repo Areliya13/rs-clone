@@ -92,12 +92,12 @@ enum EventName {
 
 interface ISubscriber {
     eventName: EventName;
-    function: (store: IStore) => void;
+    function: (store: IPartialUser) => void;
 }
 
 interface IEventObject {
     eventName: EventName;
-    eventPayload: IStore;
+    eventPayload: IPartialUser;
 }
 
 interface IReadUser {

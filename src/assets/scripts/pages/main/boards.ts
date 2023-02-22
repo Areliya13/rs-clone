@@ -2,10 +2,15 @@ import Page from '../../core/page';
 import { createHtmlElement } from '../../helpers/other';
 import clockIcon from '../../../images/clock-icon.inl.svg';
 import star from '../../../images/star.inl.svg';
+import { BigBoardList } from '../../components/BigBoardList/BigBoardList';
+import observer from '../../store/observer';
+import { EventName, IPartialUser, IStore } from '../../store/types';
+import { store } from '../../store/store';
 
 export class Boards extends Page{
   constructor(id: string) {
     super(id);
+    this.subscribe()
   }
 
   renderContent(): HTMLElement {
@@ -18,7 +23,11 @@ export class Boards extends Page{
     const favoriteIcon = createHtmlElement('div', {className: 'boardsFavoriteIcon', innerHTML: star})
     const favoriteText = createHtmlElement('h3', { className: 'boardsFavoriteText' , textContent: 'Отмеченные доски'})
     favoriteHead.append(favoriteIcon, favoriteText);
-    favoriteBoards.append(favoriteHead);
+
+    let favorite = store.user?.favoriteBoards
+    if (!favorite) favorite = []
+    const favoriteBoardsList = new BigBoardList(favorite, 'big-board-list-favorite').getList()
+    favoriteBoards.append(favoriteHead, favoriteBoardsList);
 
     const recentlyViewed = createHtmlElement('section', { className: 'boardsRecently' });
     const recentlyHead = createHtmlElement('div', { className: 'boardsRecentlyHead' });
@@ -41,4 +50,31 @@ export class Boards extends Page{
     this.container.append(this.renderContent());
     return this.container;
   }
+
+  subscribe() {
+    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  }
+
+  update(store: IPartialUser) {
+    this.renderFavoriteBoard(store)
+  }
+
+  renderFavoriteBoard(data: IPartialUser) {
+    const favoriteList = document.querySelector('.big-board-list-favorite')
+    const boardsFavorite = document.querySelector('.boardsFavorite')
+
+    if (!favoriteList) return
+    favoriteList.remove()
+
+    if (!boardsFavorite) return
+
+    let favoriteListInStore = data.favoriteBoards
+    if (!favoriteListInStore) favoriteListInStore = []
+    console.log(favoriteListInStore)
+    const newFavoriteList = new BigBoardList(favoriteListInStore, 'big-board-list-favorite').getList()
+
+    boardsFavorite.append(newFavoriteList)
+  }
+
+  
 }

@@ -1,8 +1,8 @@
-import { store } from "../../store/store"
-import { IBoard } from "../../store/types"
+import { IBoard, IPartialUser } from "../../store/types"
 
-export const getAllUserBoards = () => {
-    const workSpace = store.user.workSpace
+export const getAllUserBoards = (user: IPartialUser) => {
+    const workSpace = user?.workSpace
+    if (!workSpace) return []
     const arr: IBoard[] = []
 
     workSpace.forEach((space) => {
