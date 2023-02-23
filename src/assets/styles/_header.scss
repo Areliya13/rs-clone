@@ -174,7 +174,7 @@
 
 .modalFavoritesDropdown {
   display: none;
-  position: fixed;
+  position: absolute;
   top: 48px;
   color: #172b4d;
   background-color: #ffffff;
@@ -183,9 +183,18 @@
   box-sizing: border-box;
   outline: 0;
   overflow: hidden;
+  overflow-y: auto;
   width: 255px;
   will-change: top, left;
   padding: 12px;
+  z-index: 30;
+  & .workspaceHeader {
+    &:hover {
+      color: rgba(9, 30, 66, 0.77);
+      background-color: rgba(9, 30, 66, 0.08);
+      outline: 0;
+    }
+  }
 }
 
 .modal-active {
