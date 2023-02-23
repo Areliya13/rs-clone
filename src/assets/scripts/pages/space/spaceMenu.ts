@@ -1,15 +1,19 @@
 import { createHtmlElement } from '../../helpers/other';
 import { PageIds, spaceMenuOptions, spaceMode } from '../../types/enum';
 import { store } from '../../store/store';
-import { IBoard, IWork } from '../../store/types';
+import { IBoard, IReadUser, IWork } from '../../store/types';
 import { getAddress } from '../../helpers/functions';
+import { readAll } from '../../api/rest/readAll';
+import { Path } from '../../api/types';
+import { updateOne } from '../../api/rest/updateOne';
+import { createUserPutData } from '../../api/rest/utils/createPutData';
+import { updateStore } from '../../store/updateStore';
 
 class SpaceMenu {
   workspace = store.user.workSpace[0]; // to-do get info from path
-  // options = getOptions(window.)
   boards: IBoard[];
   renderLeftSide(workSpace: IWork, board: IBoard): HTMLElement {
-    // this.workspace = workSpace;
+    this.workspace = workSpace;
     this.boards = this.workspace.boards;
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
@@ -70,6 +74,7 @@ class SpaceMenu {
   }
 
   renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
+    console.log('Render Boards!!');
     for (let i = 0; i < this.boards.length; i++) {
       const board = this.boards[i];
       const options = new Map(
@@ -79,28 +84,36 @@ class SpaceMenu {
           boardID: board._id,
         })
       );
-      const link = createHtmlElement('a', { href: getAddress(PageIds.SpacePage, options) });
+      const link = createHtmlElement('div');
       const li = createHtmlElement('li', { className: 'space-option-link board-item' });
-      // if (board._id === chosenBoard._id) {
-      //   li.classList.add('chosen-board');
-      // }
+      if (board._id === chosenBoard._id) {
+        li.classList.add('chosen-board');
+      }
       const img = board.image
         ? createHtmlElement('img', { src: board.image, className: 'board-img' })
         : createHtmlElement('div', { className: 'board-img' });
       if (!board.image && board.color) {
         img.style.backgroundColor = board.color;
       }
-      const text = createHtmlElement('a', { className: 'board-option-text', textContent: board.title });
+      const text = createHtmlElement('a', {
+        className: 'board-option-text',
+        textContent: board.title,
+        href: getAddress(PageIds.SpacePage, options),
+      });
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
-      const favorite = createHtmlElement('div', { className: 'icon-img favorite-img' });
+      const favorite = createHtmlElement('div', {
+        className: this.findFavorite(board._id) ? 'right-item-favoriteButton icon-img' : 'icon-img favorite-img',
+      });
+
+      favorite.addEventListener('click', (e) => {
+        this.toggleFavorite(e, board);
+      });
 
       li.addEventListener('mouseover', () => {
-        text.style.width = '140px';
         actions.classList.remove('hidden');
       });
       li.addEventListener('mouseleave', () => {
-        text.style.width = '196px';
         actions.classList.add('hidden');
       });
 
@@ -109,6 +122,35 @@ class SpaceMenu {
       link.append(li);
       container.append(link);
     }
+  }
+
+  private findFavorite(id: string) {
+    const favoriteBoards = store.user.favoriteBoards;
+    const board = favoriteBoards.find((board) => board._id === id);
+    if (!board) return false;
+    return true;
+  }
+
+  private async toggleFavorite(e: Event, chosenBoard: IBoard) {
+    e.stopPropagation();
+    if (!(e.currentTarget instanceof HTMLDivElement)) return;
+    const boardId = chosenBoard._id;
+    const isFavorite = store.user.favoriteBoards.find((board) => board._id === boardId);
+    const users: IReadUser[] = await readAll(Path.user, '');
+    if (!users) return;
+    const user = users.find((user) => user._id === store.user._id);
+    if (!user) return;
+    const favoriteArr = user.favoriteBoards;
+    if (isFavorite) {
+      const newFavoriteArr = favoriteArr.filter((id) => id !== boardId);
+      await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
+    } else {
+      const newFavoriteArr = [...favoriteArr];
+      newFavoriteArr.push(boardId);
+      await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
+    }
+    await updateStore();
+    console.log('Обновляю стор!');
   }
 }
 

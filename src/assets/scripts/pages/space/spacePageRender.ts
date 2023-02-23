@@ -5,8 +5,9 @@ import { spaceMode } from '../../types/enum';
 import SpaceError from './spaceError';
 import { BoardContent } from './boardContent';
 import { Options } from '../../types/types';
-import { IBoard, IWork } from '../../store/types';
+import { EventName, IBoard, IWork } from '../../store/types';
 import { store } from '../../store/store';
+import observer from '../../store/observer';
 
 export class SpacePageRender extends Page {
   mode: spaceMode;
@@ -19,6 +20,7 @@ export class SpacePageRender extends Page {
     super(id);
     this.mode = spaceMode.error;
     this.options = options;
+    this.subscribe();
   }
 
   render() {
@@ -52,5 +54,9 @@ export class SpacePageRender extends Page {
     container.append(background);
 
     return container;
+  }
+
+  subscribe(): void {
+    observer.subscribe({ eventName: EventName.updateState, function: this.render.bind(this) });
   }
 }
