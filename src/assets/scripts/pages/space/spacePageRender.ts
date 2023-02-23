@@ -20,12 +20,10 @@ export class SpacePageRender extends Page {
     super(id);
     this.mode = spaceMode.error;
     this.options = options;
-    this.subscribe();
   }
 
   render() {
     const mode = this.options.get('mode');
-    this.content = new SpaceError().renderErrorMessage();
     this.content = new SpaceError().renderErrorMessage();
     if (!mode || mode === spaceMode.board) {
       this.mode = spaceMode.board;

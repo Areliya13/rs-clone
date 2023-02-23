@@ -1,13 +1,14 @@
 import { createHtmlElement } from '../../helpers/other';
 import { PageIds, spaceMenuOptions, spaceMode } from '../../types/enum';
 import { store } from '../../store/store';
-import { IBoard, IReadUser, IWork } from '../../store/types';
-import { getAddress } from '../../helpers/functions';
+import { EventName, IBoard, IReadUser, IWork } from '../../store/types';
+import { findFavorite, getAddress, toggleFavorite } from '../../helpers/functions';
 import { readAll } from '../../api/rest/readAll';
 import { Path } from '../../api/types';
 import { updateOne } from '../../api/rest/updateOne';
 import { createUserPutData } from '../../api/rest/utils/createPutData';
 import { updateStore } from '../../store/updateStore';
+import observer from '../../store/observer';
 
 class SpaceMenu {
   workspace = store.user.workSpace[0]; // to-do get info from path
@@ -32,6 +33,7 @@ class SpaceMenu {
     this.renderBoards(boards, board);
     wrapper.append(menu, boards);
     spaceMenuContainer.append(space, wrapper);
+    this.subscribe();
     return spaceMenuContainer;
   }
 
@@ -103,11 +105,11 @@ class SpaceMenu {
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
       const favorite = createHtmlElement('div', {
-        className: this.findFavorite(board._id) ? 'right-item-favoriteButton icon-img' : 'icon-img favorite-img',
+        className: findFavorite(board._id) ? 'icon-img chosen-favorite-img' : 'icon-img favorite-img',
       });
 
       favorite.addEventListener('click', (e) => {
-        this.toggleFavorite(e, board);
+        toggleFavorite(e, board);
       });
 
       li.addEventListener('mouseover', () => {
@@ -124,33 +126,8 @@ class SpaceMenu {
     }
   }
 
-  private findFavorite(id: string) {
-    const favoriteBoards = store.user.favoriteBoards;
-    const board = favoriteBoards.find((board) => board._id === id);
-    if (!board) return false;
-    return true;
-  }
-
-  private async toggleFavorite(e: Event, chosenBoard: IBoard) {
-    e.stopPropagation();
-    if (!(e.currentTarget instanceof HTMLDivElement)) return;
-    const boardId = chosenBoard._id;
-    const isFavorite = store.user.favoriteBoards.find((board) => board._id === boardId);
-    const users: IReadUser[] = await readAll(Path.user, '');
-    if (!users) return;
-    const user = users.find((user) => user._id === store.user._id);
-    if (!user) return;
-    const favoriteArr = user.favoriteBoards;
-    if (isFavorite) {
-      const newFavoriteArr = favoriteArr.filter((id) => id !== boardId);
-      await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
-    } else {
-      const newFavoriteArr = [...favoriteArr];
-      newFavoriteArr.push(boardId);
-      await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
-    }
-    await updateStore();
-    console.log('Обновляю стор!');
+  subscribe(): void {
+    observer.subscribe({ eventName: EventName.updateState, function: this.renderBoards.bind(this) });
   }
 }
 

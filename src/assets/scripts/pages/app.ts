@@ -14,9 +14,10 @@ import { WorkspaceBoards } from './main/workspaceBoards';
 import { SpacePageRender } from './space/spacePageRender';
 import { readAll } from '../api/rest/readAll';
 import { Path } from '../api/types';
-import { IUser } from '../store/types';
+import { EventName, IUser } from '../store/types';
 import { store } from '../store/store';
 import { updateStore } from '../store/updateStore';
+import observer from '../store/observer';
 
 class App {
   private static defaultPageID = 'content';
@@ -94,6 +95,12 @@ class App {
     }
     window.addEventListener('hashchange', getPageHash);
     window.addEventListener('load', getPageHash);
+
+    function subscribe(): void {
+      observer.subscribe({ eventName: EventName.updateState, function: getPageHash });
+    }
+
+    subscribe();
   }
 
   run(): void {
@@ -108,13 +115,13 @@ class App {
 
   async getUser(): Promise<void> {
     try {
-      const users: IUser[] = await readAll(Path.user, '')
-      const user = await readAll(Path.workSpace, users[0]._id)
-      store.user = user
-      console.log('app', user)
-      store.updateStore(user)
-    }catch(e) {
-      console.log(e)
+      const users: IUser[] = await readAll(Path.user, '');
+      const user = await readAll(Path.workSpace, users[0]._id);
+      store.user = user;
+      console.log('app', user);
+      store.updateStore(user);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
