@@ -9,6 +9,7 @@ import { BoardList } from '../../components/BoardList/BoardList';
 import { store } from '../../store/store';
 import closeButton from '../../../images/modal-close.inl.svg';
 import addBoardPreviewSvg from '../../../images/addBoardModal.inl.svg';
+import currentBackgroundMark from '../../../images/currentBackgroundMark.inl.svg';
 
 
 export class MainPage extends Page {
@@ -108,20 +109,30 @@ export class MainPage extends Page {
       'https://live.staticflickr.com/65535/52681301262_609c1be2f4_b.jpg',
       'https://live.staticflickr.com/65535/52681300682_a935bf6cfb_b.jpg'];
     const colorsArr: string[] = ['rgb(0, 121, 191)', 'rgb(137, 96, 158)', 'rgb(81, 152, 57)'];
+    createBoardPreviewDiv.style.backgroundImage = `url(${imagesArr[0]})`;
+    const currentBackground = createHtmlElement('div', {className: 'currentBackground', innerHTML: currentBackgroundMark});
+
     for (let i = 0; i < 3; i++) {
       const backgroundPickerImagesItem = createHtmlElement('li', {className: 'backgroundPickerImagesItem'});
       const backgroundPickerColorItem = createHtmlElement('li', {className: 'backgroundPickerColorItem'});
       const buttonImage = createHtmlElement('button', {className: 'createBoardBackgroundBtn backgroundPickerImageBtn', style: `background-image: url(${imagesArr[i]})`});
+      if(i === 0) {
+        buttonImage.append(currentBackground);
+      }
       const buttonColor = createHtmlElement('button', {className: 'createBoardBackgroundBtn backgroundPickerColorBtn', style: `background-color: ${colorsArr[i]}`});
 
       buttonImage.addEventListener('click', () => {
+        currentBackground.remove();
         createBoardPreviewDiv.style.backgroundColor = '';
         createBoardPreviewDiv.style.backgroundImage = buttonImage.style.backgroundImage;
+        buttonImage.append(currentBackground);
       })
 
       buttonColor.addEventListener('click', () => {
+        currentBackground.remove();
         createBoardPreviewDiv.style.backgroundImage = '';
         createBoardPreviewDiv.style.backgroundColor = buttonColor.style.backgroundColor;
+        buttonColor.append(currentBackground);
       })
 
       backgroundPickerImagesItem.append(buttonImage);
@@ -143,7 +154,8 @@ export class MainPage extends Page {
     const choseWorkspace = createHtmlElement('div', {className: 'createBoardChoseWorkspace'});
     const choseWorkspaceLabel = createHtmlElement('label', {className: 'createBoardChoseWorkspaceLabel', textContent: 'Рабочее пространство'});
     const choseWorkspaceSelect = createHtmlElement('select', {className: 'createBoardChoseWorkspaceSelect'});
-    let workspaces: IWork[] = store.user.workSpace;
+    let workspaces: IWork[] = store.user.workSpace; // todo: Разобраться со списком рабочих пространств
+
     if (!workspaces || workspaces.length === 0) {
       const choseWorkspaceOption = createHtmlElement('option', { textContent: 'Создайте рабочее пространство' });
       choseWorkspaceOption.selected = true;
