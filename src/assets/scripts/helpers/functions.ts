@@ -1,3 +1,10 @@
+import { readAll } from '../api/rest/readAll';
+import { updateOne } from '../api/rest/updateOne';
+import { createUserPutData } from '../api/rest/utils/createPutData';
+import { Path } from '../api/types';
+import { store } from '../store/store';
+import { IBoard, IReadUser } from '../store/types';
+import { updateStore } from '../store/updateStore';
 import { localStorageItems, PageIds } from '../types/enum';
 import { Options } from '../types/types';
 
@@ -82,4 +89,34 @@ export function getInitials(name: string): string {
   }
   res = res.slice(0, 2).toUpperCase();
   return res;
+}
+
+export function findFavorite(id: string): boolean {
+  const favoriteBoards = store.user.favoriteBoards;
+  const board = favoriteBoards.find((board) => board._id === id);
+  if (!board) return false;
+  return true;
+}
+
+export async function toggleFavorite(e: Event, chosenBoard: IBoard) {
+  console.log('++++++++++++++');
+  e.stopPropagation();
+  if (!(e.currentTarget instanceof HTMLDivElement)) return;
+  const boardId = chosenBoard._id;
+  const isFavorite = store.user.favoriteBoards.find((board) => board._id === boardId);
+  const users: IReadUser[] = await readAll(Path.user, '');
+  if (!users) return;
+  const user = users.find((user) => user._id === store.user._id);
+  if (!user) return;
+  const favoriteArr = user.favoriteBoards;
+  if (isFavorite) {
+    const newFavoriteArr = favoriteArr.filter((id) => id !== boardId);
+    await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
+  } else {
+    const newFavoriteArr = [...favoriteArr];
+    newFavoriteArr.push(boardId);
+    await updateOne(Path.user, store.user._id, createUserPutData({ favoriteBoards: JSON.stringify(newFavoriteArr) }));
+  }
+  await updateStore();
+  console.log('----------------');
 }

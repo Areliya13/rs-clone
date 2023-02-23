@@ -1,15 +1,20 @@
 import { createHtmlElement } from '../../helpers/other';
 import { PageIds, spaceMenuOptions, spaceMode } from '../../types/enum';
 import { store } from '../../store/store';
-import { IBoard, IWork } from '../../store/types';
-import { getAddress } from '../../helpers/functions';
+import { EventName, IBoard, IReadUser, IWork } from '../../store/types';
+import { findFavorite, getAddress, toggleFavorite } from '../../helpers/functions';
+import { readAll } from '../../api/rest/readAll';
+import { Path } from '../../api/types';
+import { updateOne } from '../../api/rest/updateOne';
+import { createUserPutData } from '../../api/rest/utils/createPutData';
+import { updateStore } from '../../store/updateStore';
+import observer from '../../store/observer';
 
 class SpaceMenu {
   workspace = store.user.workSpace[0]; // to-do get info from path
-  // options = getOptions(window.)
   boards: IBoard[];
   renderLeftSide(workSpace: IWork, board: IBoard): HTMLElement {
-    // this.workspace = workSpace;
+    this.workspace = workSpace;
     this.boards = this.workspace.boards;
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
@@ -28,6 +33,7 @@ class SpaceMenu {
     this.renderBoards(boards, board);
     wrapper.append(menu, boards);
     spaceMenuContainer.append(space, wrapper);
+    this.subscribe();
     return spaceMenuContainer;
   }
 
@@ -70,6 +76,7 @@ class SpaceMenu {
   }
 
   renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
+    console.log('Render Boards!!');
     for (let i = 0; i < this.boards.length; i++) {
       const board = this.boards[i];
       const options = new Map(
@@ -79,28 +86,36 @@ class SpaceMenu {
           boardID: board._id,
         })
       );
-      const link = createHtmlElement('a', { href: getAddress(PageIds.SpacePage, options) });
+      const link = createHtmlElement('div');
       const li = createHtmlElement('li', { className: 'space-option-link board-item' });
-      // if (board._id === chosenBoard._id) {
-      //   li.classList.add('chosen-board');
-      // }
+      if (board._id === chosenBoard._id) {
+        li.classList.add('chosen-board');
+      }
       const img = board.image
         ? createHtmlElement('img', { src: board.image, className: 'board-img' })
         : createHtmlElement('div', { className: 'board-img' });
       if (!board.image && board.color) {
         img.style.backgroundColor = board.color;
       }
-      const text = createHtmlElement('a', { className: 'board-option-text', textContent: board.title });
+      const text = createHtmlElement('a', {
+        className: 'board-option-text',
+        textContent: board.title,
+        href: getAddress(PageIds.SpacePage, options),
+      });
       const actions = createHtmlElement('div', { className: 'board-action hidden' });
       const settings = createHtmlElement('div', { className: 'icon-img board-option-settings' });
-      const favorite = createHtmlElement('div', { className: 'icon-img favorite-img' });
+      const favorite = createHtmlElement('div', {
+        className: findFavorite(board._id) ? 'icon-img chosen-favorite-img' : 'icon-img favorite-img',
+      });
+
+      favorite.addEventListener('click', (e) => {
+        toggleFavorite(e, board);
+      });
 
       li.addEventListener('mouseover', () => {
-        text.style.width = '140px';
         actions.classList.remove('hidden');
       });
       li.addEventListener('mouseleave', () => {
-        text.style.width = '196px';
         actions.classList.add('hidden');
       });
 
@@ -109,6 +124,10 @@ class SpaceMenu {
       link.append(li);
       container.append(link);
     }
+  }
+
+  subscribe(): void {
+    observer.subscribe({ eventName: EventName.updateState, function: this.renderBoards.bind(this) });
   }
 }
 

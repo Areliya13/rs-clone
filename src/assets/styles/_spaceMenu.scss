@@ -140,10 +140,11 @@
 }
 
 .board-option-text {
-  width: 196px;
+  width: 140px;
 }
 
 .board-action {
+  z-index: 5;
   display: flex;
   width: 56px;
 }
@@ -154,6 +155,10 @@
 
 .favorite-img {
   background-image: url('../images/favorite.svg');
+}
+
+.chosen-favorite-img {
+  background-image: url('../images/star-yellow.svg');
 }
 
 .hidden {
