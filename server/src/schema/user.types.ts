@@ -33,6 +33,7 @@ interface IBoard {
     image?: string;
     color?: string;
     _id: Types.ObjectId;
+    workSpaceId: Types.ObjectId;
 }
 
 interface IList {

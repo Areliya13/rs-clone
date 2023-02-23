@@ -9,10 +9,11 @@ import { updateStore } from "../../store/updateStore";
 import { getAddress } from "../../helpers/functions";
 import { PageIds, spaceMode } from "../../types/enum";
 
-export class BoardItem {
+export class BigBoardItem {
     constructor(private board: IBoard) {}
 
     private findFavorite(id: string) {
+        if (!store.user._id) return
         const favoriteBoards = store.user.favoriteBoards
         const board = favoriteBoards.find(board => board._id === id)
         if (!board) return false
@@ -21,40 +22,42 @@ export class BoardItem {
 
     getItem() {
         const li = createHtmlElement('li', {
-            className: 'right-item',
+            className: 'big-board-list-item',
             id: this.board._id
         })
-        const iconImage = createHtmlElement('img', {
+        const image = createHtmlElement('img', {
             src: this.board.image ? this.board.image : '',
-            className: 'right-item-icon right-item-image'
+            className: 'big-board-list-item-image',
+            width: 190,
+            height: 112,
         })
-        const iconBackground = createHtmlElement('div', {
-            className: 'right-item-icon right-item-background',
+        const background = createHtmlElement('div', {
+            className: 'big-board-list-item-background',
             style: `background-color: ${this.board.color}`
         })
         const contentWrapper = createHtmlElement('div', {
-            className: 'right-item-content'
+            className: 'big-board-list-item-content'
         })
         const name = createHtmlElement('span', {
-            className: 'right-item-header',
+            className: 'big-board-list-item-header',
             textContent: this.board.title
         })
         const description = createHtmlElement('span', {
-            className: 'right-item-description',
+            className: 'big-board-list-item-description',
             textContent: 'Рабочее пространство Trello'
         })
         const buttonWrapper = createHtmlElement('div', {
-            className: this.findFavorite(this.board._id) ? 'right-item-favoriteButton icon-img' : 'right-item-button icon-img'
+            className: this.findFavorite(this.board._id) ? 'right-item-favoriteButton icon-img big-board-list-item-icon' : 'right-item-button icon-img big-board-list-item-icon'
         })
 
         buttonWrapper.addEventListener('click', this.favoriteHandleClick)
         li.addEventListener('click', this.recentlyHandleClick.bind(this))
 
-        contentWrapper.append(name, description)
+        contentWrapper.append(name)
         if (this.board.image) {
-            li.append(iconImage)
+            li.append(image)
         } else {
-            li.append(iconBackground)
+            li.append(background)
         }
         li.append(contentWrapper, buttonWrapper)
         return li
@@ -65,19 +68,19 @@ export class BoardItem {
         if (!(e.currentTarget instanceof HTMLDivElement)) return
         const boardId =  e.currentTarget.parentElement.id
         if (!boardId) return
-        const isFavorite = store.user.favoriteBoards.find(board => board._id === boardId)
         const users: IReadUser[] = await readAll(Path.user, '')
         if (!users) return
         const user = users.find(user => user._id === store.user._id)
         if (!user) return
         const favoriteArr = user.favoriteBoards
+        const isFavorite = store.user.favoriteBoards.find(board => board._id === boardId)
         if (isFavorite) {
             const newFavoriteArr = favoriteArr.filter(id => id !== boardId)
-            await updateOne(Path.user, store.user._id, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteArr)}))
+            await updateOne(Path.user, user._id, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteArr)}))
         } else {
             const newFavoriteArr = [...favoriteArr]
             newFavoriteArr.push(boardId)
-            await updateOne(Path.user, store.user._id, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteArr)}))
+            await updateOne(Path.user, user._id, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteArr)}))
         }
         await updateStore()   
     }

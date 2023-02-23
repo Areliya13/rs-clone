@@ -16,13 +16,15 @@ import { createOne } from '../../api/rest/createOne';
 import { Path } from '../../api/types';
 import { createWorkSpacePostData } from '../../api/rest/utils/createPostData';
 import { store } from '../../store/store';
-import { readAll } from '../../api/rest/readAll';
 import { updateStore } from '../../store/updateStore';
+import { EventName, IPartialUser } from '../../store/types';
+import observer from '../../store/observer';
 
 class LeftSideBar {
 
   constructor(public id: string) {
     this.id = id;
+    this.subscribe()
   }
 
   renderLeftSide(): HTMLElement {
@@ -173,18 +175,35 @@ class LeftSideBar {
       workspaceModalContainer.remove();
     });
 
+    const workItem = createHtmlElement('div', {
+      className: 'workspace-item'
+    })
+    const workspace = this.renderWorkSpaceList(store.user)
+    workItem.append(...workspace)
+    workspacesDiv.append(workItem);
+
+    leftSidebarContainer.append(unList, workspacesDiv);
+    return leftSidebarContainer;
+  }
+
+  private renderWorkSpaceList(user: IPartialUser) {
+    
+    let workspaceInStore = user.workSpace;
+    if (!workspaceInStore) return workspaceInStore = []
+
+    const workSpaceArr = workspaceInStore.map((ws) => {
+
     const workspace = createHtmlElement('div', {className: 'workspace'});
     const workspaceHeader = createHtmlElement('a', {className: 'workspaceHeader', href: '#'});
-    const workspaceName = createHtmlElement('span', {className: 'workspaceName', textContent: 'Тестовое рабочее пространство'})
+    const workspaceName = createHtmlElement('span', {className: 'workspaceName', textContent: `${ws.title}`})
     const workspaceIcon = createHtmlElement('div', {className: 'workspaceIcon', textContent: `${workspaceName.textContent[0].toUpperCase()}`});
     const workspaceArrow = createHtmlElement('div', {className: 'workspaceArrow', innerHTML: upSvg});
     workspaceHeader.append(workspaceIcon, workspaceName, workspaceArrow);
     workspace.append(workspaceHeader);
-    workspacesDiv.append(workspace);
 
     const workspaceOptionsList = createHtmlElement('ul', {className: 'workspaceOptionsList'});
     const workspaceOptionsArray = [
-      [workspaceBoardIcon, 'Доски', '#home'],
+      [workspaceBoardIcon, 'Доски', `#home?ws=${ws._id}`],
       [importantIcon, 'Важные события', '#'],
       [presentationIcon, 'Представления', '#'],
       [membersIcon, 'Участники', '#'],
@@ -223,9 +242,18 @@ class LeftSideBar {
         workspaceArrow.innerHTML = upSvg;
       }
     })
+      return workspace
+    })
 
-    leftSidebarContainer.append(unList, workspacesDiv);
-    return leftSidebarContainer;
+    return workSpaceArr
+  }
+
+  private subscribe() {
+    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  }
+
+  private update(user: IPartialUser) {
+    this.reRenderWorkspaceList(user)
   }
 
   private handlerWorkSpaceInput(e: Event) {
@@ -263,7 +291,15 @@ class LeftSideBar {
     textAreaWorkspace.value = ''
     button.disabled = true
     workspaceModalContainer.remove()
+  }
 
+  private reRenderWorkspaceList(data: IPartialUser) {
+    const workSpaceList = document.querySelector('.workspace-item');
+    if (!workSpaceList) return
+    workSpaceList.innerHTML = ''
+
+    const newWorkSpace = this.renderWorkSpaceList(data)
+    workSpaceList.append(...newWorkSpace)
   }
 }
 

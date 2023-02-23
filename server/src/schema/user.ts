@@ -21,7 +21,7 @@ const workSchema = new Schema<IWork>({
     boards: [{
         type: Types.ObjectId,
         ref: IRef.board,
-    }]
+    }],
 })
 
 const boardSchema = new Schema<IBoard>({
@@ -37,6 +37,7 @@ const boardSchema = new Schema<IBoard>({
     }],
     color: String,
     image: String,
+    workSpaceId: Types.ObjectId,
 })
 
 const listSchema = new Schema<IList>({
