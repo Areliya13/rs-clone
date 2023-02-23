@@ -3,7 +3,8 @@ import { menuItems } from '../../types/constValues';
 import { BoardList } from '../../components/BoardList/BoardList';
 import { store } from '../../store/store';
 import observer from '../../store/observer';
-import { EventName, IBoard, IPartialUser, IStore } from '../../store/types';
+import { EventName, IBoard, IPartialUser, IStore, IWork } from '../../store/types';
+import { getAllUserBoards } from '../../helpers/utils/getAllUserBoard';
 
 export class Header {
   header: HTMLDivElement | undefined
@@ -48,22 +49,24 @@ export class Header {
 
       // todo: Модалка избранные доски в хедере.
       if(element[0] === menuItems[2][0]) {
-        const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown'});
-        let boards: IBoard[] = store.user.favoriteBoards
-        if (!boards || boards.length === 0) {
-          modalFavorites.append(createHtmlElement('div', {textContent: 'Нет избранных досок'}));
-        } else {
-          modalFavorites.replaceChildren();
-          const list = new BoardList(boards).getList();
-          modalFavorites.append(list);
-        }
+        const favoriteBoards = store.user.favoriteBoards
+        const modalFavorites = this.renderModalBoards(favoriteBoards)
         link.append(modalFavorites)
 
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
-          link.classList.toggle('favorite-active');
-          modalFavorites.classList.toggle('modal-active');
-        })
+        link.addEventListener('click', (event) => this.handlerNavigationClick(event, link, modalFavorites))
+      }
+      if (element[0] === menuItems[1][0]) {
+        const allBoards = getAllUserBoards(store.user)
+        const modalAll = this.renderModalBoards(allBoards)
+        link.append(modalAll)
+
+        link.addEventListener('click', (event) => this.handlerNavigationClick(event, link, modalAll))
+      }
+      if (element[0] === menuItems[0][0]) {
+        const allWorkSpaces = store.user.workSpace
+        const modalWorkSpaces = this.renderModalWorkSpace(allWorkSpaces)
+        link.append(modalWorkSpaces)
+        link.addEventListener('click', (event) => this.handlerNavigationClick(event, link, modalWorkSpaces))
       }
     }
     return nav;
@@ -100,5 +103,73 @@ export class Header {
       this.header.innerHTML = ''
       this.header.append(this.leftMenu(), this.rightMenu());
     }
+  }
+
+  renderModalBoards(boards: IBoard[]) {
+    const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown'});
+    if (!boards || boards.length === 0) {
+      modalFavorites.append(createHtmlElement('div', {textContent: 'Нет досок'}));
+    } else {
+      modalFavorites.replaceChildren();
+      const list = new BoardList(boards).getList();
+      modalFavorites.append(list);
+    }
+    return modalFavorites
+  }
+
+  handlerNavigationClick(event: Event, link: HTMLAnchorElement, modalFavorites: HTMLDivElement) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!(event.currentTarget instanceof Element)) return
+    const modalArea = event.currentTarget.querySelector('.modalFavoritesDropdown')
+    if (event.target === modalArea) return
+    const allLinks = document.querySelectorAll('.nav-link')
+    let item = 0
+    allLinks.forEach((lk, i) => {
+      if (lk !== event.currentTarget) {
+        lk.classList.remove('favorite-active')
+      } else {
+        item = i
+      }
+    })
+    const allModals = document.querySelectorAll('.modalFavoritesDropdown')
+    allModals.forEach((modal, i) => {
+      if (i !== item) {
+        modal.classList.remove('modal-active')
+      }
+    })
+    
+    link.classList.toggle('favorite-active');
+    modalFavorites.classList.toggle('modal-active');
+  }
+
+  renderModalWorkSpace(workspaces: IWork[]) {
+    const modalFavorites = createHtmlElement('div', {className: 'modalFavoritesDropdown workspacesDiv'});
+    if (!workspaces || workspaces.length === 0) {
+      modalFavorites.append(createHtmlElement('div', {textContent: 'Нет рабочих пространств'}));
+    } else {
+      modalFavorites.replaceChildren();
+      const list = this.createWorkSpaceList(workspaces)
+
+      modalFavorites.append(...list);
+    }
+    return modalFavorites
+  }
+
+  createWorkSpaceList(workspaces: IWork[]) {
+    const newArr: HTMLDivElement[] = []
+    workspaces.forEach(ws => {
+        const workspace = createHtmlElement('div', {className: 'workspace'});
+        const workspaceHeader = createHtmlElement('a', {className: 'workspaceHeader', href: `#home?ws=${ws._id}`});
+        const workspaceName = createHtmlElement('span', {className: 'workspaceName', textContent: `${ws.title}`})
+        const workspaceIcon = createHtmlElement('div', {className: 'workspaceIcon', textContent: `${workspaceName.textContent[0].toUpperCase()}`});
+        workspaceHeader.append(workspaceIcon, workspaceName);
+        workspace.append(workspaceHeader); 
+        workspace.addEventListener('click', (e) => {
+          location.hash = `#home?ws=${ws._id}`
+        })
+        newArr.push(workspace)
+      })
+      return newArr
   }
 }
