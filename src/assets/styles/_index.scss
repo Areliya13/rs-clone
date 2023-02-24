@@ -85,6 +85,11 @@ $alt-color: #0079bf;
       transition-property: background-color, border-color, box-shadow;
       transition-duration: 85ms;
       transition-timing-function: ease;
+      &:hover {
+        text-decoration: none;
+        background-color: rgba(9, 30, 66, 0.08);
+        color: currentColor;
+      }
       .workspaceIcon {
         font-size: 14px;
         border-radius: 2px;
