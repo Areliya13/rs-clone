@@ -1,13 +1,14 @@
-import { createHtmlElement, getSvgIcon } from '../../helpers/other';
+import { createHtmlElement, getElementBySelector, getSvgIcon } from '../../helpers/other';
 import clockIcon from '../../../images/clock-icon.svg';
 import heartIcon from '../../../images/heart-icon.svg';
 import star from '../../../images/star.inl.svg';
 import { BASE_COLOR } from '../../types/constValues';
 import Page from '../../core/page';
 import observer from '../../store/observer';
-import { EventName, IBoard, IPartialUser } from '../../store/types';
+import { EventName, IPartialUser, IWork, IBoard } from '../../store/types';
 import { BoardList } from '../../components/BoardList/BoardList';
 import { store } from '../../store/store';
+import { ModalCreateBoard } from '../../components/ModalCreateBoard/ModalCreateBoard';
 import { getAllUserBoards } from '../../helpers/utils/getAllUserBoard';
 
 export class MainPage extends Page {
@@ -112,6 +113,17 @@ export class MainPage extends Page {
 
     linksSection.append(linksText, createBoardDiv);
     rightSidebarContainer.append(recentlyViewed, recentlyBoardViewed,  linksSection);
+
+    // Модалка создание доски
+
+    buttonCreateBoard.addEventListener('click', () => {
+      if(document.querySelector('.createBoardModal')) {
+        document.querySelector('.createBoardModal').remove();
+      } else {
+        const createBoardModal = new ModalCreateBoard().getModal();
+        createBoardDiv.append(createBoardModal);
+      }
+    })
 
     return rightSidebarContainer;
   }
