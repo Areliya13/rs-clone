@@ -1,21 +1,28 @@
 import { createHtmlElement } from '../../helpers/other';
 import { PageIds, spaceMenuOptions, spaceMode } from '../../types/enum';
 import { store } from '../../store/store';
-import { EventName, IBoard, IReadUser, IWork } from '../../store/types';
+import { EventName, IBoard, IPartialUser, IWork } from '../../store/types';
 import { findFavorite, getAddress, toggleFavorite } from '../../helpers/functions';
-import { readAll } from '../../api/rest/readAll';
-import { Path } from '../../api/types';
-import { updateOne } from '../../api/rest/updateOne';
-import { createUserPutData } from '../../api/rest/utils/createPutData';
-import { updateStore } from '../../store/updateStore';
 import observer from '../../store/observer';
 
 class SpaceMenu {
-  workspace = store.user.workSpace[0]; // to-do get info from path
-  boards: IBoard[];
+  workspace: IWork | undefined = store.user?.workSpace?.[0] ; // to-do get info from path
+  boards: IBoard[] = [];
+  currentBoard: IBoard | undefined
+  mainContainer: HTMLDivElement | undefined
+
+  constructor() {
+    this.subscribe();
+  }
+
   renderLeftSide(workSpace: IWork, board: IBoard): HTMLElement {
+    if (!board || !workSpace) {
+      return
+    }
     this.workspace = workSpace;
-    this.boards = this.workspace.boards;
+    this.boards = workSpace.boards;
+    this.currentBoard = board;
+
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
     });
@@ -31,9 +38,10 @@ class SpaceMenu {
     boardsHeader.append(boardsHeaderText, boardsPlus);
     boards.append(boardsHeader);
     this.renderBoards(boards, board);
+    this.mainContainer = boards
     wrapper.append(menu, boards);
     spaceMenuContainer.append(space, wrapper);
-    this.subscribe();
+
     return spaceMenuContainer;
   }
 
@@ -76,8 +84,12 @@ class SpaceMenu {
   }
 
   renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', arguments)
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2', container, chosenBoard)
     console.log('Render Boards!!');
+    if (!chosenBoard) { console.log('а борд то пустой') }
     for (let i = 0; i < this.boards.length; i++) {
+
       const board = this.boards[i];
       const options = new Map(
         Object.entries({
@@ -127,7 +139,11 @@ class SpaceMenu {
   }
 
   subscribe(): void {
-    observer.subscribe({ eventName: EventName.updateState, function: this.renderBoards.bind(this) });
+    observer.subscribe({ eventName: EventName.updateState, function: this.update.bind(this) });
+  }
+
+  update(user: IPartialUser) {
+    this.renderBoards(this.mainContainer , this.currentBoard)
   }
 }
 
