@@ -1,4 +1,4 @@
-import { getInitials } from '../../helpers/functions';
+import { findFavorite, getInitials, toggleFavorite } from '../../helpers/functions';
 import { createHtmlElement } from '../../helpers/other';
 import { store } from '../../store/store';
 import { IBoard, IItem } from '../../store/types';
@@ -21,7 +21,7 @@ export class BoardContent {
     if (curBoard) {
       this.chosenBoard = curBoard;
     }
-    const currentBoard = store.user.workSpace[0];
+    // const currentBoard = store.user.workSpace[0];
     const container = createHtmlElement('div', {
       className: 'board-content',
     });
@@ -29,8 +29,12 @@ export class BoardContent {
     const boardMenuLeft = createHtmlElement('div', { className: 'board-header-menu-left' });
     const boardMenuRight = createHtmlElement('div', { className: 'board-header-menu-right' });
     const boardName = createHtmlElement('input', { className: 'header-input-text', value: this.chosenBoard.title });
-    const favoriteButton = createHtmlElement('button', { className: 'header-option-button' });
-    const favoriteImg = createHtmlElement('span', { className: 'header-option-icon favorite-img' });
+    const favoriteButton = createHtmlElement('div', { className: 'header-option-button' });
+    const favoriteImg = createHtmlElement('span', {
+      className: findFavorite(this.chosenBoard._id)
+        ? 'header-option-icon chosen-favorite-img'
+        : 'header-option-icon favorite-img',
+    });
     const autoButton = createHtmlElement('button', { className: 'header-option-button' });
     const autoImg = createHtmlElement('span', { className: 'header-option-icon light-img' });
     const autoText = createHtmlElement('span', { textContent: 'Автоматизация' });
@@ -58,6 +62,12 @@ export class BoardContent {
     boardMenu.append(boardMenuLeft, boardMenuRight);
     workSpace.append(createButton);
     container.append(boardMenu, workSpace);
+    2;
+
+    favoriteButton.addEventListener('click', (e) => {
+      console.log('click!!!!');
+      toggleFavorite(e, this.chosenBoard);
+    });
     return container;
   }
 
@@ -366,6 +376,5 @@ export class BoardContent {
     marksCloseButton.addEventListener('click', () => {
       marksModalContainer.remove();
     });
-    // Конец кода - Модальное окно метки
   }
 }

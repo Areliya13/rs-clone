@@ -40,13 +40,14 @@
 
 .header-option-icon {
   cursor: pointer;
-  padding-left: 16px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 16px 16px;
   display: inline-block;
-  width: 16px;
+  width: 32px;
   height: 20px;
+  border-radius: 3px;
+  margin: 4px;
 }
 
 .light-img {
@@ -142,11 +143,11 @@
 }
 
 .add-task-button {
+  border-radius: 3px;
   width: 238px;
   padding: 4px;
   margin-left: 10.6px;
   background-color: rgba($color: #ffffff, $alpha: 0.8);
-  border-radius: 3px;
   overflow-y: auto;
   cursor: pointer;
   transition: 0.3s;
