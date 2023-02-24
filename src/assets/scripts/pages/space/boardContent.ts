@@ -14,6 +14,7 @@ import copyIcon from '../../../images/copyIcon.inl.svg';
 import shareIcon from '../../../images/sharingIcon.inl.svg';
 import closeButtonIcon from '../../../images/modal-close.inl.svg';
 import changeIconSvg from '../../../images/wsChangeIcon.inl.svg';
+import settingIcon from '../../../images/settings.inl.svg';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
@@ -87,11 +88,15 @@ export class BoardContent {
       const item = tasks[i];
       item.deadline;
       item.userId;
-      const itemSpace = createHtmlElement('div', { className: 'item' });
+      const itemSpace = createHtmlElement('div', { className: 'item', id: item._id });
       if (item.image) {
         const itemImage = createHtmlElement('img', { src: item.image, className: 'item-image' });
         itemSpace.append(itemImage);
       }
+
+      const linkIcon = createHtmlElement('button', {className: 'item-icon', innerHTML: settingIcon});
+      linkIcon.addEventListener('click', (e) => this.handlerSettingItemClick(e))
+
       const markContainer = createHtmlElement('div', { className: 'mark-container' });
       for (let j = 0; j < item.marks.length; j++) {
         const mark = item.marks[j];
@@ -125,7 +130,7 @@ export class BoardContent {
         footerRight.append(userDiv);
       }
       footerItem.append(footerLeft, footerRight);
-      itemSpace.append(markContainer, itemName, footerItem);
+      itemSpace.append(markContainer, itemName, footerItem, linkIcon);
       container.append(itemSpace);
     }
 
@@ -376,5 +381,11 @@ export class BoardContent {
     marksCloseButton.addEventListener('click', () => {
       marksModalContainer.remove();
     });
+  }
+
+  handlerSettingItemClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+    const itemId = e.currentTarget.parentElement?.id
+    this.addModal(e.currentTarget)
   }
 }
