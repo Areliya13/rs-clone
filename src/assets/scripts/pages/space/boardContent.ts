@@ -22,7 +22,7 @@ import observer from '../../store/observer';
 import { readAll } from '../../api/rest/readAll';
 import { deleteOne } from '../../api/rest/deleteOne';
 import { updateOne } from '../../api/rest/updateOne';
-import { createCommentPutData } from '../../api/rest/utils/createPutData';
+import { createCommentPutData, createItemPutData } from '../../api/rest/utils/createPutData';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
@@ -218,8 +218,10 @@ export class BoardContent {
       className: 'modalDescriptionInput',
       placeholder: `${item.description ? item.description : 'Добавить более подробное описание...'}`,
       value: `${item.description ? item.description : ''}`,
-      id: item._id
     });
+    descriptionTextarea.dataset.itemIdInDescription = item._id
+    descriptionTextarea.addEventListener('blur', (e) => this.handlerDescriptionUpdateBlur(e))
+
     const commentDiv = createHtmlElement('div', { className: 'modalCommentDiv' });
     const commentForm = createHtmlElement('form', { className: 'modalCommentForm' });
    
@@ -550,6 +552,22 @@ export class BoardContent {
       await updateOne(Path.comment, commentId, createCommentPutData({description}))
       const newItem = await readAll(Path.comment, itemId)
       this.comments = await newItem;
+      await updateStore()
+
+    }catch(e) {
+      console.log('yyy', e)
+    }
+  }
+
+  async handlerDescriptionUpdateBlur(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
+    try {
+      const itemId = e.currentTarget.dataset?.itemIdInDescription
+      if (!itemId) return
+
+      const description = e.currentTarget.value
+    
+      await updateOne(Path.item, itemId, createItemPutData({description}))
       await updateStore()
 
     }catch(e) {
