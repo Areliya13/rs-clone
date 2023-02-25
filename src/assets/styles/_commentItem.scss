@@ -32,6 +32,36 @@
         margin: 0 0 8px;
         padding: 8px 12px;
         border-radius: 6px;
+        &.disabled {
+            display: none;
+        }
+        &-area {
+            display: none;
+            width: 100%;
+            background-color: #dbe1e4;
+            border: none;
+            box-shadow: none;
+            outline: 0;
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    &-control {
+        &-delete {
+            margin: 0 10px 0 0;
+            cursor: pointer;
+            &:hover {
+                color: red
+            }
+        }
+        &-update {
+            cursor: pointer;
+            &:hover {
+                color: green
+            }
+        }
     }
     
     

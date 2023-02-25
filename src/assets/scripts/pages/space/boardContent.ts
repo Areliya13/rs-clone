@@ -20,6 +20,9 @@ import { createCommentPostData } from '../../api/rest/utils/createPostData';
 import { updateStore } from '../../store/updateStore';
 import observer from '../../store/observer';
 import { readAll } from '../../api/rest/readAll';
+import { deleteOne } from '../../api/rest/deleteOne';
+import { updateOne } from '../../api/rest/updateOne';
+import { createCommentPutData } from '../../api/rest/utils/createPutData';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
@@ -155,6 +158,7 @@ export class BoardContent {
 
   addModal(item: IItem) {
     //todo: Модальное окно с настройками
+    this.currentItem  = item
     const settingsModalContainer = createHtmlElement('div', { className: 'settingsModalContainer'});
     settingsModalContainer.dataset.itemIdOnModal = item._id
     const settingsModal = createHtmlElement('div', { className: 'settingsModal' });
@@ -426,8 +430,21 @@ export class BoardContent {
     const commentName = createHtmlElement('div', { className: 'comment-name', textContent: comment.userId.name});
     const commentTime = createHtmlElement('div', { className: 'comment-time', textContent: this.getTime(comment.date)});
     const commentText = createHtmlElement('div', { className: 'comment-text', textContent: comment.description });
+    const commentTextArea = createHtmlElement('textarea', { className: 'comment-text-area', value: comment.description });
+
+    const commentControlWrapper = createHtmlElement('div', { className: 'comment-control' });
+    commentControlWrapper.dataset.commentId = comment._id
+    commentControlWrapper.dataset.itemId = this.currentItem._id
+    const commentControlDelete = createHtmlElement('span', { className: 'comment-control-delete', textContent: 'Удалить' });
+    const commentControlUpdate = createHtmlElement('span', { className: 'comment-control-update', textContent: 'Обновить' });
+
+    commentControlDelete.addEventListener('click', (e) => this.handlerCommentDeleteClick(e))
+    commentControlUpdate.addEventListener('click', (e) => this.handlerCommentUpdateClick(e))
+    commentTextArea.addEventListener('blur', (e) => this.handlerCommentUpdateBlur(e))
+
+    commentControlWrapper.append(commentControlDelete, commentControlUpdate)
     commentDataTop.append(commentName, commentTime)
-    commentData.append(commentDataTop, commentText)
+    commentData.append(commentDataTop, commentText, commentTextArea, commentControlWrapper)
     commentWrapper.append(commentIcon, commentData)
 
     return commentWrapper
@@ -443,26 +460,6 @@ export class BoardContent {
 
   update(user: IPartialUser) {
     this.updateModal(user)
-  }
-
-  async handlerCommentTextAreaClick(e: FocusEvent) {
-    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
-    try {
-      const textArea = e.currentTarget
-      const value = textArea.value
-  
-      const userId = store.user._id
-      const itemId = textArea.dataset.itemIdOnComment
-    
-      await createOne(Path.comment, createCommentPostData(itemId, userId, value))
-      const newItem = await readAll(Path.comment, itemId)
-      this.comments = await newItem;
-      await updateStore()
-
-    }catch(e) {
-      console.log(e)
-    }
-    
   }
 
   updateModal(user: IPartialUser) {
@@ -487,5 +484,76 @@ export class BoardContent {
     mainContainer.remove()
     const modal = this.addModal(this.currentItem)
     document.body.append(modal);
+  }
+
+
+
+  async handlerCommentTextAreaClick(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
+    try {
+      const textArea = e.currentTarget
+      const value = textArea.value
+  
+      const userId = store.user._id
+      const itemId = textArea.dataset.itemIdOnComment
+    
+      await createOne(Path.comment, createCommentPostData(itemId, userId, value))
+      const newItem = await readAll(Path.comment, itemId)
+      this.comments = await newItem;
+      await updateStore()
+
+    }catch(e) {
+      console.log('aaaaaaaaaaaaaaaaaaa', e)
+    }
+    
+  }
+
+  async handlerCommentDeleteClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLSpanElement)) return
+    try {
+      const commentId = e.currentTarget?.parentElement?.dataset?.commentId
+      const itemId = e.currentTarget?.parentElement?.dataset?.itemId
+      if (!commentId) return
+    
+      await deleteOne(Path.comment, commentId, itemId)
+      const newItem = await readAll(Path.comment, itemId)
+      this.comments = await newItem;
+      await updateStore()
+
+    }catch(e) {
+      console.log('zzzzzzzz', e)
+    }
+  }
+
+  handlerCommentUpdateClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLSpanElement)) return
+
+    const textArea: HTMLTextAreaElement = e.currentTarget?.parentElement?.parentElement?.querySelector('.comment-text-area')
+    const text: HTMLDivElement = e.currentTarget?.parentElement?.parentElement?.querySelector('.comment-text')
+    if (!textArea || !text) return
+
+    text.classList.toggle('disabled')
+    textArea.classList.toggle('active')
+  }
+
+  async handlerCommentUpdateBlur(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
+    try {
+      const control:HTMLDivElement = e.currentTarget?.parentElement?.querySelector('.comment-control')
+      if (!control) return
+      const commentId = control.dataset?.commentId
+      const itemId = control.dataset?.itemId
+      if (!commentId || !itemId) return
+
+      const description = e.currentTarget.value
+    
+      await updateOne(Path.comment, commentId, createCommentPutData({description}))
+      const newItem = await readAll(Path.comment, itemId)
+      this.comments = await newItem;
+      await updateStore()
+
+    }catch(e) {
+      console.log('yyy', e)
+    }
   }
 }
