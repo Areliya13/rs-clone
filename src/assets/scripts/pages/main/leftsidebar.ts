@@ -19,6 +19,7 @@ import { store } from '../../store/store';
 import { updateStore } from '../../store/updateStore';
 import { EventName, IPartialUser } from '../../store/types';
 import observer from '../../store/observer';
+import { getAddress } from '../../helpers/functions';
 
 class LeftSideBar {
 
@@ -187,7 +188,6 @@ class LeftSideBar {
   }
 
   private renderWorkSpaceList(user: IPartialUser) {
-    
     let workspaceInStore = user.workSpace;
     if (!workspaceInStore) return workspaceInStore = []
 
@@ -212,7 +212,7 @@ class LeftSideBar {
     workspaceOptionsArray.map(e => {
       const listItem = createHtmlElement('li', {className: 'workspaceListItem'});
       const itemLink = createHtmlElement('a', {className: 'workspaceItemLink', href: e[2]});
-      if(this.id === e[2].slice(1)) {
+      if(ws._id === window.location.hash.split('ws=')[1] && window.location.hash === e[2]) {
         itemLink.classList.add('current');
       }
       const linkIcon = createHtmlElement('div', {className: 'workspaceLinkIcon', innerHTML: e[0]});
@@ -229,6 +229,13 @@ class LeftSideBar {
       }
       listItem.append(itemLink);
       workspaceOptionsList.append(listItem);
+
+      itemLink.addEventListener('click', (event) => {
+        if(document.querySelector('.current')) {
+          document.querySelector('.current').classList.remove('current')
+        }
+        itemLink.classList.add('current');
+      })
     })
     workspace.append(workspaceOptionsList);
 

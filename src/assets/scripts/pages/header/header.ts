@@ -5,6 +5,8 @@ import { store } from '../../store/store';
 import observer from '../../store/observer';
 import { EventName, IBoard, IPartialUser, IStore, IWork } from '../../store/types';
 import { getAllUserBoards } from '../../helpers/utils/getAllUserBoard';
+import trelloIcon from '../../../images/boards.inl.svg';
+import membersIcon from '../../../images/members.inl.svg';
 
 export class Header {
   header: HTMLDivElement | undefined
@@ -29,10 +31,39 @@ export class Header {
     const logoLink = createHtmlElement('a', { href: '#' });
     const logo = createHtmlElement('div', { className: 'logo' });
     const navigation = this.createNav();
+    const createButtonContainer = createHtmlElement('div', {className: 'create-button-container'});
     const createButton = createHtmlElement('button', { className: 'create-button', textContent: 'Создать' });
+    createButtonContainer.append(createButton)
     menuButton.append(innerImg);
     logoLink.append(logo);
-    container.append(menuButton, logoLink, navigation, createButton);
+    container.append(menuButton, logoLink, navigation, createButtonContainer);
+
+    const createModalContainer = createHtmlElement('div', {className: 'createModalContainer'});
+    const createButtonsContainer = createHtmlElement('div', {className: 'createButtonsContainer'})
+    const createBoardButton = createHtmlElement('button', {className: 'modalCreateButton createBoardButton'});
+    const createBoardButtonHead = createHtmlElement('div', {className: 'modalCreateBoardHead createBoardButtonHead'});
+    const createBoardButtonHeadSvg = createHtmlElement('div', {className: 'modalCreateBoardHeadSvg createBoardButtonHeadSvg', innerHTML: trelloIcon});
+    const createBoardButtonHeadName = createHtmlElement('span', {className: 'modalCreateBoardName createBoardButtonHeadText', textContent: 'Создайте доску'});
+    const createBoardButtonDescription = createHtmlElement('p', {className: 'modalCreateBoardDescription createBoardButtonDescription', textContent: 'Доска представляет собой совокупность карточек, упорядоченных в списках. Используйте её для управления проектом, отслеживания или организации чего угодно.'});
+    const createWorkspaceButton = createHtmlElement('button', {className: 'modalCreateButton createWorkspaceButton'});
+    const createWorkspaceButtonHead = createHtmlElement('div', {className: 'modalCreateBoardHead createWorkspaceButtonHead'});
+    const createWorkspaceButtonHeadSvg = createHtmlElement('div', {className: 'modalCreateBoardHeadSvg createWorkspaceButtonHeadSvg', innerHTML: membersIcon});
+    const createWorkspaceButtonHeadName = createHtmlElement('span', {className: 'modalCreateBoardName createWorkspaceButtonHeadText', textContent: 'Создайте рабочее пространство'});
+    const createWorkspaceButtonDescription = createHtmlElement('p', {className: 'modalCreateBoardDescription createWorkspaceButtonDescription', textContent: 'Рабочее пространство представляет собой группу досок и людей. Оно поможет организовать работу в компании, внештатную работу, семейные дела или отдых с друзьями.'});
+
+    createWorkspaceButtonHead.append(createWorkspaceButtonHeadSvg, createWorkspaceButtonHeadName);
+    createWorkspaceButton.append(createWorkspaceButtonHead, createWorkspaceButtonDescription);
+    createBoardButtonHead.append(createBoardButtonHeadSvg, createBoardButtonHeadName);
+    createBoardButton.append(createBoardButtonHead, createBoardButtonDescription);
+    createButtonsContainer.append(createBoardButton, createWorkspaceButton);
+    createModalContainer.append(createButtonsContainer);
+    createButtonContainer.append(createModalContainer);
+
+    createButton.addEventListener('click', () => {
+      createButton.classList.toggle('create-button-active')
+      createModalContainer.classList.toggle('modal-active');
+    })
+
     return container;
   }
 
