@@ -84,8 +84,6 @@ class SpaceMenu {
   }
 
   renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', arguments)
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2', container, chosenBoard)
     console.log('Render Boards!!');
     if (!chosenBoard) { console.log('а борд то пустой') }
     for (let i = 0; i < this.boards.length; i++) {

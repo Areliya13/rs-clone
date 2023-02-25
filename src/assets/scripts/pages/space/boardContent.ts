@@ -1,7 +1,7 @@
 import { findFavorite, getInitials, toggleFavorite } from '../../helpers/functions';
 import { createHtmlElement } from '../../helpers/other';
 import { store } from '../../store/store';
-import { IBoard, IItem } from '../../store/types';
+import { EventName, IBoard, IComment, IItem, IPartialUser } from '../../store/types';
 import modalHeaderIcon from '../../../images/spaceModalHead.inl.svg';
 import modalEye from '../../../images/modalEye.inl.svg';
 import downIcon from '../../../images/down.inl.svg';
@@ -13,12 +13,20 @@ import rightIcon from '../../../images/rightArrow.inl.svg';
 import copyIcon from '../../../images/copyIcon.inl.svg';
 import shareIcon from '../../../images/sharingIcon.inl.svg';
 import closeButtonIcon from '../../../images/modal-close.inl.svg';
-import changeIconSvg from '../../../images/wsChangeIcon.inl.svg';
 import settingIcon from '../../../images/settings.inl.svg';
+import { createOne } from '../../api/rest/createOne';
+import { Path } from '../../api/types';
+import { createCommentPostData } from '../../api/rest/utils/createPostData';
+import { updateStore } from '../../store/updateStore';
+import observer from '../../store/observer';
+import { readAll } from '../../api/rest/readAll';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
+  currentItem: IItem | undefined
+  comments: IComment[] = []
   renderContent(curBoard?: IBoard): HTMLDivElement {
+    this.subscribe()
     if (curBoard) {
       this.chosenBoard = curBoard;
     }
@@ -66,7 +74,6 @@ export class BoardContent {
     2;
 
     favoriteButton.addEventListener('click', (e) => {
-      console.log('click!!!!');
       toggleFavorite(e, this.chosenBoard);
     });
     return container;
@@ -86,6 +93,7 @@ export class BoardContent {
   renderTasks(container: HTMLDivElement, tasks: IItem[]): void {
     for (let i = 0; i < tasks.length; i++) {
       const item = tasks[i];
+      this.comments = item.comments
       item.deadline;
       item.userId;
       const itemSpace = createHtmlElement('div', { className: 'item', id: item._id });
@@ -95,7 +103,13 @@ export class BoardContent {
       }
 
       const linkIcon = createHtmlElement('button', {className: 'item-icon', innerHTML: settingIcon});
-      linkIcon.addEventListener('click', (e) => this.handlerSettingItemClick(e))
+      
+      const settingsModalContainer = this.addModal(item)
+      linkIcon.addEventListener('click', () => {
+        this.currentItem = item
+        document.body.append(settingsModalContainer);
+      });
+  
 
       const markContainer = createHtmlElement('div', { className: 'mark-container' });
       for (let j = 0; j < item.marks.length; j++) {
@@ -135,19 +149,20 @@ export class BoardContent {
     }
 
     const addTaskButton = createHtmlElement('button', { className: 'add-task-button', textContent: 'Добавить задачу' });
-    this.addModal(addTaskButton);
+    // this.addModal(addTaskButton);
     container.append(addTaskButton);
   }
 
-  addModal(button: HTMLButtonElement): void {
+  addModal(item: IItem) {
     //todo: Модальное окно с настройками
-    const settingsModalContainer = createHtmlElement('div', { className: 'settingsModalContainer' });
+    const settingsModalContainer = createHtmlElement('div', { className: 'settingsModalContainer'});
+    settingsModalContainer.dataset.itemIdOnModal = item._id
     const settingsModal = createHtmlElement('div', { className: 'settingsModal' });
     const settingsModalHeader = createHtmlElement('div', { className: 'settingsModalHeader' });
     const headerIcon = createHtmlElement('div', { className: 'modalHeaderIcon', innerHTML: modalHeaderIcon });
     const headerText = createHtmlElement('textarea', {
       className: 'modalHeaderText',
-      textContent: 'Тестовое название',
+      textContent: `${item.title}`,
     });
     const columnDiv = createHtmlElement('div', { className: 'modalColumnDiv' });
     const columnLink = createHtmlElement('a', { className: 'modalColumnLink', href: '#', textContent: 'test' });
@@ -197,15 +212,29 @@ export class BoardContent {
     const descriptionHead = createHtmlElement('h3', { className: 'modalDescriptionHead', textContent: 'Описание' });
     const descriptionTextarea = createHtmlElement('textarea', {
       className: 'modalDescriptionInput',
-      placeholder: 'Добавить более подробное описание...',
+      placeholder: `${item.description ? item.description : 'Добавить более подробное описание...'}`,
+      value: `${item.description ? item.description : ''}`,
+      id: item._id
     });
-    const commentDiv = createHtmlElement('div', { className: 'modalCommentDiv' });
-    const currUserIcon = createHtmlElement('div', { className: 'currUserIcon' });
+    const commentDiv = createHtmlElement('div', { className: 'modalComhandlermentDiv' });
     const commentForm = createHtmlElement('form', { className: 'modalCommentForm' });
+   
+    const commentHeadDiv = createHtmlElement('div', { className: 'modalCommentHeadDiv' });
+    const commentIcon = createHtmlElement('div', { className: 'modalDescriptionIcon', innerHTML: modal4LineIcon });
+    const commentHead = createHtmlElement('h3', { className: 'modalDescriptionHead', textContent: 'Комментарии' });
     const commentTextarea = createHtmlElement('textarea', {
       className: 'modalCommentTextarea',
       placeholder: 'Напишите комментарий...',
     });
+
+    commentTextarea.dataset.itemIdOnComment = item._id
+
+    commentTextarea.addEventListener('blur', (e) => this.handlerCommentTextAreaClick(e))
+
+    const commentsArea = createHtmlElement('div', {className: 'comment-area'})
+    this.comments.forEach((comment) => {
+      commentsArea.append(this.addComment(comment))
+    })
     const sidebarModal = createHtmlElement('div', { className: 'modalSidebar' });
     const sidebarRecommended = createHtmlElement('div', { className: 'modalRecommended' });
     const sidebarRecommendedHead = createHtmlElement('h3', {
@@ -244,7 +273,7 @@ export class BoardContent {
     });
     const tagsButtonText = createHtmlElement('span', { className: 'modalTagsButtonText', textContent: 'Метки' });
     const tagsButton = createHtmlElement('button', { className: 'modal-button modalTagsButton' });
-    this.addMarkModal(tagsButton);
+    // this.addMarkModal(tagsButton);
     const checklistButtonIcon = createHtmlElement('div', {
       className: 'modalIcon modalChecklistButtonIcon',
       innerHTML: checkBoxIcon,
@@ -300,9 +329,10 @@ export class BoardContent {
     sidebarRecommended.append(sidebarRecommendedHead, sidebarRecommendedButton);
     sidebarModal.append(sidebarRecommended, addToCardContainer, actionsContainer);
     commentForm.append(commentTextarea);
-    commentDiv.append(currUserIcon, commentForm);
+    commentDiv.append(commentHeadDiv, commentForm);
     descriptionHeadDiv.append(descriptionIcon, descriptionHead);
     description.append(descriptionHeadDiv, descriptionTextarea);
+    commentHeadDiv.append(commentIcon, commentHead)
     cardDateButton.append(cardDateSpan, cardDateStatus, cardDateArrowIcon);
     cardDateControls.append(cardDateControlsCheckbox, cardDateButton);
     cardDate.append(cardDateHead, cardDateControls);
@@ -310,7 +340,7 @@ export class BoardContent {
     notification.append(notificationHead, notificationButton);
     cardDetailMembersList.append(memberIcon, memberAddButton);
     cardDetailMembers.append(cardDetailMembersHead, cardDetailMembersList);
-    mainModal.append(cardDetail, description, commentDiv);
+    mainModal.append(cardDetail, description, commentDiv, commentsArea);
     mainSidebarContainer.append(mainModal, sidebarModal);
     cardDetail.append(cardDetailMembers, notification, cardDate);
     columnText.append(columnLink);
@@ -318,10 +348,6 @@ export class BoardContent {
     settingsModalHeader.append(headerIcon, headerText);
     settingsModal.append(settingsModalHeader, columnDiv, mainSidebarContainer, closeButton);
     settingsModalContainer.append(settingsModal);
-
-    button.addEventListener('click', () => {
-      document.body.append(settingsModalContainer);
-    });
 
     settingsModalContainer.addEventListener('click', (event) => {
       if (event.target === settingsModalContainer) {
@@ -332,60 +358,134 @@ export class BoardContent {
     closeButton.addEventListener('click', () => {
       settingsModalContainer.remove();
     });
+    return  settingsModalContainer
     // Конец кода - Модальное окно с настройками
   }
 
-  addMarkModal(markButton: HTMLButtonElement): void {
-    // todo: Модальное окно метки
-    const marksModalContainer = createHtmlElement('div', { className: 'marksModalContainer' });
-    const marksModal = createHtmlElement('div', { className: 'marksModal' });
-    const marksHeader = createHtmlElement('header', { className: 'marksHeader' });
-    const marksHeadText = createHtmlElement('h2', { className: 'marksHeadText', textContent: 'Метки' });
-    const marksCloseButton = createHtmlElement('div', { className: 'marksCloseButton', innerHTML: closeButtonIcon });
-    const marksContentContainer = createHtmlElement('div', { className: 'marksContentContainer' });
-    const marksList = createHtmlElement('ul', { className: 'marksList' });
-    for (let i = 0; i < 6; i++) {
-      const marksItem = createHtmlElement('li', { className: 'marksItem' });
-      const marksCheckbox = createHtmlElement('input', { className: 'marksCheckbox', type: 'checkbox' });
-      const marksContainer = createHtmlElement('div', { className: 'marksContainer' });
-      const mark = createHtmlElement('div', { className: 'markDiv' });
-      const markColorIcon = createHtmlElement('div', { className: 'markColorIcon' });
-      const markName = createHtmlElement('span', { className: 'markName', textContent: `Test ${i + 1}` });
-      const markEditButton = createHtmlElement('button', { className: 'markEditButton', innerHTML: changeIconSvg });
+  // addMarkModal(markButton: HTMLButtonElement): void {
+  //   // todo: Модальное окно метки
+  //   console.log("Модалка Render")
+  //   const marksModalContainer = createHtmlElement('div', { className: 'marksModalContainer' });
+  //   const marksModal = createHtmlElement('div', { className: 'marksModal' });
+  //   const marksHeader = createHtmlElement('header', { className: 'marksHeader' });
+  //   const marksHeadText = createHtmlElement('h2', { className: 'marksHeadText', textContent: 'Метки' });
+  //   const marksCloseButton = createHtmlElement('div', { className: 'marksCloseButton', innerHTML: closeButtonIcon });
+  //   const marksContentContainer = createHtmlElement('div', { className: 'marksContentContainer' });
+  //   const marksList = createHtmlElement('ul', { className: 'marksList' });
+  //   for (let i = 0; i < 6; i++) {
+  //     const marksItem = createHtmlElement('li', { className: 'marksItem' });
+  //     const marksCheckbox = createHtmlElement('input', { className: 'marksCheckbox', type: 'checkbox' });
+  //     const marksContainer = createHtmlElement('div', { className: 'marksContainer' });
+  //     const mark = createHtmlElement('div', { className: 'markDiv' });
+  //     const markColorIcon = createHtmlElement('div', { className: 'markColorIcon' });
+  //     const markName = createHtmlElement('span', { className: 'markName', textContent: `Test ${i + 1}` });
+  //     const markEditButton = createHtmlElement('button', { className: 'markEditButton', innerHTML: changeIconSvg });
 
-      mark.append(markColorIcon, markName);
-      marksContainer.append(mark, markEditButton);
-      marksItem.append(marksCheckbox, marksContainer);
-      marksList.append(marksItem);
+  //     mark.append(markColorIcon, markName);
+  //     marksContainer.append(mark, markEditButton);
+  //     marksItem.append(marksCheckbox, marksContainer);
+  //     marksList.append(marksItem);
+  //   }
+  //   const createMarkButton = createHtmlElement('button', {
+  //     className: 'marksCreateButton',
+  //     textContent: 'Создать новую метку',
+  //   });
+
+  //   marksHeader.append(marksHeadText, marksCloseButton);
+
+  //   marksContentContainer.append(marksList, createMarkButton);
+  //   marksModal.append(marksHeader, marksContentContainer);
+  //   marksModalContainer.append(marksModal);
+  //   markButton.addEventListener('click', () => {
+  //     document.body.append(marksModalContainer);
+  //   });
+
+  //   marksModalContainer.addEventListener('click', (event) => {
+  //     if (event.target === marksModalContainer) {
+  //       marksModalContainer.remove();
+  //     }
+  //   });
+
+  //   marksCloseButton.addEventListener('click', () => {
+  //     marksModalContainer.remove();
+  //   });
+  // }
+
+  addComment(comment: IComment) {
+    const commentWrapper = createHtmlElement('div', { className: 'comment-wrapper' });
+    let commentIcon:HTMLDivElement;
+    if (comment.userId?.image) {
+      commentIcon = createHtmlElement('div', { className: 'comment-icon' });
+      const commentImage = createHtmlElement('img', { className: 'comment-icon-image', src: comment.userId.image })
+      commentIcon.append(commentImage)
+    } else {
+      commentIcon = createHtmlElement('div', { className: 'comment-icon currUserIcon' });
     }
-    const createMarkButton = createHtmlElement('button', {
-      className: 'marksCreateButton',
-      textContent: 'Создать новую метку',
-    });
+    const commentData = createHtmlElement('div', { className: 'comment-data' });
+    const commentDataTop = createHtmlElement('div', { className: 'comment-data-top' });
+    const commentName = createHtmlElement('div', { className: 'comment-name', textContent: comment.userId.name});
+    const commentTime = createHtmlElement('div', { className: 'comment-time', textContent: this.getTime(comment.date)});
+    const commentText = createHtmlElement('div', { className: 'comment-text', textContent: comment.description });
+    commentDataTop.append(commentName, commentTime)
+    commentData.append(commentDataTop, commentText)
+    commentWrapper.append(commentIcon, commentData)
 
-    marksHeader.append(marksHeadText, marksCloseButton);
-
-    marksContentContainer.append(marksList, createMarkButton);
-    marksModal.append(marksHeader, marksContentContainer);
-    marksModalContainer.append(marksModal);
-    markButton.addEventListener('click', () => {
-      document.body.append(marksModalContainer);
-    });
-
-    marksModalContainer.addEventListener('click', (event) => {
-      if (event.target === marksModalContainer) {
-        marksModalContainer.remove();
-      }
-    });
-
-    marksCloseButton.addEventListener('click', () => {
-      marksModalContainer.remove();
-    });
+    return commentWrapper
   }
 
-  handlerSettingItemClick(e: MouseEvent) {
-    if (!(e.currentTarget instanceof HTMLButtonElement)) return
-    const itemId = e.currentTarget.parentElement?.id
-    this.addModal(e.currentTarget)
+  getTime(time: string) {
+    return time.split('.')[0].replace('T', ' ')
+  }
+
+  subscribe() {
+    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  }
+
+  update(user: IPartialUser) {
+    this.updateModal(user)
+  }
+
+  async handlerCommentTextAreaClick(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
+    try {
+      const textArea = e.currentTarget
+      const value = textArea.value
+  
+      const userId = store.user._id
+      const itemId = textArea.dataset.itemIdOnComment
+    
+      await createOne(Path.comment, createCommentPostData(itemId, userId, value))
+      const newItem = await readAll(Path.comment, itemId)
+      this.comments = await newItem;
+      await updateStore()
+
+    }catch(e) {
+      console.log(e)
+    }
+    
+  }
+
+  updateModal(user: IPartialUser) {
+    const mainContainer: HTMLDivElement = document.querySelector('.settingsModalContainer')
+    if (!mainContainer) return
+    const itemId = mainContainer.dataset.itemIdOnModal
+    if (!itemId) return
+
+    user.workSpace.forEach((ws) => {
+      ws.boards.forEach(b => {
+        b.lists.forEach(l => {
+          l.items.forEach((i) => {
+             if (i._id === itemId) {
+              this.currentItem = i
+              this.comments = i.comments
+             }
+          })
+        })
+      })
+    })
+
+    mainContainer.remove()
+    const modal = this.addModal(this.currentItem)
+    document.body.append(modal);
   }
 }

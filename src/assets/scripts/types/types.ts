@@ -26,6 +26,10 @@ export type OptionsType = {
   style?: string;
   height?: number;
   width?: number;
+  data?: {
+    itemIdOnComment?: string;
+    itemIdOnModal?: string;
+  }
 };
 
 export type Options = Map<string, string | spaceMode>;

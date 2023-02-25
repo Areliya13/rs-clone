@@ -25,6 +25,10 @@ export const getPopulatedUser = async (userId: string | Types.ObjectId) => {
                     },
                     {   path: 'comments',
                         model: 'Comment',
+                        populate: {
+                            path: 'userId',
+                            model: 'User',
+                        }
                     },
                     {   path: 'marks',
                         model: 'Mark',

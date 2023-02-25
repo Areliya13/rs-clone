@@ -1,0 +1,38 @@
+.comment {
+    &-wrapper {
+        display: flex;
+        margin: 0 0 8px 40px;
+    }
+    &-icon {
+        margin: 0 10px 0 0;
+        &-image {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+    }
+    &-data {
+        width: 100%;
+        &-top {
+            display: flex;
+        }
+    }
+    &-name {
+        font-weight: 700;
+        font-size: 14px;
+        margin-right: 8px;
+    }
+    &-time {
+
+    }
+    &-text {
+        background-color: #dbe1e4;
+        word-wrap: break-word;
+        text-overflow: ellipsis;
+        margin: 0 0 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+    }
+    
+    
+}
