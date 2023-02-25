@@ -220,7 +220,7 @@ export class BoardContent {
       value: `${item.description ? item.description : ''}`,
       id: item._id
     });
-    const commentDiv = createHtmlElement('div', { className: 'modalComhandlermentDiv' });
+    const commentDiv = createHtmlElement('div', { className: 'modalCommentDiv' });
     const commentForm = createHtmlElement('form', { className: 'modalCommentForm' });
    
     const commentHeadDiv = createHtmlElement('div', { className: 'modalCommentHeadDiv' });
