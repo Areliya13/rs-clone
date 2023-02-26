@@ -7,7 +7,13 @@ import { EventName, IBoard, IPartialUser, IStore, IWork } from '../../store/type
 import { getAllUserBoards } from '../../helpers/utils/getAllUserBoard';
 import trelloIcon from '../../../images/boards.inl.svg';
 import membersIcon from '../../../images/members.inl.svg';
+import modalImage from '../../../images/modal-image.inl.svg';
+import closeButton from '../../../images/modal-close.inl.svg';
 import { ModalCreateBoard } from '../../components/ModalCreateBoard/ModalCreateBoard';
+import { createOne } from '../../api/rest/createOne';
+import { updateStore } from '../../store/updateStore';
+import { Path } from '../../api/types';
+import { createWorkSpacePostData } from '../../api/rest/utils/createPostData';
 
 export class Header {
   header: HTMLDivElement | undefined
@@ -35,7 +41,7 @@ export class Header {
     const createButtonContainer = createHtmlElement('div', {className: 'create-button-container'});
     const createButton = createHtmlElement('button', { className: 'create-button', textContent: 'Создать' });
 
-    createButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
+    // createButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
 
     createButtonContainer.append(createButton)
     menuButton.append(innerImg);
@@ -54,6 +60,9 @@ export class Header {
     const createWorkspaceButtonHeadSvg = createHtmlElement('div', {className: 'modalCreateBoardHeadSvg createWorkspaceButtonHeadSvg', innerHTML: membersIcon});
     const createWorkspaceButtonHeadName = createHtmlElement('span', {className: 'modalCreateBoardName createWorkspaceButtonHeadText', textContent: 'Создайте рабочее пространство'});
     const createWorkspaceButtonDescription = createHtmlElement('p', {className: 'modalCreateBoardDescription createWorkspaceButtonDescription', textContent: 'Рабочее пространство представляет собой группу досок и людей. Оно поможет организовать работу в компании, внештатную работу, семейные дела или отдых с друзьями.'});
+    createWorkspaceButton.addEventListener('click', (e) => this.handlerAddWorkSpaceClick(e))
+    createBoardButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
+    this.createWorkSpaceModal(createWorkspaceButton)
 
     createWorkspaceButtonHead.append(createWorkspaceButtonHeadSvg, createWorkspaceButtonHeadName);
     createWorkspaceButton.append(createWorkspaceButtonHead, createWorkspaceButtonDescription);
@@ -67,6 +76,7 @@ export class Header {
       createButton.classList.toggle('create-button-active')
       createModalContainer.classList.toggle('modal-active');
     })
+
 
     return container;
   }
@@ -214,9 +224,174 @@ export class Header {
     if (modal) {
       modal.remove();
     }
+
+    const modalC = document.querySelector('.createModalContainer.modal-active')
+    modalC.classList.toggle('modal-active')
     
     const newModal = new ModalCreateBoard().getModal()
     
     document.body.querySelector('main').append(newModal)
   } 
+
+  createWorkSpaceModal(button: HTMLElement) {
+    const workspaceModalContainer = createHtmlElement('div', { className: 'workspaceModalContainer' });
+    const workspaceModal = createHtmlElement('div', { className: 'workspaceModal' });
+    const leftSideModalDiv = createHtmlElement('div', { className: 'modal-leftSide' });
+    const rightSideModalDiv = createHtmlElement('div', { className: 'modal-rightSide' });
+    const form = createHtmlElement('form', {
+      className: 'modal-form',
+      innerHTML: `
+    <span class="form-head">Создайте рабочее пространство</span>
+    <span class="form-text">Повысьте производительность: участники команды смогут получать удобный доступ ко всем доскам.</span>
+    `,
+    });
+    form.addEventListener('submit', (e) => this.handlerFormSubmit(e))
+    const labelWorkspace = createHtmlElement('label', {
+      className: 'modalHead workspaceLabel',
+      for: 'workspaceInput',
+      textContent: 'Название рабочего пространства',
+    });
+    const inputWorkspace = createHtmlElement('input', {
+      id: 'workspaceInput',
+      type: 'text',
+      maxLength: '100',
+      placeholder: 'Компания «Тако»',
+      required: true,
+      name: 'workSpaceName',
+    });
+    inputWorkspace.addEventListener('input', (e: InputEvent) => this.handlerWorkSpaceInput(e))
+
+    const spanWorkspaceHelp = createHtmlElement('span', {
+      className: 'workspaceHelp',
+      textContent: 'Укажите название вашей команды, компании или организации.',
+    });
+    const headChooseActivity = createHtmlElement('span', {
+      className: 'modalHead activityHead',
+      textContent: 'Тип рабочего пространства',
+    });
+    const selectChooseActivity = createHtmlElement('select', { className: 'activitySelect', required: true });
+    const selectArray = [
+      'Выбрать...',
+      'Продажи CRM',
+      'Образование',
+      'Инженерия/ИТ',
+      'Операции',
+      'Управление персоналом',
+      'Малый бизнес',
+      'Маркетинг',
+      'Другое',
+    ];
+    for (let i = 0; i < selectArray.length; i++) {
+      const selectOption = createHtmlElement('option', { textContent: selectArray[i] });
+      if (i === 0) {
+        selectOption.selected = true;
+        selectOption.disabled = true;
+      }
+      selectChooseActivity.append(selectOption);
+    }
+    const headDescription = createHtmlElement('span', {
+      className: 'modalHead descriptionHead',
+      innerHTML: `
+    Описание рабочего пространства
+    <span class="descriptionHead-additional">Необязательно</span>
+    `,
+    });
+    const textareaDescription = createHtmlElement('textarea', {
+      className: 'descriptionTextarea',
+      placeholder: 'Здесь наша команда хранит всю нужную информацию',
+      rows: '6',
+    });
+    const spanDescriptionHelp = createHtmlElement('span', {
+      className: 'descriptionHelp',
+      textContent: 'Расскажите участникам немного о рабочем пространстве.',
+    });
+    const buttonContinue = createHtmlElement('button', {
+      className: 'form-continue',
+      type: 'submit',
+      disabled: true,
+      textContent: 'Продолжить',
+    });
+
+    form.append(
+      labelWorkspace,
+      inputWorkspace,
+      spanWorkspaceHelp,
+      headChooseActivity,
+      selectChooseActivity,
+      headDescription,
+      textareaDescription,
+      spanDescriptionHelp,
+      buttonContinue
+    );
+    leftSideModalDiv.append(form);
+
+    const svgModalImage = createHtmlElement('div', { innerHTML: modalImage });
+    rightSideModalDiv.append(svgModalImage);
+
+    const closeModalButton = createHtmlElement('button', { className: 'modal-close', innerHTML: closeButton });
+
+    workspaceModal.append(leftSideModalDiv, rightSideModalDiv, closeModalButton);
+    workspaceModalContainer.append(workspaceModal);
+
+    button.addEventListener('click', () => {
+      document.body.append(workspaceModalContainer);
+    });
+
+    workspaceModalContainer.addEventListener('click', (event) => {
+      if (event.target === workspaceModalContainer) {
+        workspaceModalContainer.remove();
+      }
+    });
+
+    closeModalButton.addEventListener('click', () => {
+      workspaceModalContainer.remove();
+    });
+  }
+
+  handlerAddWorkSpaceClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+
+    const modalC = document.querySelector('.createModalContainer.modal-active')
+    modalC.classList.toggle('modal-active')
+
+    
+  }
+
+  private async handlerFormSubmit(e: SubmitEvent) {
+    e.preventDefault()
+    if (!(e.target instanceof HTMLFormElement) ) return
+    const form = new FormData(e.target)
+    const workSpaceName = form.get('workSpaceName')
+
+    if (!workSpaceName.toString().trim()) return
+    
+    await createOne(Path.workSpace, createWorkSpacePostData(workSpaceName.toString(), store.user._id))
+    await updateStore()
+    
+    const inputWorkspace: HTMLInputElement = e.target.querySelector('#workspaceInput')
+    const textAreaWorkspace: HTMLInputElement = e.target.querySelector('.descriptionTextarea')
+    const button: HTMLInputElement = e.target.querySelector('.form-continue')
+    const workspaceModalContainer = document.querySelector('.workspaceModalContainer')
+    inputWorkspace.value = ''
+    textAreaWorkspace.value = ''
+    button.disabled = true
+    workspaceModalContainer.remove()
+  }
+
+  private handlerWorkSpaceInput(e: Event) {
+    if (!(e.target instanceof HTMLInputElement)) return
+    const target = e.target
+    const value = target.value
+    const submitButton:HTMLButtonElement = document.querySelector('button.form-continue')
+    if (value.trim().length) {
+      if (submitButton) {
+        submitButton.disabled = false
+      }
+    } else {
+      if (submitButton) {
+        submitButton.disabled = true
+      }
+    }
+  }
+
 }
