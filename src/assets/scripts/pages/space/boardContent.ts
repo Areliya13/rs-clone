@@ -23,7 +23,7 @@ import observer from '../../store/observer';
 import { readAll } from '../../api/rest/readAll';
 import { deleteOne } from '../../api/rest/deleteOne';
 import { updateOne } from '../../api/rest/updateOne';
-import { createCommentPutData, createItemPutData } from '../../api/rest/utils/createPutData';
+import { createBoardPutData, createCommentPutData, createItemPutData } from '../../api/rest/utils/createPutData';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
@@ -42,6 +42,9 @@ export class BoardContent {
     const boardMenuLeft = createHtmlElement('div', { className: 'board-header-menu-left' });
     const boardMenuRight = createHtmlElement('div', { className: 'board-header-menu-right' });
     const boardName = createHtmlElement('input', { className: 'header-input-text', value: this.chosenBoard.title });
+    boardName.dataset.boardIdInInput = curBoard._id
+    boardName.addEventListener('blur', (e) => this.handlerBoardNameClick(e))
+
     const favoriteButton = createHtmlElement('div', { className: 'header-option-button' });
     const favoriteImg = createHtmlElement('span', {
       className: findFavorite(this.chosenBoard._id)
@@ -636,5 +639,17 @@ export class BoardContent {
       modal.remove()
     }
 
+  }
+
+  async handlerBoardNameClick(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLInputElement)) return
+
+    const boardId = e.currentTarget.dataset.boardIdInInput
+    const title = e.currentTarget.value
+    console.log(title, boardId)
+    if (!boardId || !title) return
+
+    await updateOne(Path.board, boardId, createBoardPutData({title}))
+    await updateStore()
   }
 }
