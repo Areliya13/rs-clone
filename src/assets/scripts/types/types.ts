@@ -21,7 +21,6 @@ export type OptionsType = {
   disabled?: boolean;
   rows?: string;
   title?: string;
-  'style.backgroundColor'?: string;
   name?: string;
   style?: string;
   height?: number;
