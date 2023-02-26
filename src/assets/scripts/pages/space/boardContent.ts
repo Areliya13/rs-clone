@@ -23,7 +23,7 @@ import observer from '../../store/observer';
 import { readAll } from '../../api/rest/readAll';
 import { deleteOne } from '../../api/rest/deleteOne';
 import { updateOne } from '../../api/rest/updateOne';
-import { createBoardPutData, createCommentPutData, createItemPutData } from '../../api/rest/utils/createPutData';
+import { createBoardPutData, createCommentPutData, createItemPutData, createListPutData } from '../../api/rest/utils/createPutData';
 
 export class BoardContent {
   chosenBoard = store.user.workSpace[0].boards[0];
@@ -90,7 +90,10 @@ export class BoardContent {
     for (let i = 0; i < this.chosenBoard.lists.length; i++) {
       const list = this.chosenBoard.lists[i];
       const listSpace = createHtmlElement('div', { className: 'list' });
-      const listName = createHtmlElement('h3', { textContent: list.title });
+      const listName = createHtmlElement('input', { value: list.title , className: 'header-input-text header-list-text'});
+      listName.dataset.listIdInInput = list._id
+      listName.addEventListener('blur', (e) => this.handlerListNameBlur(e))
+
       listSpace.append(listName);
       this.renderTasks(listSpace, list.items);
       container.append(listSpace);
@@ -652,4 +655,17 @@ export class BoardContent {
     await updateOne(Path.board, boardId, createBoardPutData({title}))
     await updateStore()
   }
+
+  async handlerListNameBlur(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLInputElement)) return
+
+    const listId = e.currentTarget.dataset.listIdInInput
+    const title = e.currentTarget.value
+    if (!listId || !title) return
+
+    await updateOne(Path.list, listId, createListPutData(title))
+    await updateStore()
+  }
+
+
 }

@@ -6,7 +6,7 @@ import { createIdArray } from '../../utils/createIdArray';
 export interface IUpdateListProps {
     title?: string;
     listId: string;
-    item: string[];
+    item?: string[];
 }
 
 export const updateListService = async ({listId, title, item}: IUpdateListProps) => {

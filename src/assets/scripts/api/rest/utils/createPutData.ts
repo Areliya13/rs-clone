@@ -13,7 +13,7 @@ export const createBoardPutData = ({title, color, image, list}: ICreateBoardPutD
     }
 }
 
-export const createListPutData = (title: string, item: string) => ({ title, item })
+export const createListPutData = (title: string, item?: string) => ({ title, item })
 
 export const createItemPutData = ({deadline, title, description, image}: ICreateItemPutData) => { 
     return {
