@@ -20,6 +20,7 @@ export class SpacePageRender extends Page {
     super(id);
     this.mode = spaceMode.error;
     this.options = options;
+    // this.subscribe()
   }
 
   render() {
@@ -32,9 +33,17 @@ export class SpacePageRender extends Page {
         if (this.workspace) {
           this.board = this.workspace.boards.find((val) => val._id === this.options.get('boardID'));
           this.content = new BoardContent().renderContent(this.board);
+        } else {
+          this.content = new SpaceError().renderErrorMessage();
         }
+      } else {
+        this.content = new SpaceError().renderErrorMessage();
       }
+
+    } else {
+      this.content = new SpaceError().renderErrorMessage();
     }
+
     this.menu = new SpaceMenu();
     const container = createHtmlElement('div');
     const background = createHtmlElement('div', { className: 'background' });
@@ -57,4 +66,5 @@ export class SpacePageRender extends Page {
   subscribe(): void {
     observer.subscribe({ eventName: EventName.updateState, function: this.render.bind(this) });
   }
+
 }

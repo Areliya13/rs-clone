@@ -146,6 +146,12 @@
   }
 }
 
+.wsDescriptionText {
+  &:hover {
+    background-color: #aebcd5;
+  }
+}
+
 .wsBoardsList {
   display: flex;
   flex-wrap: wrap;

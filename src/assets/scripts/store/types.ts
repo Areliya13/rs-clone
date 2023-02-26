@@ -61,9 +61,9 @@ interface IItem {
 }
 
 interface IComment {
-    userId: string;
+    userId: IUser;
     description: string;
-    date: Date;
+    date: string;
     _id: string;
 }
 

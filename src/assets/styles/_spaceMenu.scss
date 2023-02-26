@@ -168,3 +168,110 @@
 .chosen-board {
   background-color: rgba($color: #ffffff, $alpha: 0.2);
 }
+
+.board-modal-setting {
+  width: 400px;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 10px;
+  &-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #222222, $alpha: 0.6);
+    &.active {
+      display: flex;
+    }
+  }
+
+  &-button {
+    &--delete {
+      &:hover {
+        background-color: rgba($color: #d70f0f, $alpha: 0.6);
+      }
+    }
+    &--update {
+      &:hover {
+        background-color: rgba($color: #358a2f, $alpha: 0.6);
+      }
+    }
+  }
+  
+  .board-modal-setting-image {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    margin: 5px;
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &-item {
+      margin-right: 10px;
+    }
+    &-img {
+      width: 100px;
+      height: 80px;
+      cursor: pointer;
+      &:hover {
+        border: 3px solid green;
+      }
+      &.choose {
+        border: 3px solid goldenrod;
+      }
+    }
+    &-button {
+      &:hover {
+        background-color: rgba($color: #358a2f, $alpha: 0.6);
+      }
+    }
+  }
+
+  .board-modal-setting-color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+    &-item {
+      width: 100px;
+      height: 80px;
+      margin-right: 10px;
+      &:hover {
+        border: 3px solid green;
+      }
+      &.choose {
+        border: 3px solid goldenrod;
+      }
+    }
+    &-button {
+      &:hover {
+        background-color: rgba($color: #358a2f, $alpha: 0.6);
+      }
+    }
+  }
+}
+
+.list-modal-setting {
+  &-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    
+    background-color: rgba($color: #222222, $alpha: 0.6);
+    &.active {
+      display: flex;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

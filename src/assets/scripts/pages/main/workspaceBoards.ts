@@ -5,22 +5,26 @@ import wsPrivateIcon from '../../../images/wsPrivateIcon.inl.svg';
 import workspaceSiteIcon from '../../../images/wsSiteIcon.inl.svg';
 import workspaceBoardsIcon from '../../../images/wsBoardsIcon.inl.svg';
 import { store } from '../../store/store';
-import observer from '../../store/observer';
-import { EventName, IBoard, IPartialUser } from '../../store/types';
+import { IBoard} from '../../store/types';
 import { WorkSpaceBigBoardList } from '../../components/WorkSpaceBigBoardList/WorkSpaceBigBoardList';
 import { BigBoardList } from '../../components/BigBoardList/BigBoardList';
 import { updateOne } from '../../api/rest/updateOne';
 import { Path } from '../../api/types';
 import { createWorkSpacePutData } from '../../api/rest/utils/createPutData';
 import { updateStore } from '../../store/updateStore';
+import { deleteOne } from '../../api/rest/deleteOne';
 
 export class WorkspaceBoards extends Page {
+  workSpaceId: string
   constructor(id: string) {
     super(id);
-    this.subscribe()
+    this.workSpaceId = location.hash.split('=')[1].trim()
+    // this.subscribe()
   }
   renderContent(): HTMLDivElement {
     const workSpaceId = location.hash.split('=')[1].trim()
+
+    console.log('wsId', workSpaceId)
   
     let currentWorkSpace = store.user?.workSpace?.find((workspace) => workspace._id === workSpaceId)
     if (!currentWorkSpace) {
@@ -59,7 +63,9 @@ export class WorkspaceBoards extends Page {
     const wsSiteLink = createHtmlElement('a', {className: 'wsSiteLink', textContent: 'trololo.com', href: 'https://trololo.com'});
 
     const wsDescription = createHtmlElement('div', {className: 'wsDescription'});
-    const wsDescriptionText = createHtmlElement('p', {className: 'wsDescriptionText', textContent: 'test'});
+    const wsDescriptionText = createHtmlElement('button', {className: 'wsDescriptionText', textContent: 'Удалить рабочее пространство'});
+    wsDescriptionText.addEventListener('click', (e) => this.handlerDeleteWSClick(e))
+
 
     const wsFavoriteBoardsSection = createHtmlElement('div', {className: 'wsBoardsSection'});
     const wsFavoriteBoardsHeadContainer = createHtmlElement('div', {className: 'wsBoardsHead'});
@@ -104,13 +110,13 @@ export class WorkspaceBoards extends Page {
     return this.container;
   }
 
-  subscribe() {
-    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
-  }
+  // subscribe() {
+  //   observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  // }
 
-  update(user: IPartialUser) {
-    this.reRenderContent()
-  }
+  // update(user: IPartialUser) {
+  //   // this.reRenderContent()
+  // }
 
   reRenderContent() {
     const body = document.querySelector('.wsBoardContent');
@@ -146,7 +152,7 @@ export class WorkspaceBoards extends Page {
   async handlerInputTitleBlur(e: Event) {
     if (!(e.currentTarget instanceof HTMLInputElement)) return
     const input = e.currentTarget
-
+    
     const newTitle = input.value
     const body: HTMLDivElement = document.querySelector('.wsBoardContent')
     if (!body) return
@@ -154,6 +160,16 @@ export class WorkspaceBoards extends Page {
     if (!workSpaceId) return
     await updateOne(Path.workSpace, workSpaceId, createWorkSpacePutData(newTitle))
     await updateStore()
+  }
+
+  async handlerDeleteWSClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+
+    const id = this.workSpaceId
+    await deleteOne(Path.workSpace, id, store.user._id)
+    await updateStore()
+
+    location.hash = '#'
   }
  
 }

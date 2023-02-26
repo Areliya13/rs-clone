@@ -7,8 +7,11 @@ export const updateBoardController = async (req: Request, res: Response, next: N
         const title = req.body.title
         const image = req.body.image
         const color = req.body.color
-        const list: string[] = await JSON.parse(req.body.list)
-      
+        let list: string[] | undefined
+        if (req.body.list) {
+          list = await JSON.parse(req.body.list)
+        }
+
         const response = await updateBoardService({boardId, color, image, title, list})
         res.status(200).send(response)
     }

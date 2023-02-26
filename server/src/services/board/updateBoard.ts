@@ -17,12 +17,28 @@ export const updateBoardService = async ({title, color, image, boardId, list}: I
     const board = await Board.findById(boardId)
     if (!board) throw new Error('boardId not exist')
 
-    await Board.findByIdAndUpdate<IBoard>(boardId, {
-        title: title ? title : board.title, 
-        color: color ? color : board.color,
-        image: image ? image : board.image,
-        lists: list ? createIdArray(list) : board.lists
-    })
+    if (title) {
+        await Board.findByIdAndUpdate<IBoard>(boardId, {
+            title: title ? title : board.title, 
+            color: color ? color: board.color,
+            image: image ? image : board.image,
+            lists: list ? createIdArray(list) : board.lists
+        })
+    } else if (color && !title && !image) {
+        await Board.findByIdAndUpdate<IBoard>(boardId, {
+            title: board.title, 
+            color: color,
+            image: '',
+            lists: list ? createIdArray(list) : board.lists
+        })
+    } else if (image && !title && !color) {
+        await Board.findByIdAndUpdate<IBoard>(boardId, {
+            title: board.title, 
+            color: '',
+            image: image,
+            lists: list ? createIdArray(list) : board.lists
+        })
+    }
     const updatedBoard = await Board.findById(boardId)
     return updatedBoard
 }

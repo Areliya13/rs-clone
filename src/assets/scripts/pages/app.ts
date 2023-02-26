@@ -123,6 +123,9 @@ class App {
     } catch (e) {
       console.log(e);
     }
+    finally {
+
+    }
   }
 }
 
