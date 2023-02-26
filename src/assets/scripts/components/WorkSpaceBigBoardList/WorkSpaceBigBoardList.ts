@@ -1,6 +1,7 @@
 import { createHtmlElement } from "../../helpers/other";
 import { IWork } from "../../store/types";
 import { BigBoardItem } from "../BigBoardItem/BigBoardItem";
+import { ModalCreateBoard } from "../ModalCreateBoard/ModalCreateBoard";
 
 export class WorkSpaceBigBoardList {
     constructor(private workSpace: IWork, private className: string) {}
@@ -22,6 +23,8 @@ export class WorkSpaceBigBoardList {
         const createButton = createHtmlElement('li', {
             className: `big-board-list-item work-space-big-board-list-create`,
         })
+
+        createButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
         const createButtonText = createHtmlElement('div', {
             className: `work-space-big-board-list-create-text`,
             textContent: 'Создать доску'
@@ -33,6 +36,19 @@ export class WorkSpaceBigBoardList {
         ul.append(createButton)
         wrapper.append(ul)
         return wrapper
+    }
+
+    handlerAddBoardClick(e: MouseEvent) {
+        if (!(e.currentTarget instanceof HTMLLIElement)) return
+
+        const modal = document.querySelector('.createBoardModal')
+        if (modal) {
+        modal.remove();
+        }
+
+        const newModal = new ModalCreateBoard().getModal()
+
+        document.body.append(newModal)
     }
 
 }

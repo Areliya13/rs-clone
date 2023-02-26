@@ -4,6 +4,17 @@ import { store } from '../../store/store';
 import { EventName, IBoard, IPartialUser, IWork } from '../../store/types';
 import { findFavorite, getAddress, toggleFavorite } from '../../helpers/functions';
 import observer from '../../store/observer';
+import { updateOne } from '../../api/rest/updateOne';
+import { Path } from '../../api/types';
+import { createBoardPutData, createUserPutData } from '../../api/rest/utils/createPutData';
+import { updateStore } from '../../store/updateStore';
+import { deleteOne } from '../../api/rest/deleteOne';
+
+const imagesArr: string[] = [
+  'https://live.staticflickr.com/65535/52682453673_e81dae0a3b_b.jpg',
+  'https://live.staticflickr.com/65535/52681301262_609c1be2f4_b.jpg',
+  'https://live.staticflickr.com/65535/52681300682_a935bf6cfb_b.jpg'];
+const colorsArr: string[] = ['rgb(0, 121, 191)', 'rgb(137, 96, 158)', 'rgb(81, 152, 57)'];
 
 class SpaceMenu {
   workspace: IWork | undefined = store.user?.workSpace?.[0] ; // to-do get info from path
@@ -26,6 +37,7 @@ class SpaceMenu {
     const spaceMenuContainer = createHtmlElement('aside', {
       className: 'space-menu',
     });
+
     const space = createHtmlElement('div', { className: 'space-top-section' });
     this.renderSpace(space);
     const wrapper = createHtmlElement('div', { className: 'left-space-wrapper' });
@@ -41,7 +53,7 @@ class SpaceMenu {
     this.mainContainer = boards
     wrapper.append(menu, boards);
     spaceMenuContainer.append(space, wrapper);
-
+    this.createSettingModal()
     return spaceMenuContainer;
   }
 
@@ -76,6 +88,8 @@ class SpaceMenu {
       textContent: spaceMenuOptions.settings,
     });
     const settingsButton = createHtmlElement('span', { className: 'icon-img arrow-down' });
+
+    settingsLink.addEventListener('click', (e) => this.openSettingModalClick(e))
 
     boardsLink.append(boardsImg, boardsText);
     usersLink.append(usersImg, usersText, usersButton);
@@ -142,6 +156,133 @@ class SpaceMenu {
 
   update(user: IPartialUser) {
     this.renderBoards(this.mainContainer , this.currentBoard)
+  }
+
+  openSettingModalClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLAnchorElement)) return
+
+    const modal = document.querySelector('.board-modal-setting-wrapper')
+    if (!modal) return
+
+    modal.classList.toggle('active')
+  }
+
+  createSettingModal() {
+    const modalWrapper = createHtmlElement('div', {className: 'board-modal-setting-wrapper'})
+    const modal = createHtmlElement('div', {className: 'board-modal-setting'})
+
+    const inputWrapper = createHtmlElement('div', {className: 'board-modal-setting-input-wrapper'})
+    const input = createHtmlElement('input', {className: 'board-modal-setting-input', value: this.currentBoard.title})
+    const buttonUpdate = createHtmlElement('button', {className: 'board-modal-setting-button--update', textContent: 'Изменить название'})
+    const buttonDelete = createHtmlElement('button', {className: 'board-modal-setting-button--delete', textContent: 'Удалить доску'})
+
+    buttonUpdate.addEventListener('click', async (e) => {
+      const boardId = this.currentBoard._id
+      const title = input.value 
+      console.log(this.currentBoard._id )
+      if (!boardId) return
+      await updateOne(Path.board, boardId, createBoardPutData({title}) )
+      await updateStore()
+    })
+
+    buttonDelete.addEventListener('click', async (e) => {
+      const boardId = this.currentBoard._id
+      console.log(this.currentBoard._id )
+      if (!boardId) return
+      const workSpace = this.workspace._id
+      const newFavoriteBoard = store.user.favoriteBoards.filter(board => board._id !== boardId)
+      const user = store.user._id
+
+      await deleteOne(Path.board, boardId, workSpace)
+      await updateOne(Path.user, user, createUserPutData({favoriteBoards: JSON.stringify(newFavoriteBoard)}))
+      location.hash = '#'
+      await updateStore()
+      modalWrapper.classList.toggle('active')
+    })
+
+    inputWrapper.append(input, buttonUpdate)
+
+    const imageWrapper = createHtmlElement('div', {className: 'board-modal-setting-image-wrapper'})
+    const imageList = createHtmlElement('ul', {className: 'board-modal-setting-image'})
+    const imageUpdate = createHtmlElement('button', {className: 'board-modal-setting-image-button', textContent: 'Изменить фоновое изображение'})
+
+    imageUpdate.addEventListener('click', async (e) => {
+      const chooseElement: HTMLImageElement = imageWrapper.querySelector('.board-modal-setting-image-img.choose')
+      if (!chooseElement) return
+
+      const image = chooseElement.src
+
+      const id = this.currentBoard._id
+      if (!id) return
+
+      await updateOne(Path.board, id, createBoardPutData({image}))
+      await updateStore()
+    })
+
+    imagesArr.forEach((img) => {
+      const item = createHtmlElement('li', { className: 'board-modal-setting-image-item' })
+      const image = createHtmlElement('img', { className: 'board-modal-setting-image-img', src: img })
+
+      image.addEventListener('click', (e) => {
+          if (!(e.currentTarget instanceof HTMLImageElement)) return
+          const allImage = document.querySelectorAll('.board-modal-setting-image-img')
+          allImage.forEach(img => {
+            img.classList.remove('choose')
+          })
+          e.currentTarget.classList.add('choose')
+      })
+
+      item.append(image)
+      imageList.append(item)
+    })
+
+    imageWrapper.append(imageList, imageUpdate)
+
+    const colorWrapper = createHtmlElement('div', {className: 'board-modal-setting-color-wrapper'})
+    const colorList = createHtmlElement('ul', {className: 'board-modal-setting-color'})
+    const colorUpdate = createHtmlElement('button', {className: 'board-modal-setting-color-button', textContent: 'Изменить фоновый цвет'})
+
+    colorUpdate.addEventListener('click', async (e) => {
+      const chooseElement: HTMLLIElement = colorWrapper.querySelector('.board-modal-setting-color-item.choose')
+      if (!chooseElement) return
+
+      const color = chooseElement.style.backgroundColor
+
+      console.log('id',  color)
+      const id = this.currentBoard._id
+      if (!id) return
+      await updateOne(Path.board, id, createBoardPutData({color}))
+      await updateStore()
+    })
+
+    colorsArr.forEach((color) => {
+      const item = createHtmlElement('li', { className: 'board-modal-setting-color-item', style: `background-color: ${color}` })
+
+      item.addEventListener('click', (e) => {
+        if (!(e.currentTarget instanceof HTMLLIElement)) return
+        const allItems = document.querySelectorAll('.board-modal-setting-color-item')
+        allItems.forEach(item => {
+          item.classList.remove('choose')
+        })
+        e.currentTarget.classList.add('choose')
+      })
+
+      colorList.append(item)
+    })
+
+    colorWrapper.append(colorList, colorUpdate)
+
+    modal.append(inputWrapper,imageWrapper, colorWrapper, buttonDelete )
+    modalWrapper.append(modal)
+
+    modalWrapper.addEventListener('click', (e) => {
+      if (e.target !== e.currentTarget) return
+      if (!(e.currentTarget instanceof HTMLDivElement)) return
+
+      modalWrapper.classList.toggle('active')
+    })
+
+    document.body.append(modalWrapper)
   }
 }
 

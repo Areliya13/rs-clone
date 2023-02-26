@@ -1,7 +1,7 @@
 import { findFavorite, getInitials, toggleFavorite } from '../../helpers/functions';
 import { createHtmlElement } from '../../helpers/other';
 import { store } from '../../store/store';
-import { EventName, IBoard, IComment, IItem, IPartialUser } from '../../store/types';
+import { EventName, IBoard, IComment, IItem, IList, IPartialUser } from '../../store/types';
 import modalHeaderIcon from '../../../images/spaceModalHead.inl.svg';
 import modalEye from '../../../images/modalEye.inl.svg';
 import downIcon from '../../../images/down.inl.svg';
@@ -17,7 +17,7 @@ import closeButtonIcon from '../../../images/modal-close.inl.svg';
 import settingIcon from '../../../images/settings.inl.svg';
 import { createOne } from '../../api/rest/createOne';
 import { Path } from '../../api/types';
-import { createCommentPostData } from '../../api/rest/utils/createPostData';
+import { createCommentPostData, createItemPostData, createBoardPostData, createListPostData } from '../../api/rest/utils/createPostData';
 import { updateStore } from '../../store/updateStore';
 import observer from '../../store/observer';
 import { readAll } from '../../api/rest/readAll';
@@ -33,7 +33,7 @@ export class BoardContent {
     this.subscribe()
     if (curBoard) {
       this.chosenBoard = curBoard;
-    }
+    } 
     // const currentBoard = store.user.workSpace[0];
     const container = createHtmlElement('div', {
       className: 'board-content',
@@ -65,6 +65,12 @@ export class BoardContent {
     const workSpace = createHtmlElement('div', { className: 'board-workspace' });
     this.renderLists(workSpace);
     const createButton = createHtmlElement('button', { className: 'header-option-button list-item' });
+    createButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
+    
+    const createInput = createHtmlElement('input', { className: 'header-option-button-input' });
+    createInput.addEventListener('blur', (e) => this.handlerAddBoardBlur(e))
+    createInput.dataset.boardIdInAddButton = curBoard._id
+
     const createImg = createHtmlElement('span', { className: 'header-option-icon plus-img' });
     const createText = createHtmlElement('span', { textContent: 'Добавьте еще одну колонку' });
     favoriteButton.append(favoriteImg);
@@ -76,7 +82,7 @@ export class BoardContent {
     boardMenuLeft.append(boardName, favoriteButton);
     boardMenuRight.append(autoButton, filterButton, shareButton, settingsButton);
     boardMenu.append(boardMenuLeft, boardMenuRight);
-    workSpace.append(createButton);
+    workSpace.append(createButton, createInput);
     container.append(boardMenu, workSpace);
     2;
 
@@ -90,11 +96,18 @@ export class BoardContent {
     for (let i = 0; i < this.chosenBoard.lists.length; i++) {
       const list = this.chosenBoard.lists[i];
       const listSpace = createHtmlElement('div', { className: 'list' });
+      listSpace.dataset.listId = list._id
       const listName = createHtmlElement('input', { value: list.title , className: 'header-input-text header-list-text'});
       listName.dataset.listIdInInput = list._id
       listName.addEventListener('blur', (e) => this.handlerListNameBlur(e))
-
-      listSpace.append(listName);
+      
+      const listTitleWrapper = createHtmlElement('div', { className: 'list-header'});
+      const listOptionsButton = createHtmlElement('div', { className: 'list-header-button', innerHTML: settingIcon});
+      listOptionsButton.addEventListener('click', (e) => this.openModalListClick(e, list))
+      listOptionsButton.dataset.listIdInOption = list._id
+      
+      listTitleWrapper.append(listName, listOptionsButton)
+      listSpace.append(listTitleWrapper);
       this.renderTasks(listSpace, list.items);
       container.append(listSpace);
     }
@@ -160,8 +173,12 @@ export class BoardContent {
     }
 
     const addTaskButton = createHtmlElement('button', { className: 'add-task-button', textContent: 'Добавить задачу' });
-    // this.addModal(addTaskButton);
-    container.append(addTaskButton);
+    addTaskButton.addEventListener('click', (e) => this.openModalAddItem(e))
+    
+    const addTaskInput = createHtmlElement('input', { className: 'add-task-input', value: '' });
+    addTaskInput.addEventListener('blur', (e) => this.handlerTaskInputBlue(e))
+
+    container.append(addTaskButton, addTaskInput);
   }
 
   addModal(item: IItem) {
@@ -181,7 +198,7 @@ export class BoardContent {
 
 
     const columnDiv = createHtmlElement('div', { className: 'modalColumnDiv' });
-    const columnLink = createHtmlElement('a', { className: 'modalColumnLink', href: '#', textContent: 'test' });
+    const columnLink = createHtmlElement('a', { className: 'modalColumnLink', href: '#', textContent: '' });
     const columnText = createHtmlElement('p', { className: 'modalColumnText', textContent: 'в колонке ' });
     const mainSidebarContainer = createHtmlElement('div', { className: 'modalMainSidebar' });
     const mainModal = createHtmlElement('div', { className: 'modalMain' });
@@ -667,5 +684,97 @@ export class BoardContent {
     await updateStore()
   }
 
+  openModalAddItem(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
 
+    e.currentTarget.classList.toggle('disabled')
+
+    e.currentTarget.nextElementSibling.classList.toggle('active')
+
+  }
+
+  async handlerTaskInputBlue(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLInputElement)) return
+
+    const listId = e.currentTarget.parentElement.dataset.listId
+    const title = e.currentTarget.value
+    if (!listId || !title) return
+
+    await createOne(Path.item, createItemPostData(listId, title))
+    await updateStore()
+  }
+
+  handlerAddBoardClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+
+    e.currentTarget.classList.toggle('disabled')
+
+    e.currentTarget.nextElementSibling.classList.toggle('active')
+  }
+
+  
+  async handlerAddBoardBlur(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLInputElement)) return
+
+    const boardId = e.currentTarget.dataset.boardIdInAddButton
+    const title = e.currentTarget.value
+    if (!boardId || !title) return
+
+    await createOne(Path.list, createListPostData(boardId, title))
+    await updateStore()
+  }
+
+  openModalListClick(e: MouseEvent, list: IList) {
+    if  (!(e.currentTarget instanceof HTMLDivElement)) return
+    const allModals = document.querySelectorAll('.list-modal-setting-wrapper')
+    allModals.forEach(modal => modal.remove())
+    this.createListModal(list)
+    const modal = document.querySelector('.list-modal-setting-wrapper')
+    if (modal) {
+      modal.classList.add('active')
+    }
+  }
+
+  createListModal(list: IList) {
+    const modalWrapper = createHtmlElement('div', {className: 'list-modal-setting-wrapper'})
+    const modal = createHtmlElement('div', {className: 'board-modal-setting'})
+
+    const inputWrapper = createHtmlElement('div', {className: 'board-modal-setting-input-wrapper'})
+    const input = createHtmlElement('input', {className: 'board-modal-setting-input', value: list.title})
+    const buttonUpdate = createHtmlElement('button', {className: 'board-modal-setting-button--update', textContent: 'Изменить название'})
+    const buttonDelete = createHtmlElement('button', {className: 'board-modal-setting-button--delete', textContent: 'Удалить список'})
+
+    buttonUpdate.addEventListener('click', async (e) => {
+      const listId = list._id
+      const title = input.value 
+      if (!listId) return
+      await updateOne(Path.list, listId, createListPutData(title) )
+      await updateStore()
+    })
+
+    buttonDelete.addEventListener('click', async (e) => {
+      const listId = list._id
+
+      if (!listId) return
+      const boardId = this.chosenBoard._id
+     
+      await deleteOne(Path.list, listId, boardId)
+      await updateStore()
+      modalWrapper.classList.toggle('active')
+    })
+
+    inputWrapper.append(input, buttonUpdate)
+
+    modal.append(inputWrapper, buttonDelete )
+    modalWrapper.append(modal)
+
+    modalWrapper.addEventListener('click', (e) => {
+      if (e.target !== e.currentTarget) return
+      if (!(e.currentTarget instanceof HTMLDivElement)) return
+
+      modalWrapper.classList.toggle('active')
+    })
+
+    document.body.append(modalWrapper)
+  }
 }

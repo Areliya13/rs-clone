@@ -5,6 +5,7 @@ import { store } from '../../store/store';
 import observer from '../../store/observer';
 import { EventName, IBoard, IPartialUser, IStore, IWork } from '../../store/types';
 import { getAllUserBoards } from '../../helpers/utils/getAllUserBoard';
+import { ModalCreateBoard } from '../../components/ModalCreateBoard/ModalCreateBoard';
 
 export class Header {
   header: HTMLDivElement | undefined
@@ -30,6 +31,9 @@ export class Header {
     const logo = createHtmlElement('div', { className: 'logo' });
     const navigation = this.createNav();
     const createButton = createHtmlElement('button', { className: 'create-button', textContent: 'Создать' });
+
+    createButton.addEventListener('click', (e) => this.handlerAddBoardClick(e))
+
     menuButton.append(innerImg);
     logoLink.append(logo);
     container.append(menuButton, logoLink, navigation, createButton);
@@ -172,4 +176,16 @@ export class Header {
       })
       return newArr
   }
+
+  handlerAddBoardClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+    const modal = document.querySelector('.createBoardModal')
+    if (modal) {
+      modal.remove();
+    }
+    
+    const newModal = new ModalCreateBoard().getModal()
+    
+    document.body.querySelector('main').append(newModal)
+  } 
 }

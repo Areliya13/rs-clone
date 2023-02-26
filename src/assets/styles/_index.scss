@@ -487,11 +487,11 @@ $alt-color: #0079bf;
 }
 
 .createBoardModal {
-  position: absolute;
+  position: fixed;
   width: 304px;
   will-change: top, left;
-  top: 0;
-  left: -310px;
+  top: 10%;
+  left: 40%;
   background-color: #ffffff;
   border-radius: 3px;
   box-shadow: 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 0 1px rgba(9, 30, 66, 0.08);

@@ -5,6 +5,16 @@ import currentBackgroundMark from '../../../images/currentBackgroundMark.inl.svg
 import { EventName, IPartialUser, IUser, IWork } from '../../store/types';
 import { store } from '../../store/store';
 import observer from '../../store/observer';
+import { createOne } from '../../api/rest/createOne';
+import { Path } from '../../api/types';
+import { createBoardPostData } from '../../api/rest/utils/createPostData';
+import { updateStore } from '../../store/updateStore';
+
+const imagesArr: string[] = [
+  'https://live.staticflickr.com/65535/52682453673_e81dae0a3b_b.jpg',
+  'https://live.staticflickr.com/65535/52681301262_609c1be2f4_b.jpg',
+  'https://live.staticflickr.com/65535/52681300682_a935bf6cfb_b.jpg'];
+const colorsArr: string[] = ['rgb(0, 121, 191)', 'rgb(137, 96, 158)', 'rgb(81, 152, 57)'];
 
 export class ModalCreateBoard {
   constructor() {
@@ -32,12 +42,14 @@ export class ModalCreateBoard {
     const colorsArr: string[] = ['rgb(0, 121, 191)', 'rgb(137, 96, 158)', 'rgb(81, 152, 57)'];
     createBoardPreviewDiv.style.backgroundImage = `url(${imagesArr[0]})`;
     const currentBackground = createHtmlElement('div', {className: 'currentBackground', innerHTML: currentBackgroundMark});
-
+    
     for (let i = 0; i < 3; i++) {
       const backgroundPickerImagesItem = createHtmlElement('li', {className: 'backgroundPickerImagesItem'});
       const backgroundPickerColorItem = createHtmlElement('li', {className: 'backgroundPickerColorItem'});
       const buttonImage = createHtmlElement('button', {className: 'createBoardBackgroundBtn backgroundPickerImageBtn', style: `background-image: url(${imagesArr[i]})`});
       if(i === 0) {
+        currentBackground.dataset.bId = `${i}`
+        currentBackground.dataset.cId = ''
         buttonImage.append(currentBackground);
       }
       const buttonColor = createHtmlElement('button', {className: 'createBoardBackgroundBtn backgroundPickerColorBtn', style: `background-color: ${colorsArr[i]}`});
@@ -46,6 +58,8 @@ export class ModalCreateBoard {
         currentBackground.remove();
         createBoardPreviewDiv.style.backgroundColor = '';
         createBoardPreviewDiv.style.backgroundImage = buttonImage.style.backgroundImage;
+        currentBackground.dataset.bId = `${i}`
+        currentBackground.dataset.cId = ''
         buttonImage.append(currentBackground);
       })
 
@@ -53,6 +67,8 @@ export class ModalCreateBoard {
         currentBackground.remove();
         createBoardPreviewDiv.style.backgroundImage = '';
         createBoardPreviewDiv.style.backgroundColor = buttonColor.style.backgroundColor;
+        currentBackground.dataset.cId = `${i}`
+        currentBackground.dataset.bId = ''
         buttonColor.append(currentBackground);
       })
 
@@ -67,6 +83,7 @@ export class ModalCreateBoard {
     const createBoardHeaderLabel = createHtmlElement('label', {className: 'createBoardHeaderLabel', textContent: 'Заголовок доски'});
     createBoardHeaderLabel.setAttribute('for', 'createBoardHeader');
     const createBoardHeaderInput = createHtmlElement('input', {className: 'createBoardHeaderInput', id: 'createBoardHeader', type: 'text', required: true});
+    createBoardHeaderInput.addEventListener('input', (e) => this.handlerInputChange(e))
 
     const checkBoardHeaderInput = createHtmlElement('div', {className: 'checkBoardHeaderInput'});
     const checkBoardHeaderInputImg = createHtmlElement('span', {className: 'checkBoardHeaderInputImg', textContent: '👋'});
@@ -80,9 +97,8 @@ export class ModalCreateBoard {
     }
     const choseWorkspaceSelect = this.getNewWorkspaceData(workspaces)
     const createBoardBtnSubmit = createHtmlElement('button', {className: 'createBoardBtnSubmit', textContent: 'Создать', type: 'button', disabled: true});
-    if(!createBoardHeaderInput.value.length && choseWorkspaceSelect.value !== 'Создайте рабочее пространство') {
-      createBoardBtnSubmit.disabled = false;
-    }
+
+    createBoardBtnSubmit.addEventListener('click', (e) => this.handlerAddBoardButtonClick(e))
 
     choseWorkspace.append(choseWorkspaceLabel, choseWorkspaceSelect)
     checkBoardHeaderInput.append(checkBoardHeaderInputImg, checkBoardHeaderInputText);
@@ -115,7 +131,11 @@ export class ModalCreateBoard {
   }
 
   subscribe(): void {
-    observer.subscribe({eventName: EventName.updateState, function: this.getNewWorkspaceData.bind(this)})
+    observer.subscribe({eventName: EventName.updateState, function: this.update.bind(this)})
+  }
+
+  update(user: IPartialUser) {
+    // this.getNewWorkspaceData(user.workSpace)
   }
 
   getNewWorkspaceData(store: IWork[]) {
@@ -128,7 +148,8 @@ export class ModalCreateBoard {
       choseWorkspaceSelect.append(choseWorkspaceOption);
     } else {
       store.forEach((e, index) => {
-        const choseWorkspaceOption = createHtmlElement('option', { textContent: e.title });
+        const choseWorkspaceOption = createHtmlElement('option', { textContent: e.title, value: e._id });
+        choseWorkspaceOption.dataset.workSpaceId = e._id
         if(index === 0) {
           choseWorkspaceOption.selected = true;
         }
@@ -137,5 +158,48 @@ export class ModalCreateBoard {
     }
 
     return choseWorkspaceSelect
+  }
+
+  handlerInputChange(e: Event) {
+    if (!(e.currentTarget instanceof HTMLInputElement)) return
+    const button: HTMLButtonElement = document.querySelector('.createBoardBtnSubmit')
+    const input = e.currentTarget
+    if (input.value.length !== 0) {
+      button.disabled = false
+    }
+
+  }
+
+  async handlerAddBoardButtonClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+    const select: HTMLSelectElement = document.querySelector('.createBoardChoseWorkspaceSelect')
+    const input: HTMLInputElement = document.querySelector('#createBoardHeader')
+    if (!select || !input) return
+
+    const workSpaceId = select.value
+    const title = input.value
+    console.log(workSpaceId, title)
+
+    const currentBg:HTMLDivElement = document.querySelector('.currentBackground')
+    const cId = currentBg.dataset.cId
+    const bId = currentBg.dataset.bId
+
+    if (!cId && !bId) return 
+
+    if (cId) {
+      const color = colorsArr[Number(cId)]
+      await createOne(Path.board, createBoardPostData({workSpaceId, title, color}))
+    } 
+
+    if (bId) {
+      const image = imagesArr[Number(bId)]
+      await createOne(Path.board, createBoardPostData({workSpaceId, title, image}))
+    }
+
+    await updateStore()
+    const modal = document.querySelector('.createBoardModal')
+    if (modal) {
+      modal.remove()
+    }
   }
 }
