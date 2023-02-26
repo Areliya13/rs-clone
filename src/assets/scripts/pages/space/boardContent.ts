@@ -9,6 +9,7 @@ import modal4LineIcon from '../../../images/modal4Lines.inl.svg';
 import modalUserIcon from '../../../images/users-icon.inl.svg';
 import tagsIcon from '../../../images/tagsIcon.inl.svg';
 import checkBoxIcon from '../../../images/checkBoxIcon.inl.svg';
+import changeIconSvg from '../../../images/wsChangeIcon.inl.svg';
 import rightIcon from '../../../images/rightArrow.inl.svg';
 import copyIcon from '../../../images/copyIcon.inl.svg';
 import shareIcon from '../../../images/sharingIcon.inl.svg';
@@ -104,8 +105,9 @@ export class BoardContent {
         const itemImage = createHtmlElement('img', { src: item.image, className: 'item-image' });
         itemSpace.append(itemImage);
       }
-
+      const buttonDiv = createHtmlElement('div', {className: 'item-icon-wrapper'});
       const linkIcon = createHtmlElement('button', {className: 'item-icon', innerHTML: settingIcon});
+      buttonDiv.append(linkIcon)
       
       const settingsModalContainer = this.addModal(item)
       linkIcon.addEventListener('click', () => {
@@ -147,7 +149,7 @@ export class BoardContent {
         footerRight.append(userDiv);
       }
       footerItem.append(footerLeft, footerRight);
-      itemSpace.append(markContainer, itemName, footerItem, linkIcon);
+      itemSpace.append(markContainer, itemName, footerItem, buttonDiv);
       container.append(itemSpace);
     }
 
@@ -168,6 +170,10 @@ export class BoardContent {
       className: 'modalHeaderText',
       textContent: `${item.title}`,
     });
+    headerText.dataset.itemIdInHeaderText = item._id
+    headerText.addEventListener('blur', (e) => this.handlerTitleModalUpdateBlur(e))
+
+
     const columnDiv = createHtmlElement('div', { className: 'modalColumnDiv' });
     const columnLink = createHtmlElement('a', { className: 'modalColumnLink', href: '#', textContent: 'test' });
     const columnText = createHtmlElement('p', { className: 'modalColumnText', textContent: 'в колонке ' });
@@ -279,7 +285,7 @@ export class BoardContent {
     });
     const tagsButtonText = createHtmlElement('span', { className: 'modalTagsButtonText', textContent: 'Метки' });
     const tagsButton = createHtmlElement('button', { className: 'modal-button modalTagsButton' });
-    // this.addMarkModal(tagsButton);
+    this.addMarkModal(tagsButton);
     const checklistButtonIcon = createHtmlElement('div', {
       className: 'modalIcon modalChecklistButtonIcon',
       innerHTML: checkBoxIcon,
@@ -321,10 +327,16 @@ export class BoardContent {
     const shareButton = createHtmlElement('button', { className: 'modal-button modalShareButton' });
     const closeButton = createHtmlElement('div', { className: 'modalCloseButton', innerHTML: closeButtonIcon });
 
+    const deleteItemText = createHtmlElement('span', { className: 'deleteItemButtonText', textContent: 'Удалить' });
+    const deleteItemButton = createHtmlElement('button', { className: 'deleteItemButton' });
+    deleteItemButton.dataset.itemIdInDeleteButton = item._id
+    deleteItemButton.addEventListener('click', (e) => this.handlerDeleteItemClick(e))
+
+    deleteItemButton.append(deleteItemText)
     shareButton.append(shareButtonIcon, shareButtonText);
     copyingButton.append(copyingButtonIcon, copyingButtonText);
     movingButton.append(movingButtonIcon, movingButtonText);
-    actionsButtons.append(movingButton, copyingButton, shareButton);
+    actionsButtons.append(movingButton, copyingButton, shareButton, deleteItemButton);
     actionsContainer.append(actionsHead, actionsButtons);
     checklistButton.append(checklistButtonIcon, checklistButtonText);
     tagsButton.append(tagsButtonIcon, tagsButtonText);
@@ -368,54 +380,54 @@ export class BoardContent {
     // Конец кода - Модальное окно с настройками
   }
 
-  // addMarkModal(markButton: HTMLButtonElement): void {
-  //   // todo: Модальное окно метки
-  //   console.log("Модалка Render")
-  //   const marksModalContainer = createHtmlElement('div', { className: 'marksModalContainer' });
-  //   const marksModal = createHtmlElement('div', { className: 'marksModal' });
-  //   const marksHeader = createHtmlElement('header', { className: 'marksHeader' });
-  //   const marksHeadText = createHtmlElement('h2', { className: 'marksHeadText', textContent: 'Метки' });
-  //   const marksCloseButton = createHtmlElement('div', { className: 'marksCloseButton', innerHTML: closeButtonIcon });
-  //   const marksContentContainer = createHtmlElement('div', { className: 'marksContentContainer' });
-  //   const marksList = createHtmlElement('ul', { className: 'marksList' });
-  //   for (let i = 0; i < 6; i++) {
-  //     const marksItem = createHtmlElement('li', { className: 'marksItem' });
-  //     const marksCheckbox = createHtmlElement('input', { className: 'marksCheckbox', type: 'checkbox' });
-  //     const marksContainer = createHtmlElement('div', { className: 'marksContainer' });
-  //     const mark = createHtmlElement('div', { className: 'markDiv' });
-  //     const markColorIcon = createHtmlElement('div', { className: 'markColorIcon' });
-  //     const markName = createHtmlElement('span', { className: 'markName', textContent: `Test ${i + 1}` });
-  //     const markEditButton = createHtmlElement('button', { className: 'markEditButton', innerHTML: changeIconSvg });
+  addMarkModal(markButton: HTMLButtonElement): void {
+    // todo: Модальное окно метки
+    console.log("Модалка Render")
+    const marksModalContainer = createHtmlElement('div', { className: 'marksModalContainer' });
+    const marksModal = createHtmlElement('div', { className: 'marksModal' });
+    const marksHeader = createHtmlElement('header', { className: 'marksHeader' });
+    const marksHeadText = createHtmlElement('h2', { className: 'marksHeadText', textContent: 'Метки' });
+    const marksCloseButton = createHtmlElement('div', { className: 'marksCloseButton', innerHTML: closeButtonIcon });
+    const marksContentContainer = createHtmlElement('div', { className: 'marksContentContainer' });
+    const marksList = createHtmlElement('ul', { className: 'marksList' });
+    for (let i = 0; i < 6; i++) {
+      const marksItem = createHtmlElement('li', { className: 'marksItem' });
+      const marksCheckbox = createHtmlElement('input', { className: 'marksCheckbox', type: 'checkbox' });
+      const marksContainer = createHtmlElement('div', { className: 'marksContainer' });
+      const mark = createHtmlElement('div', { className: 'markDiv' });
+      const markColorIcon = createHtmlElement('div', { className: 'markColorIcon' });
+      const markName = createHtmlElement('span', { className: 'markName', textContent: `Test ${i + 1}` });
+      const markEditButton = createHtmlElement('button', { className: 'markEditButton', innerHTML: changeIconSvg });
 
-  //     mark.append(markColorIcon, markName);
-  //     marksContainer.append(mark, markEditButton);
-  //     marksItem.append(marksCheckbox, marksContainer);
-  //     marksList.append(marksItem);
-  //   }
-  //   const createMarkButton = createHtmlElement('button', {
-  //     className: 'marksCreateButton',
-  //     textContent: 'Создать новую метку',
-  //   });
+      mark.append(markColorIcon, markName);
+      marksContainer.append(mark, markEditButton);
+      marksItem.append(marksCheckbox, marksContainer);
+      marksList.append(marksItem);
+    }
+    const createMarkButton = createHtmlElement('button', {
+      className: 'marksCreateButton',
+      textContent: 'Создать новую метку',
+    });
 
-  //   marksHeader.append(marksHeadText, marksCloseButton);
+    marksHeader.append(marksHeadText, marksCloseButton);
 
-  //   marksContentContainer.append(marksList, createMarkButton);
-  //   marksModal.append(marksHeader, marksContentContainer);
-  //   marksModalContainer.append(marksModal);
-  //   markButton.addEventListener('click', () => {
-  //     document.body.append(marksModalContainer);
-  //   });
+    marksContentContainer.append(marksList, createMarkButton);
+    marksModal.append(marksHeader, marksContentContainer);
+    marksModalContainer.append(marksModal);
+    markButton.addEventListener('click', () => {
+      document.body.append(marksModalContainer);
+    });
 
-  //   marksModalContainer.addEventListener('click', (event) => {
-  //     if (event.target === marksModalContainer) {
-  //       marksModalContainer.remove();
-  //     }
-  //   });
+    marksModalContainer.addEventListener('click', (event) => {
+      if (event.target === marksModalContainer) {
+        marksModalContainer.remove();
+      }
+    });
 
-  //   marksCloseButton.addEventListener('click', () => {
-  //     marksModalContainer.remove();
-  //   });
-  // }
+    marksCloseButton.addEventListener('click', () => {
+      marksModalContainer.remove();
+    });
+  }
 
   addComment(comment: IComment) {
     const commentWrapper = createHtmlElement('div', { className: 'comment-wrapper' });
@@ -573,5 +585,56 @@ export class BoardContent {
     }catch(e) {
       console.log('yyy', e)
     }
+  }
+
+  async handlerTitleModalUpdateBlur(e: FocusEvent) {
+    if (!(e.currentTarget instanceof HTMLTextAreaElement)) return
+    try {
+      const itemId = e.currentTarget.dataset?.itemIdInHeaderText
+      if (!itemId) return
+
+      const title = e.currentTarget.value
+    
+      await updateOne(Path.item, itemId, createItemPutData({title}))
+      await updateStore()
+
+    }catch(e) {
+      console.log('yyy', e)
+    }
+  }
+
+  async handlerDeleteItemClick(e: MouseEvent) {
+    if (!(e.currentTarget instanceof HTMLButtonElement)) return
+    try {
+    
+      const itemId = e.currentTarget.dataset.itemIdInDeleteButton
+      if (!itemId) return
+
+      let listId = ''
+
+      store.user.workSpace.forEach(ws => {
+        ws.boards.forEach(b => {
+          b.lists.forEach(l => {
+            l.items.forEach(i => {
+              if (i._id === itemId) {
+                listId = l._id
+              }
+            })
+          })
+        })
+      })
+
+      await deleteOne(Path.item, itemId, listId)
+      await updateStore()
+
+    }catch(e) {
+      console.log('eee', e)
+    }
+    finally {
+      const modal = document.querySelector('.settingsModalContainer')
+      if (!modal) return
+      modal.remove()
+    }
+
   }
 }
