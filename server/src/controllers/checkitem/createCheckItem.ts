@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { createCheckItemService } from "../../services/checkItem/createCheckItem"
+import { createCheckItemService } from "../../services/checkitem/createCheckItem"
 
 export const createCheckItemController = async (req: Request, res: Response, next: NextFunction) => {
     try{
