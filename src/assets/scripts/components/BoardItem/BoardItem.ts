@@ -61,6 +61,7 @@ export class BoardItem {
     }
 
     private async favoriteHandleClick(e: Event) {
+        e.preventDefault()
         e.stopPropagation()
         if (!(e.currentTarget instanceof HTMLDivElement)) return
         const boardId =  e.currentTarget.parentElement.id
