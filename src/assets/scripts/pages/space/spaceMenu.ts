@@ -74,13 +74,10 @@ class SpaceMenu {
   }
 
   renderMenu(container: HTMLDivElement): void {
-    const boardsLink = createHtmlElement('a', { className: 'space-option-link' });
+    const boardsLink = createHtmlElement('a', { className: 'space-option-link', href: `#home?ws=${this.workspace._id}` });
     const boardsImg = createHtmlElement('span', { className: 'icon-img boards-img' });
     const boardsText = createHtmlElement('p', { className: 'space-option-text', textContent: spaceMenuOptions.boards });
-    const usersLink = createHtmlElement('a', { className: 'space-option-link' });
-    const usersImg = createHtmlElement('span', { className: 'icon-img users-img' });
-    const usersText = createHtmlElement('p', { className: 'space-option-text', textContent: spaceMenuOptions.users });
-    const usersButton = createHtmlElement('span', { className: 'icon-img plus-img' });
+
     const settingsLink = createHtmlElement('a', { className: 'space-option-link' });
     const settingsImg = createHtmlElement('span', { className: 'icon-img gear-img' });
     const settingsText = createHtmlElement('p', {
@@ -92,9 +89,9 @@ class SpaceMenu {
     settingsLink.addEventListener('click', (e) => this.openSettingModalClick(e))
 
     boardsLink.append(boardsImg, boardsText);
-    usersLink.append(usersImg, usersText, usersButton);
+
     settingsLink.append(settingsImg, settingsText, settingsButton);
-    container.append(boardsLink, usersLink, settingsLink);
+    container.append(boardsLink, settingsLink);
   }
 
   renderBoards(container: HTMLDivElement, chosenBoard: IBoard): void {
@@ -156,6 +153,7 @@ class SpaceMenu {
 
   update(user: IPartialUser) {
     this.renderBoards(this.mainContainer , this.currentBoard)
+
   }
 
   openSettingModalClick(e: MouseEvent) {
@@ -168,6 +166,9 @@ class SpaceMenu {
   }
 
   createSettingModal() {
+    const modalAll = document.querySelectorAll('.board-modal-setting-wrapper')
+    modalAll.forEach(modal => {modal.remove()})
+
     const modalWrapper = createHtmlElement('div', {className: 'board-modal-setting-wrapper'})
     const modal = createHtmlElement('div', {className: 'board-modal-setting'})
 
@@ -186,7 +187,7 @@ class SpaceMenu {
     })
 
     buttonDelete.addEventListener('click', async (e) => {
-      const boardId = this.currentBoard._id
+      const boardId = location.hash.split('=')[3]
       console.log(this.currentBoard._id )
       if (!boardId) return
       const workSpace = this.workspace._id

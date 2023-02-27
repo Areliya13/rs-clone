@@ -7,7 +7,7 @@ export const menuItems = [
   ['Рабочие пространства', '#'],
   ['Недавние', `#${PageIds.SpacePage}`],
   ['В избранном', '#'],
-  ['Шаблоны', '#'],
+  ['Шаблоны', '#templates'],
 ];
 export const leftSidebarButtons = [
   ['Доски', '#boards'],
