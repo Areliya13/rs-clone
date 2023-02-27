@@ -64,6 +64,10 @@ var getPopulatedUser = function (userId) { return __awaiter(void 0, void 0, void
                                             },
                                             { path: 'comments',
                                                 model: 'Comment',
+                                                populate: {
+                                                    path: 'userId',
+                                                    model: 'User',
+                                                }
                                             },
                                             { path: 'marks',
                                                 model: 'Mark',

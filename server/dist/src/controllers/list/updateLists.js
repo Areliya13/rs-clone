@@ -43,22 +43,25 @@ var updateListsController = function (req, res, next) { return __awaiter(void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 4, , 5]);
                 listId = req.params.id;
                 title = req.body.title;
+                item = void 0;
+                if (!req.body.item) return [3 /*break*/, 2];
                 return [4 /*yield*/, JSON.parse(req.body.item)];
             case 1:
                 item = _a.sent();
-                return [4 /*yield*/, (0, updateList_1.updateListService)({ listId: listId, title: title, item: item })];
-            case 2:
+                _a.label = 2;
+            case 2: return [4 /*yield*/, (0, updateList_1.updateListService)({ listId: listId, title: title, item: item })];
+            case 3:
                 response = _a.sent();
                 res.status(200).send(response);
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 5];
+            case 4:
                 e_1 = _a.sent();
                 next(e_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

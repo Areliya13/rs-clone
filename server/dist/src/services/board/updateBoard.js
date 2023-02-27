@@ -57,6 +57,7 @@ var updateBoardService = function (_a) {
                     board = _b.sent();
                     if (!board)
                         throw new Error('boardId not exist');
+                    if (!title) return [3 /*break*/, 4];
                     return [4 /*yield*/, model_1.Board.findByIdAndUpdate(boardId, {
                             title: title ? title : board.title,
                             color: color ? color : board.color,
@@ -65,8 +66,31 @@ var updateBoardService = function (_a) {
                         })];
                 case 3:
                     _b.sent();
-                    return [4 /*yield*/, model_1.Board.findById(boardId)];
+                    return [3 /*break*/, 8];
                 case 4:
+                    if (!(color && !title && !image)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, model_1.Board.findByIdAndUpdate(boardId, {
+                            title: board.title,
+                            color: color,
+                            image: '',
+                            lists: list ? (0, createIdArray_1.createIdArray)(list) : board.lists
+                        })];
+                case 5:
+                    _b.sent();
+                    return [3 /*break*/, 8];
+                case 6:
+                    if (!(image && !title && !color)) return [3 /*break*/, 8];
+                    return [4 /*yield*/, model_1.Board.findByIdAndUpdate(boardId, {
+                            title: board.title,
+                            color: '',
+                            image: image,
+                            lists: list ? (0, createIdArray_1.createIdArray)(list) : board.lists
+                        })];
+                case 7:
+                    _b.sent();
+                    _b.label = 8;
+                case 8: return [4 /*yield*/, model_1.Board.findById(boardId)];
+                case 9:
                     updatedBoard = _b.sent();
                     return [2 /*return*/, updatedBoard];
             }
