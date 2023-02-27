@@ -1,0 +1,64 @@
+.footer {
+  background-color: rgba($color: #026aa7, $alpha: 0.1);
+}
+
+.footer-container {
+  max-width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.rsschool {
+  background-image: url('../images/rsschool_small.svg');
+  width: 36px;
+  height: 36px;
+  background-size: 36px 36px;
+  margin-right: 5px;
+}
+
+.github {
+  background-image: url('../images/Octocat.svg');
+  width: 24px;
+  height: 24px;
+  background-size: 24px 24px;
+  margin-left: 5px;
+}
+
+.icon-footer {
+  margin: 5px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  display: inline-block;
+  border: 0;
+  outline: 0;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: 0.5s;
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.year {
+  font-size: 36px;
+}
+
+.gh-link {
+  font-size: 20px;
+  text-decoration: none;
+  color: #172b4d;
+  transition: 0.3s;
+  cursor: pointer;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  align-items: center;
+  &:hover {
+    background-color: #0079bf;
+  }
+}
